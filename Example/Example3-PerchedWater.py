@@ -11,7 +11,7 @@ if __name__ == "__main__":
     # Control Params
     controlParams = pycomus.ComusConPars(model=model, SimType=1, IntBkm=2, MaxIt=100000, Damp=0.95, RClose=0.0001)
 
-    outParams = pycomus.ComusOutputPars(model,2,2,2,2,2,2,2,2)
+    outParams = pycomus.ComusOutputPars(model, 2, 2, 2, 2, 2, 2, 2, 2)
 
     # Create Grid And Layer
     NumLyr = 10
@@ -38,7 +38,7 @@ if __name__ == "__main__":
     modelGridPar = pycomus.ComusGridPars(model, Top=top, Bot=bot, Ibound=ibound, Kx=KxKyKz, Ky=KxKyKz, Kz=KxKyKz,
                                        Shead=shead)
     # Set Period
-    period = pycomus.ComusPeriod(model, [(1, 1, 1)])
+    period = pycomus.ComusPeriod(model, (1, 1, 1))
 
     # Set RCH
     recharge = np.zeros((NumLyr, NumRow, NumCol))

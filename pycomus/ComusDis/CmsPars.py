@@ -14,7 +14,7 @@ class ComusConPars:
                  SimType: int = 2, LamBda: float = -1, IntBkm: int = 1, ISolve: int = 2,
                  MaxIt: int = 200, Damp: float = 1, HClose: float = 0.0001,
                  RClose: float = 0.001, IRelax: int = 0, Theta: float = 0.7,
-                 Gamma: float = 3, Akappa: float = 0.001, Niter: int = 3,
+                 Gamma: float = 3, Akappa: float = 0.001, Niter: int = 5,
                  HNoflo: float = -1E+30, IchFlg: int = 0, IwdFlg: int = 0,
                  WetFct: float = 0.1, NweTit: int = 1, IhdWet: int = 1,
                  IreSta: int = 0, ImuLtd: int = 0, NumTd: int = -1):
