@@ -74,9 +74,14 @@ class WriteFiles:
 
     def WriteOutput(self):
         with open(os.path.join(self.folder_path, "模拟输出选项表.in"), "w") as file:
+            outPars: pycomus.ComusOutputPars  = self.__model._outPars
             file.write(
                 "GDWBDPRN  LYRBDPRN  CELLBDPRN  CELLHHPRN  CELLDDPRN  CELLFLPRN  LAKBDPRN  SEGMBDPRN  RECHBDPRN  IBSPRN  SUBPRN  NDBPRN  DBPRN  REGBDPRN\n")
-            file.write('    '.join(map(str, [2 for i in range(14)])))
+            file.write(f"{outPars.m_GDWBDPRN}  {outPars.m_LYRBDPRN}  {outPars.m_CELLBDPRN}  {outPars.m_CELLHHPRN}  "
+                       f"{outPars.m_CELLDDPRN}  {outPars.m_CELLFLPRN}  {outPars.m_LAKBDPRN}  {outPars.m_SEGMBDPRN}  "
+                       f"{outPars.m_RECHBDPRN}  {outPars.m_IBSPRN}  {outPars.m_SUBPRN}  {outPars.m_NDBPRN}  {outPars.m_DBPRN}  "
+                       f"{outPars.m_REGBDPRN}")
+
 
     def WriteRowColSpace(self):
         with open(os.path.join(self.folder_path, "网格单元水平向间距表.in"), "w") as file:

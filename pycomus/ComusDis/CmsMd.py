@@ -24,6 +24,7 @@ class ComusModel:
         self._model_name: str = model_name
         self._package = {}
         self._conPars = None
+        self._outPars = None
         self._cmsDis = None
         self._cmsTime = None
         self._Layers = []
@@ -31,6 +32,9 @@ class ComusModel:
 
     def _addConPars(self, cmsPars):
         self._conPars = cmsPars
+
+    def _addOutPars(self, outPars):
+        self._outPars = outPars
 
     def _addDis(self, cmsDis):
         self._cmsDis = cmsDis

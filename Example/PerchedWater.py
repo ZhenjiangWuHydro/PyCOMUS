@@ -11,6 +11,8 @@ if __name__ == "__main__":
     # Control Params
     controlParams = pycomus.ComusConPars(model=model, SimType=1, IntBkm=2, MaxIt=100000, Damp=0.95, RClose=0.0001)
 
+    outParams = pycomus.ComusOutputPars(model,2,2,2,2,2,2,2,2)
+
     # Create Grid And Layer
     NumLyr = 10
     NumRow = 1
