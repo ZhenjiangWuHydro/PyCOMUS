@@ -70,6 +70,14 @@ class ComusModel:
             writeOutPut.WriteGHB()
         if "HFB" in self._package:
             writeOutPut.WriteHFB()
+        if "WEL" in self._package:
+            writeOutPut.WriteWEL()
+        if "SHB" in self._package:
+            writeOutPut.WriteSHB()
+        if "EVT" in self._package:
+            writeOutPut.WriteEVT()
+        if "RIV" in self._package:
+            writeOutPut.WriteRIV()
 
     def runModel(self) -> None:
         """

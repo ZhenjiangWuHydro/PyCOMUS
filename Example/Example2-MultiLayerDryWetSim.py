@@ -7,8 +7,12 @@ if __name__ == "__main__":
 
     # Create Model
     model = pycomus.ComusModel(model_name="MultiLayerDryWetSim")
+
     # Control Params
     controlParams = pycomus.ComusConPars(model=model, IntBkm=2, MaxIt=1000, RClose=0.0001)
+
+    # Output Params
+    outParams = pycomus.ComusOutputPars(model, 2, 2, 2, 2, 2, 2)
 
     # Create Grid And Layer
     NumLyr = 40

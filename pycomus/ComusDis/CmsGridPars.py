@@ -148,10 +148,10 @@ class ComusGridPars:
             if self.NumLyr > 1:
                 if isinstance(Vcont, float) or isinstance(Vcont, int):
                     self.Vcont = np.full((self.NumLyr, self.NumRow, self.NumCol), Vcont)
-                elif isinstance(Vcont, np.ndarray) and Vcont.shape == (self.NumLyr - 1, self.NumRow, self.NumCol):
+                elif isinstance(Vcont, np.ndarray) and Vcont.shape == (self.NumLyr, self.NumRow, self.NumCol):
                     self.Vcont = Vcont
                 else:
-                    self.__ShowErrorMsgWithoutLastLyr("Vcont")
+                    self.__ShowErrorMsg("Vcont")
 
             # unsteady flow
             # SC2 Check
@@ -188,17 +188,17 @@ class ComusGridPars:
                 # VKCB Check
                 if isinstance(VKCB, float) or isinstance(VKCB, int):
                     self.VKCB = np.full((self.NumLyr, self.NumRow, self.NumCol), VKCB)
-                elif isinstance(VKCB, np.ndarray) and VKCB.shape == (self.NumLyr - 1, self.NumRow, self.NumCol):
+                elif isinstance(VKCB, np.ndarray) and VKCB.shape == (self.NumLyr, self.NumRow, self.NumCol):
                     self.VKCB = VKCB
                 else:
-                    self.__ShowErrorMsgWithoutLastLyr("VKCB")
+                    self.__ShowErrorMsg("VKCB")
                 # TKCB Check
                 if isinstance(TKCB, float) or isinstance(TKCB, int):
                     self.TKCB = np.full((self.NumLyr, self.NumRow, self.NumCol), TKCB)
-                elif isinstance(TKCB, np.ndarray) and TKCB.shape == (self.NumLyr - 1, self.NumRow, self.NumCol):
+                elif isinstance(TKCB, np.ndarray) and TKCB.shape == (self.NumLyr, self.NumRow, self.NumCol):
                     self.TKCB = TKCB
                 else:
-                    self.__ShowErrorMsgWithoutLastLyr("TKCB")
+                    self.__ShowErrorMsg("TKCB")
             # SC2 Check
             if self.SimType == 2 and any(x in {1} for x in self.LyrType):
                 if isinstance(SC2, float) or isinstance(SC2, int):
@@ -264,6 +264,4 @@ class ComusGridPars:
         raise ValueError(
             f"{parName} must be a 3D numpy array(int, float, numpy arrary) with shape ({self.NumLyr}, {self.NumRow}, {self.NumCol})")
 
-    def __ShowErrorMsgWithoutLastLyr(self, parName):
-        raise ValueError(
-            f"{parName} must be a 3D numpy array(int, float, numpy arrary) with shape ({self.NumLyr - 1}, {self.NumRow}, {self.NumCol})")
+

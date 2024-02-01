@@ -1,5 +1,6 @@
 import os
 import shutil
+
 import pycomus
 
 
@@ -28,7 +29,8 @@ class WriteFiles:
 
     def WriteConPars(self):
         conParsData = [self.__NumLyr, self.__NumRow, self.__NumCol, self.__conPars.DimUnit, self.__conPars.TimeUnit,
-                       self.__model._cmsDis.XCoord, self.__model._cmsDis.YCoord, self.__conPars.SimMtd, self.__conPars.SimType,
+                       self.__model._cmsDis.XCoord, self.__model._cmsDis.YCoord, self.__conPars.SimMtd,
+                       self.__conPars.SimType,
                        self.__conPars.LamBda, self.__conPars.IntBkm, self.__conPars.ISolve, self.__conPars.MaxIt,
                        self.__conPars.Damp, self.__conPars.HClose,
                        self.__conPars.RClose, self.__conPars.IRelax, self.__conPars.Theta, self.__conPars.Gamma,
@@ -52,6 +54,12 @@ class WriteFiles:
         SIMWEL = 0
         SIMEVT = 0
         SIMHFB = 0
+        SIMRIV = 0
+        SIMSTR = 0
+        SIMRES = 0
+        SIMLAK = 0
+        SIMIBS = 0
+        SIMSUB = 0
         if "RCH" in self.__package:
             SIMRCH = 1
         if "GHB" in self.__package:
@@ -66,22 +74,33 @@ class WriteFiles:
             SIMEVT = 1
         if "HFB" in self.__package:
             SIMHFB = 1
-
+        if "RIV" in self.__package:
+            SIMRIV = 1
+        if "STR" in self.__package:
+            SIMSTR = 1
+        if "RES" in self.__package:
+            SIMRES = 1
+        if "LAK" in self.__package:
+            SIMLAK = 1
+        if "IBS" in self.__package:
+            SIMIBS = 1
+        if "SUB" in self.__package:
+            SIMSUB = 1
         with open(os.path.join(self.folder_path, "源汇项模拟选项表.in"), "w") as file:
             file.write(
                 "SIMSHB  SIMGHB  SIMRCH  SIMWEL  SIMDRN  SIMEVT  SIMHFB  SIMRIV  SIMSTR  SIMRES  SIMLAK  SIMIBS  SIMSUB\n")
-            file.write(f"{SIMSHB}  {SIMGHB}  {SIMRCH}  {SIMWEL}  {SIMDRN}  {SIMEVT}  {SIMHFB}  0  0  0  0  0  0")
+            file.write(f"{SIMSHB}  {SIMGHB}  {SIMRCH}  {SIMWEL}  {SIMDRN}  {SIMEVT}  {SIMHFB}  {SIMRIV}  {SIMSTR}  "
+                       f"{SIMRES}  {SIMLAK}  {SIMIBS}  {SIMSUB}")
 
     def WriteOutput(self):
         with open(os.path.join(self.folder_path, "模拟输出选项表.in"), "w") as file:
-            outPars: pycomus.ComusOutputPars  = self.__model._outPars
+            outPars: pycomus.ComusOutputPars = self.__model._outPars
             file.write(
                 "GDWBDPRN  LYRBDPRN  CELLBDPRN  CELLHHPRN  CELLDDPRN  CELLFLPRN  LAKBDPRN  SEGMBDPRN  RECHBDPRN  IBSPRN  SUBPRN  NDBPRN  DBPRN  REGBDPRN\n")
             file.write(f"{outPars.m_GDWBDPRN}  {outPars.m_LYRBDPRN}  {outPars.m_CELLBDPRN}  {outPars.m_CELLHHPRN}  "
                        f"{outPars.m_CELLDDPRN}  {outPars.m_CELLFLPRN}  {outPars.m_LAKBDPRN}  {outPars.m_SEGMBDPRN}  "
                        f"{outPars.m_RECHBDPRN}  {outPars.m_IBSPRN}  {outPars.m_SUBPRN}  {outPars.m_NDBPRN}  {outPars.m_DBPRN}  "
                        f"{outPars.m_REGBDPRN}")
-
 
     def WriteRowColSpace(self):
         with open(os.path.join(self.folder_path, "网格单元水平向间距表.in"), "w") as file:
@@ -164,10 +183,10 @@ class WriteFiles:
         drn = self.__package["DRN"]
         with open(os.path.join(self.folder_path, "排水沟_应力期数据表.in"), "w") as file:
             file.write("IPER  ILYR  IROW  ICOL  DELEV  COND\n")
-            periods = sorted(drn.cond.keys())
+            periods = sorted(drn.Cond.keys())
             for period in periods:
-                cond_value = drn.cond[period]
-                delev_value = drn.delev[period]
+                cond_value = drn.Cond[period]
+                delev_value = drn.Delev[period]
                 for layer in range(self.__NumLyr):
                     for row in range(self.__NumRow):
                         for col in range(self.__NumCol):
@@ -180,11 +199,11 @@ class WriteFiles:
         ghb = self.__package["GHB"]
         with open(os.path.join(self.folder_path, "通用水头_应力期数据表.in"), "w") as file:
             file.write("IPER  ILYR  IROW  ICOL  SHEAD  EHEAD  COND\n")
-            periods = sorted(ghb.cond.keys())
+            periods = sorted(ghb.Cond.keys())
             for period in periods:
-                cond_value = ghb.cond[period]
-                shead_value = ghb.shead[period]
-                ehead_value = ghb.ehead[period]
+                cond_value = ghb.Cond[period]
+                shead_value = ghb.Shead[period]
+                ehead_value = ghb.Ehead[period]
                 for layer in range(self.__NumLyr):
                     for row in range(self.__NumRow):
                         for col in range(self.__NumCol):
@@ -201,3 +220,76 @@ class WriteFiles:
                 file.write(
                     f"{hfb_data[0] + 1}  {hfb_data[1] + 1}  {hfb_data[2] + 1}  {hfb_data[3] + 1}  {hfb_data[4] + 1}  "
                     f"{hfb_data[5]}\n")
+
+    def WriteSHB(self):
+        shb = self.__package["SHB"]
+        with open(os.path.join(self.folder_path, "时变水头_应力期数据表.in"), "w") as file:
+            file.write("IPER  ILYR  IROW  ICOL  SHEAD  EHEAD\n")
+            periods = sorted(shb.Shead.keys())
+            for period in periods:
+                shead_value = shb.Shead[period]
+                ehead_value = shb.Ehead[period]
+                for layer in range(self.__NumLyr):
+                    for row in range(self.__NumRow):
+                        for col in range(self.__NumCol):
+                            if shead_value[layer, row, col] != 0 and ehead_value[layer, row, col] != 0:
+                                file.write(
+                                    f"{period + 1}  {layer + 1}  {row + 1}  {col + 1}  {shead_value[layer, row, col]}  "
+                                    f"{ehead_value[layer, row, col]}\n")
+
+    def WriteWEL(self):
+        wel = self.__package["WEL"]
+        with open(os.path.join(self.folder_path, "井流_应力期数据表.in"), "w") as file:
+            file.write("IPER  ILYR  IROW  ICOL  WELLR  SATTHR\n")
+            periods = sorted(wel.Wellr.keys())
+            for period in periods:
+                wellr_value = wel.Wellr[period]
+                satthr_value = wel.Satthr[period]
+                for layer in range(self.__NumLyr):
+                    for row in range(self.__NumRow):
+                        for col in range(self.__NumCol):
+                            if wellr_value[layer, row, col] != 0:
+                                file.write(
+                                    f"{period + 1}  {layer + 1}  {row + 1}  {col + 1}  {wellr_value[layer, row, col]}  "
+                                    f"{satthr_value[layer, row, col]}\n")
+
+    def WriteEVT(self):
+        evt = self.__package["EVT"]
+        with open(os.path.join(self.folder_path, "潜水蒸发_应力期数据表.in"), "w") as file:
+            file.write("IPER  ILYR  IROW  ICOL  IEVT  ETSURF  ETRATE  ETMXD  ETEXP  NUMSEG\n")
+            periods = sorted(evt.ETSurf.keys())
+            print(periods)
+            for period in periods:
+                ETSurf_value = evt.ETSurf[period]
+                ETRate_value = evt.ETRate[period]
+                ETMxd_value = evt.ETMxd[period]
+                ETExp_value = evt.ETExp[period]
+                for layer in range(self.__NumLyr):
+                    for row in range(self.__NumRow):
+                        for col in range(self.__NumCol):
+                            if ETExp_value[layer, row, col] > 0:
+                                file.write(
+                                    f"{period + 1}  {layer + 1}  {row + 1}  {col + 1}  {evt.IEvt}  {ETSurf_value[layer, row, col]}  "
+                                    f"{ETRate_value[layer, row, col]}  {ETMxd_value[layer, row, col]}  "
+                                    f"{ETExp_value[layer, row, col]}  {evt.NumSeg}\n")
+
+    def WriteRIV(self):
+        riv = self.__package["RIV"]
+        with open(os.path.join(self.folder_path, "常年性河流_应力期数据表.in"), "w") as file:
+            file.write("IPER  ILYR  IROW  ICOL  SHEAD  EHEAD  COND  RIVBTM\n")
+            periods = sorted(riv.Cond.keys())
+            for period in periods:
+                cond_value = riv.Cond[period]
+                shead_value = riv.Shead[period]
+                ehead_value = riv.Ehead[period]
+                rivBtm_value = riv.RivBtm[period]
+                for layer in range(self.__NumLyr):
+                    for row in range(self.__NumRow):
+                        for col in range(self.__NumCol):
+                            if cond_value[layer, row, col] > 0:
+                                file.write(
+                                    f"{period + 1}  {layer + 1}  {row + 1}  {col + 1}  {shead_value[layer, row, col]}  "
+                                    f"{ehead_value[layer, row, col]}  {cond_value[layer, row, col]}  {rivBtm_value[layer, row, col]}\n")
+
+
+
