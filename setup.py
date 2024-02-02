@@ -5,7 +5,7 @@ setup(
     version='1.0.0',
     author='Zhenjiang Wu',
     description='A Python library for invoking the COMUS model for groundwater numerical simulation.',
-    packages=find_packages(exclude=['Example*', 'tests*', 'docs*', 'build*', 'dist*', '.idea*', '.gitignore', 'README.md']),
+    packages=find_packages(exclude=['Example*', 'tests*', 'docs*', 'build*', 'dist*', '.idea*', '.gitignore', 'README.md','ComusModel']),
     package_data={
         'pycomus.Utils': ['*.dll'],
     },
