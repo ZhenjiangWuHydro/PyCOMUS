@@ -78,6 +78,8 @@ class ComusModel:
             writeOutPut.WriteEVT()
         if "RIV" in self._package:
             writeOutPut.WriteRIV()
+        if "RES" in self._package:
+            writeOutPut.WriteRES()
 
     def runModel(self) -> None:
         """

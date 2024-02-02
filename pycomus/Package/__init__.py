@@ -6,3 +6,4 @@ from .CWEL import ComusWel
 from .CSHB import ComusShb
 from .CEVT import ComusEvt
 from .CRIV import ComusRiv
+from .CRES import ComusRes

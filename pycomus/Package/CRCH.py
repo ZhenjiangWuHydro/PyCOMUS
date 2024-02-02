@@ -20,7 +20,8 @@ class ComusRch:
 
         Parameters:
         ----------------------------
-        model: COMUS Model Object.
+        model:
+            COMUS Model Object.
         Rechr:
             The rate of areal recharge to the grid cell (L/T). This value must be greater than or equal to 0.
         IRech:

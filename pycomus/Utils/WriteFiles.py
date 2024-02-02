@@ -64,7 +64,7 @@ class WriteFiles:
             SIMRCH = 1
         if "GHB" in self.__package:
             SIMGHB = 1
-        if "GHB" in self.__package:
+        if "DRN" in self.__package:
             SIMDRN = 1
         if "SHB" in self.__package:
             SIMSHB = 1
@@ -291,5 +291,36 @@ class WriteFiles:
                                     f"{period + 1}  {layer + 1}  {row + 1}  {col + 1}  {shead_value[layer, row, col]}  "
                                     f"{ehead_value[layer, row, col]}  {cond_value[layer, row, col]}  {rivBtm_value[layer, row, col]}\n")
 
+    def WriteRES(self):
+        res = self.__package["RES"].ResValue
+        control_data = res.ControlParams
+        period_data = res.PeriodData
+        grid_data = res.GridData
+        with open(os.path.join(self.folder_path, "水库_模拟控制参数表.in"), "w") as file:
+            file.write("RESID  EVEXP  EVMAXD  NUMSEG  NUMPT\n")
+            for res_id, params in control_data.items():
+                file.write(f"{res_id + 1}  {params[0]}  {params[1]}  {params[2]}  {params[3]}\n")
 
+        with open(os.path.join(self.folder_path, "水库_应力期数据表.in"), "w") as file:
+            file.write("IPER  RESID  SHEAD  EHEAD  RCHRG  GEVT\n")
+            for res_id, periodData in period_data.items():
+                for period_id, value in periodData.items():
+                    file.write(f"{period_id + 1}  {res_id + 1}  {value[0]}  {value[1]}  {value[2]}  {value[3]}\n")
+
+        with open(os.path.join(self.folder_path, "水库_网格单元数据表.in"), "w") as file:
+            file.write("RESID  CELLID  ILYR  IROW  ICOL  BTM  BVK  BTK\n")
+            resIds = sorted(grid_data["Btm"].keys())
+            for resId in resIds:
+                index = 1
+                btm_value = grid_data["Btm"][resId]
+                bvk_value = grid_data["Bvk"][resId]
+                btk_value = grid_data["Btk"][resId]
+                for layer in range(self.__NumLyr):
+                    for row in range(self.__NumRow):
+                        for col in range(self.__NumCol):
+                            if bvk_value[layer, row, col] >= 0 and btk_value[layer, row, col] > 0:
+                                file.write(
+                                    f"{resId + 1}  {index}  {layer + 1}  {row + 1}  {col + 1}  {btm_value[layer, row, col]}  "
+                                    f"{bvk_value[layer, row, col]}  {btk_value[layer, row, col]}\n")
+                                index += 1
 

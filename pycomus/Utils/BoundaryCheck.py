@@ -13,7 +13,7 @@ def CheckValueFormat(Value: Union[int, float, Dict[int, Union[int, float, np.nda
     elif isinstance(Value, Dict):
         # Check for duplicate keys
         if len(Value) != len(set(Value.keys())):
-            raise ValueError("Duplicate Period found in the Value.")
+            raise ValueError("Duplicate Key found in the Value.")
 
         # Check dictionary length
         if len(Value) < 1 or len(Value) > len(period):
@@ -51,7 +51,7 @@ def CheckValueGtZero(Value: Union[int, float, Dict[int, Union[int, float, np.nda
     elif isinstance(Value, Dict):
         # Check for duplicate keys
         if len(Value) != len(set(Value.keys())):
-            raise ValueError(f"Duplicate Period found in the {ValueName}.")
+            raise ValueError(f"Duplicate Key found in the {ValueName}.")
 
         # Check dictionary length
         if len(Value) < 1 or len(Value) > len(period):
