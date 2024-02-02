@@ -41,7 +41,7 @@ class WriteFiles:
         # 定义要写入的内容
         header_line = "NUMLYR  NUMROW  NUMCOL  DIMUNIT  TIMEUNIT  XSTCORD  YSTCORD  SIMMTHD  SIMTYPE  LAMBDA  INTBLKM  ISOLVE  MAXIT  DAMP  HCLOSE  RCLOSE  IRELAX  THETA  GAMMA  AKAPPA  NITER  HNOFLO  ICHFLG  IWDFLG  WETFCT  IWETIT  IHDWET  IREGSTA  IMULTD  NUMTD"
         # 打开文件以写入内容
-        with open(os.path.join(self.folder_path, "模拟控制参数表.in"), "w") as file:
+        with open(os.path.join(self.folder_path, "CtrlPar.in"), "w") as file:
             # 写入第一行内容
             file.write(header_line + "\n")
             file.write('    '.join(map(str, conParsData)))
@@ -86,14 +86,14 @@ class WriteFiles:
             SIMIBS = 1
         if "SUB" in self.__package:
             SIMSUB = 1
-        with open(os.path.join(self.folder_path, "源汇项模拟选项表.in"), "w") as file:
+        with open(os.path.join(self.folder_path, "BndOpt.in"), "w") as file:
             file.write(
                 "SIMSHB  SIMGHB  SIMRCH  SIMWEL  SIMDRN  SIMEVT  SIMHFB  SIMRIV  SIMSTR  SIMRES  SIMLAK  SIMIBS  SIMSUB\n")
             file.write(f"{SIMSHB}  {SIMGHB}  {SIMRCH}  {SIMWEL}  {SIMDRN}  {SIMEVT}  {SIMHFB}  {SIMRIV}  {SIMSTR}  "
                        f"{SIMRES}  {SIMLAK}  {SIMIBS}  {SIMSUB}")
 
     def WriteOutput(self):
-        with open(os.path.join(self.folder_path, "模拟输出选项表.in"), "w") as file:
+        with open(os.path.join(self.folder_path, "OutOpt.in"), "w") as file:
             outPars: pycomus.ComusOutputPars = self.__model._outPars
             file.write(
                 "GDWBDPRN  LYRBDPRN  CELLBDPRN  CELLHHPRN  CELLDDPRN  CELLFLPRN  LAKBDPRN  SEGMBDPRN  RECHBDPRN  IBSPRN  SUBPRN  NDBPRN  DBPRN  REGBDPRN\n")
@@ -103,7 +103,7 @@ class WriteFiles:
                        f"{outPars.m_REGBDPRN}")
 
     def WriteRowColSpace(self):
-        with open(os.path.join(self.folder_path, "网格单元水平向间距表.in"), "w") as file:
+        with open(os.path.join(self.folder_path, "GrdSpace.in"), "w") as file:
             file.write("ATTI  NUMID  DELT\n")
             index = 1
             for rowSpace in self.__model._cmsDis.RowSpaceList:
@@ -115,7 +115,7 @@ class WriteFiles:
                 index += 1
 
     def WritePeriod(self):
-        with open(os.path.join(self.folder_path, "应力期属性表.in"), "w") as file:
+        with open(os.path.join(self.folder_path, "PerAttr.in"), "w") as file:
             # 写入第一行内容
             file.write("IPER  PERLEN  NSTEP  MULTR\n")
             index = 1
@@ -124,7 +124,7 @@ class WriteFiles:
                 index += 1
 
     def WriteBCFLyrProp(self):
-        with open(os.path.join(self.folder_path, "BCF含水层属性表.in"), "w") as file:
+        with open(os.path.join(self.folder_path, "BcfLyr.in"), "w") as file:
             # 写入第一行内容
             file.write("LYRID  LYRCON  LYRTRPY  LYRIBS\n")
             for i in range(self.__NumLyr):
@@ -133,7 +133,7 @@ class WriteFiles:
                     f"{self.__model._Layers[i].LyrTrpy}  {self.__model._Layers[i].LyrIbs}\n")
 
     def WriteBCFGridCell(self):
-        with open(os.path.join(self.folder_path, "BCF网格单元属性表.in"), "w") as file:
+        with open(os.path.join(self.folder_path, "BcfGrd.in"), "w") as file:
             # 写入第一行内容
             file.write("ILYR  IROW  ICOL  IBOUND  CELLTOP  CELLBOT  TRANSM  HK  VCONT  SC1  SC2  WETDRY  SHEAD\n")
             for layer in range(self.__NumLyr):
@@ -145,7 +145,7 @@ class WriteFiles:
                             f"  {gridCell.HK}  {gridCell.VCONT}  {gridCell.SC1}  {gridCell.SC2}  {gridCell.WETDRY}  {gridCell.SHEAD}\n")
 
     def WriteLPFLyrProp(self):
-        with open(os.path.join(self.folder_path, "LPF含水层属性表.in"), "w") as file:
+        with open(os.path.join(self.folder_path, "LpfLyr.in"), "w") as file:
             # 写入第一行内容
             file.write("LYRID  LYRTYPE  LYRHANI  LYRVKA  LYRCBD  LYRIBS\n")
             for i in range(self.__NumLyr):
@@ -154,7 +154,7 @@ class WriteFiles:
                     f"{self.__model._Layers[i].LyrCbd}  {self.__model._Layers[i].LyrIbs}\n")
 
     def WriteLPFGridCell(self):
-        with open(os.path.join(self.folder_path, "LPF网格单元属性表.in"), "w") as file:
+        with open(os.path.join(self.folder_path, "LpfGrd.in"), "w") as file:
             # 写入第一行内容
             file.write(
                 "ILYR  IROW  ICOL  CELLTOP  CELLBOT  IBOUND  HK  HANI  VKA  VKCB  TKCB  SC1  SC2  WETDRY  SHEAD\n")
@@ -169,7 +169,7 @@ class WriteFiles:
 
     def WriteRCH(self):
         rchar = self.__package["RCH"]
-        with open(os.path.join(self.folder_path, "面上补给_应力期数据表.in"), "w") as file:
+        with open(os.path.join(self.folder_path, "RCH.in"), "w") as file:
             file.write("IPER  ILYR  IROW  ICOL  IRECH  RECHR\n")
             for period, value in rchar.Rechr.items():
                 for layer in range(self.__NumLyr):
@@ -181,7 +181,7 @@ class WriteFiles:
 
     def WriteDRN(self):
         drn = self.__package["DRN"]
-        with open(os.path.join(self.folder_path, "排水沟_应力期数据表.in"), "w") as file:
+        with open(os.path.join(self.folder_path, "DRN.in"), "w") as file:
             file.write("IPER  ILYR  IROW  ICOL  DELEV  COND\n")
             periods = sorted(drn.Cond.keys())
             for period in periods:
@@ -197,7 +197,7 @@ class WriteFiles:
 
     def WriteGHB(self):
         ghb = self.__package["GHB"]
-        with open(os.path.join(self.folder_path, "通用水头_应力期数据表.in"), "w") as file:
+        with open(os.path.join(self.folder_path, "GHB.in"), "w") as file:
             file.write("IPER  ILYR  IROW  ICOL  SHEAD  EHEAD  COND\n")
             periods = sorted(ghb.Cond.keys())
             for period in periods:
@@ -214,7 +214,7 @@ class WriteFiles:
 
     def WriteHFB(self):
         hfb: pycomus.ComusHfb = self.__package["HFB"]
-        with open(os.path.join(self.folder_path, "水平流动屏障数据表.in"), "w") as file:
+        with open(os.path.join(self.folder_path, "HFB.in"), "w") as file:
             file.write("ILYR  IROW1  ICOL1  IROW2  ICOL2  HCDW\n")
             for hfb_data in hfb.hfb_data:
                 file.write(
@@ -223,7 +223,7 @@ class WriteFiles:
 
     def WriteSHB(self):
         shb = self.__package["SHB"]
-        with open(os.path.join(self.folder_path, "时变水头_应力期数据表.in"), "w") as file:
+        with open(os.path.join(self.folder_path, "SHB.in"), "w") as file:
             file.write("IPER  ILYR  IROW  ICOL  SHEAD  EHEAD\n")
             periods = sorted(shb.Shead.keys())
             for period in periods:
@@ -239,7 +239,7 @@ class WriteFiles:
 
     def WriteWEL(self):
         wel = self.__package["WEL"]
-        with open(os.path.join(self.folder_path, "井流_应力期数据表.in"), "w") as file:
+        with open(os.path.join(self.folder_path, "WEL.in"), "w") as file:
             file.write("IPER  ILYR  IROW  ICOL  WELLR  SATTHR\n")
             periods = sorted(wel.Wellr.keys())
             for period in periods:
@@ -255,7 +255,7 @@ class WriteFiles:
 
     def WriteEVT(self):
         evt = self.__package["EVT"]
-        with open(os.path.join(self.folder_path, "潜水蒸发_应力期数据表.in"), "w") as file:
+        with open(os.path.join(self.folder_path, "EVT.in"), "w") as file:
             file.write("IPER  ILYR  IROW  ICOL  IEVT  ETSURF  ETRATE  ETMXD  ETEXP  NUMSEG\n")
             periods = sorted(evt.ETSurf.keys())
             print(periods)
@@ -275,7 +275,7 @@ class WriteFiles:
 
     def WriteRIV(self):
         riv = self.__package["RIV"]
-        with open(os.path.join(self.folder_path, "常年性河流_应力期数据表.in"), "w") as file:
+        with open(os.path.join(self.folder_path, "RIV.in"), "w") as file:
             file.write("IPER  ILYR  IROW  ICOL  SHEAD  EHEAD  COND  RIVBTM\n")
             periods = sorted(riv.Cond.keys())
             for period in periods:
@@ -296,18 +296,18 @@ class WriteFiles:
         control_data = res.ControlParams
         period_data = res.PeriodData
         grid_data = res.GridData
-        with open(os.path.join(self.folder_path, "水库_模拟控制参数表.in"), "w") as file:
+        with open(os.path.join(self.folder_path, "RESCtrl.in"), "w") as file:
             file.write("RESID  EVEXP  EVMAXD  NUMSEG  NUMPT\n")
             for res_id, params in control_data.items():
                 file.write(f"{res_id + 1}  {params[0]}  {params[1]}  {params[2]}  {params[3]}\n")
 
-        with open(os.path.join(self.folder_path, "水库_应力期数据表.in"), "w") as file:
+        with open(os.path.join(self.folder_path, "RESPer.in"), "w") as file:
             file.write("IPER  RESID  SHEAD  EHEAD  RCHRG  GEVT\n")
             for res_id, periodData in period_data.items():
                 for period_id, value in periodData.items():
                     file.write(f"{period_id + 1}  {res_id + 1}  {value[0]}  {value[1]}  {value[2]}  {value[3]}\n")
 
-        with open(os.path.join(self.folder_path, "水库_网格单元数据表.in"), "w") as file:
+        with open(os.path.join(self.folder_path, "RESGrd.in"), "w") as file:
             file.write("RESID  CELLID  ILYR  IROW  ICOL  BTM  BVK  BTK\n")
             resIds = sorted(grid_data["Btm"].keys())
             for resId in resIds:
