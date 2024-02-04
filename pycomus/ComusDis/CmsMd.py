@@ -12,7 +12,7 @@ import pycomus.Utils.WriteFiles
 
 class ComusModel:
 
-    def __init__(self, model_name="aaa"):
+    def __init__(self, model_name: str = "ComusTest"):
         """
         Create a COMUS Model object.
 
@@ -21,6 +21,8 @@ class ComusModel:
         model_name:
             COMUS Model Name
         """
+        if not isinstance(model_name, str):
+            raise ValueError("model_name should be of type str.")
         self._model_name: str = model_name
         self._package = {}
         self._conPars = None
@@ -80,6 +82,8 @@ class ComusModel:
             writeOutPut.WriteRIV()
         if "RES" in self._package:
             writeOutPut.WriteRES()
+        if "STR" in self._package:
+            writeOutPut.WriteSTR()
 
     def runModel(self) -> None:
         """

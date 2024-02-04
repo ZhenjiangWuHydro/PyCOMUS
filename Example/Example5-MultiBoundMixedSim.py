@@ -69,7 +69,7 @@ if __name__ == "__main__":
     etExp = np.zeros((NumLyr, NumRow, NumCol))
     etExp[0, :, :] = 2
     evtPackage = pycomus.ComusEvt(model, ETSurf={0: etSurf, 1: etSurf}, ETRate={0: etRate, 1: etRate},
-                                  ETMxd={0: etMxd, 1: etMxd}, ETExp={0:etExp,1:etExp}, NumSeg=2)
+                                  ETMxd={0: etMxd, 1: etMxd}, ETExp={0: etExp, 1: etExp}, NumSeg=2)
 
     # Set RIV
     cond = np.zeros((NumLyr, NumRow, NumCol))

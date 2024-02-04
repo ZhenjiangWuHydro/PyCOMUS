@@ -126,8 +126,6 @@ class ComusGridPars:
                 self.SC1 = np.full((self.NumLyr, self.NumRow, self.NumCol), SC1)
             elif isinstance(SC1, np.ndarray) and SC1.shape == (self.NumLyr, self.NumRow, self.NumCol):
                 self.SC1 = SC1
-            else:
-                self.__ShowErrorMsg("SC1")
         self.__SetComPars()
 
         # BCF Params Input

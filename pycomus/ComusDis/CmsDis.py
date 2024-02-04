@@ -59,10 +59,14 @@ class __ComusDis:
             raise ValueError("ColSpace grid spacing length should be the same as NumCol!")
         else:
             self.ColSpaceList = ColSpace
+        if not all(x > 0 for x in self.RowSpaceList):
+            raise ValueError("RowSpace should be greater than 0")
+        if not all(x > 0 for x in self.ColSpaceList):
+            raise ValueError("ColSpace should be greater than 0")
         model._addDis(self)
 
     def __str__(self):
-        return f"Mesh Grid And Layer:\n    Number of layers : {self.NumLyr}  Number of rows : {self.NumRow}  Number of cols : {self.NumCol}  \n"\
+        return f"Mesh Grid And Layer:\n    Number of layers : {self.NumLyr}  Number of rows : {self.NumRow}  Number of cols : {self.NumCol}  \n" \
                f"    RowSpace : {self.RowSpaceList}  \n    ColSpace : {self.ColSpaceList}  XCoord : {self.XCoord}   " \
                f"YCoord : {self.YCoord}"
 
