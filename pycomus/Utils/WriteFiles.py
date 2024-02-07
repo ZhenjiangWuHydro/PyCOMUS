@@ -6,13 +6,13 @@ import pycomus
 
 class WriteFiles:
     def __init__(self, model):
-        self.__model = model
-        self.__NumLyr = model._cmsDis.NumLyr
-        self.__NumRow = model._cmsDis.NumRow
-        self.__NumCol = model._cmsDis.NumCol
-        self.__conPars: pycomus.ComusConPars = self.__model._conPars
-        self.__package = self.__model._package
-        folder_name = self.__model._model_name
+        self._model = model
+        self._num_lyr = model.CmsDis.num_lyr
+        self._num_row = model.CmsDis.num_row
+        self._num_col = model.CmsDis.num_col
+        self._conPars: pycomus.ComusConPars = self._model.CmsPars
+        self._package = self._model.package
+        folder_name = self._model.model_name
         current_directory = os.getcwd()
         self.folder_path = os.path.join(current_directory, folder_name)
         if os.path.exists(self.folder_path):
@@ -28,16 +28,14 @@ class WriteFiles:
         os.mkdir(self.folder_path)
 
     def WriteConPars(self):
-        conParsData = [self.__NumLyr, self.__NumRow, self.__NumCol, self.__conPars.DimUnit, self.__conPars.TimeUnit,
-                       self.__model._cmsDis.XCoord, self.__model._cmsDis.YCoord, self.__conPars.SimMtd,
-                       self.__conPars.SimType,
-                       self.__conPars.LamBda, self.__conPars.IntBkm, self.__conPars.ISolve, self.__conPars.MaxIt,
-                       self.__conPars.Damp, self.__conPars.HClose,
-                       self.__conPars.RClose, self.__conPars.IRelax, self.__conPars.Theta, self.__conPars.Gamma,
-                       self.__conPars.Akappa, self.__conPars.Niter,
-                       self.__conPars.HNoflo, self.__conPars.IchFlg, self.__conPars.IwdFlg, self.__conPars.WetFct,
-                       self.__conPars.NweTit, self.__conPars.IhdWet,
-                       self.__conPars.IreSta, self.__conPars.ImuLtd, self.__conPars.NumTd]
+        conParsData = [self._num_lyr, self._num_row, self._num_col, self._conPars.dim_unit, self._conPars.time_unit,
+                       self._model.CmsDis.x_coord, self._model.CmsDis.y_coord, self._conPars.sim_mtd,
+                       self._conPars.sim_type, self._conPars.acc_lambda, self._conPars.intblkm, self._conPars.solve,
+                       self._conPars.max_iter, self._conPars.damp, self._conPars.h_close, self._conPars.r_close,
+                       self._conPars.relax, self._conPars.theta, self._conPars.gamma, self._conPars.akappa,
+                       self._conPars.n_iter, self._conPars.hno_flo, self._conPars.ch_flg, self._conPars.wd_flg,
+                       self._conPars.wet_fct, self._conPars.newt_iter, self._conPars.hd_wet, self._conPars.reg_sta,
+                       self._conPars.mul_td, self._conPars.num_td]
         # 定义要写入的内容
         header_line = "NUMLYR  NUMROW  NUMCOL  DIMUNIT  TIMEUNIT  XSTCORD  YSTCORD  SIMMTHD  SIMTYPE  LAMBDA  INTBLKM  ISOLVE  MAXIT  DAMP  HCLOSE  RCLOSE  IRELAX  THETA  GAMMA  AKAPPA  NITER  HNOFLO  ICHFLG  IWDFLG  WETFCT  IWETIT  IHDWET  IREGSTA  IMULTD  NUMTD"
         # 打开文件以写入内容
@@ -60,31 +58,31 @@ class WriteFiles:
         SIMLAK = 0
         SIMIBS = 0
         SIMSUB = 0
-        if "RCH" in self.__package:
+        if "RCH" in self._package:
             SIMRCH = 1
-        if "GHB" in self.__package:
+        if "GHB" in self._package:
             SIMGHB = 1
-        if "DRN" in self.__package:
+        if "DRN" in self._package:
             SIMDRN = 1
-        if "SHB" in self.__package:
+        if "SHB" in self._package:
             SIMSHB = 1
-        if "WEL" in self.__package:
+        if "WEL" in self._package:
             SIMWEL = 1
-        if "EVT" in self.__package:
+        if "EVT" in self._package:
             SIMEVT = 1
-        if "HFB" in self.__package:
+        if "HFB" in self._package:
             SIMHFB = 1
-        if "RIV" in self.__package:
+        if "RIV" in self._package:
             SIMRIV = 1
-        if "STR" in self.__package:
+        if "STR" in self._package:
             SIMSTR = 1
-        if "RES" in self.__package:
+        if "RES" in self._package:
             SIMRES = 1
-        if "LAK" in self.__package:
+        if "LAK" in self._package:
             SIMLAK = 1
-        if "IBS" in self.__package:
+        if "IBS" in self._package:
             SIMIBS = 1
-        if "SUB" in self.__package:
+        if "SUB" in self._package:
             SIMSUB = 1
         with open(os.path.join(self.folder_path, "BndOpt.in"), "w") as file:
             file.write(
@@ -94,23 +92,23 @@ class WriteFiles:
 
     def WriteOutput(self):
         with open(os.path.join(self.folder_path, "OutOpt.in"), "w") as file:
-            outPars: pycomus.ComusOutputPars = self.__model._outPars
+            outPars: pycomus.ComusOutputPars = self._model.CmsOutPars
             file.write(
                 "GDWBDPRN  LYRBDPRN  CELLBDPRN  CELLHHPRN  CELLDDPRN  CELLFLPRN  LAKBDPRN  SEGMBDPRN  RECHBDPRN  IBSPRN  SUBPRN  NDBPRN  DBPRN  REGBDPRN\n")
-            file.write(f"{outPars.m_GDWBDPRN}  {outPars.m_LYRBDPRN}  {outPars.m_CELLBDPRN}  {outPars.m_CELLHHPRN}  "
-                       f"{outPars.m_CELLDDPRN}  {outPars.m_CELLFLPRN}  {outPars.m_LAKBDPRN}  {outPars.m_SEGMBDPRN}  "
-                       f"{outPars.m_RECHBDPRN}  {outPars.m_IBSPRN}  {outPars.m_SUBPRN}  {outPars.m_NDBPRN}  {outPars.m_DBPRN}  "
-                       f"{outPars.m_REGBDPRN}")
+            file.write(f"{outPars.gdw_bd}  {outPars.lyr_bd}  {outPars.cell_bd}  {outPars.cell_hh}  "
+                       f"{outPars.cell_dd}  {outPars.cell_flp}  {outPars.lak_bd}  {outPars.segm_bd}  "
+                       f"{outPars.rech_bd}  {outPars.ibs}  {outPars.sub}  {outPars.ndb}  {outPars.db}  "
+                       f"{outPars.reg_bd}")
 
     def WriteRowColSpace(self):
         with open(os.path.join(self.folder_path, "GrdSpace.in"), "w") as file:
             file.write("ATTI  NUMID  DELT\n")
             index = 1
-            for rowSpace in self.__model._cmsDis.RowSpaceList:
+            for rowSpace in self._model.CmsDis.row_space:
                 file.write(f"C  {index}  {rowSpace}\n")
                 index += 1
             index = 1
-            for colSpace in self.__model._cmsDis.ColSpaceList:
+            for colSpace in self._model.CmsDis.col_space:
                 file.write(f"R  {index}  {colSpace}\n")
                 index += 1
 
@@ -119,84 +117,84 @@ class WriteFiles:
             # 写入第一行内容
             file.write("IPER  PERLEN  NSTEP  MULTR\n")
             index = 1
-            for tuple in self.__model._cmsTime:
-                file.write(f"{index}  {tuple[0]}  {tuple[1]}  {tuple[2]}\n")
+            for tuple in self._model.CmsTime:
+                file.write(f"{int(index)}   {float(tuple[0])}   {int(tuple[1])}   {float(tuple[2])} \n")
                 index += 1
 
     def WriteBCFLyrProp(self):
         with open(os.path.join(self.folder_path, "BcfLyr.in"), "w") as file:
             # 写入第一行内容
             file.write("LYRID  LYRCON  LYRTRPY  LYRIBS\n")
-            for i in range(self.__NumLyr):
+            for i in range(self._num_lyr):
                 file.write(
-                    f"{self.__model._Layers[i].LyrId}  {self.__model._Layers[i].LyrType}  "
-                    f"{self.__model._Layers[i].LyrTrpy}  {self.__model._Layers[i].LyrIbs}\n")
+                    f"{self._model.layers[i].lyr_id}  {self._model.layers[i].lyr_type}  "
+                    f"{self._model.layers[i].lyr_trpy}  {self._model.layers[i].lyr_ibs}\n")
 
     def WriteBCFGridCell(self):
         with open(os.path.join(self.folder_path, "BcfGrd.in"), "w") as file:
             # 写入第一行内容
             file.write("ILYR  IROW  ICOL  IBOUND  CELLTOP  CELLBOT  TRANSM  HK  VCONT  SC1  SC2  WETDRY  SHEAD\n")
-            for layer in range(self.__NumLyr):
-                for row in range(self.__NumRow):
-                    for col in range(self.__NumCol):
-                        gridCell = self.__model._Layers[layer].GridCells[row][col]
+            for layer in range(self._num_lyr):
+                for row in range(self._num_row):
+                    for col in range(self._num_col):
+                        grid_cell = self._model.layers[layer].grid_cells[row][col]
                         file.write(
-                            f"{layer + 1}  {row + 1}  {col + 1}  {gridCell.IBOUND}  {gridCell.TOP}  {gridCell.BOT}  {gridCell.TRAN}"
-                            f"  {gridCell.HK}  {gridCell.VCONT}  {gridCell.SC1}  {gridCell.SC2}  {gridCell.WETDRY}  {gridCell.SHEAD}\n")
+                            f"{int(layer + 1)}  {int(row + 1)}  {int(col + 1)}  {int(grid_cell.ibound)}  {grid_cell.top}  {grid_cell.bot}  {grid_cell.tran}"
+                            f"  {grid_cell.hk}  {grid_cell.vcont}  {grid_cell.sc1}  {grid_cell.sc2}  {grid_cell.wetdry}  {grid_cell.shead}\n")
 
     def WriteLPFLyrProp(self):
         with open(os.path.join(self.folder_path, "LpfLyr.in"), "w") as file:
             # 写入第一行内容
             file.write("LYRID  LYRTYPE  LYRHANI  LYRVKA  LYRCBD  LYRIBS\n")
-            for i in range(self.__NumLyr):
+            for i in range(self._num_lyr):
                 file.write(
-                    f"{self.__model._Layers[i].LyrId}  {self.__model._Layers[i].LyrType}  -1  0  "
-                    f"{self.__model._Layers[i].LyrCbd}  {self.__model._Layers[i].LyrIbs}\n")
+                    f"{self._model.layers[i].lyr_id}  {self._model.layers[i].lyr_type}  -1  0  "
+                    f"{self._model.layers[i].lyr_cbd}  {self._model.layers[i].lyr_ibs}\n")
 
     def WriteLPFGridCell(self):
         with open(os.path.join(self.folder_path, "LpfGrd.in"), "w") as file:
             # 写入第一行内容
             file.write(
                 "ILYR  IROW  ICOL  CELLTOP  CELLBOT  IBOUND  HK  HANI  VKA  VKCB  TKCB  SC1  SC2  WETDRY  SHEAD\n")
-            for layer in range(self.__NumLyr):
-                for row in range(self.__NumRow):
-                    for col in range(self.__NumCol):
-                        gridCell = self.__model._Layers[layer].GridCells[row][col]
+            for layer in range(self._num_lyr):
+                for row in range(self._num_row):
+                    for col in range(self._num_col):
+                        grid_cell = self._model.layers[layer].grid_cells[row][col]
                         file.write(
-                            f"{layer + 1}  {row + 1}  {col + 1}  {gridCell.TOP}  {gridCell.BOT}  {gridCell.IBOUND}  {gridCell.HK}"
-                            f"  {gridCell.HANI}  {gridCell.VKA}  {gridCell.VKCB}  {gridCell.TKCB}  {gridCell.SC1}  {gridCell.SC2}"
-                            f"  {gridCell.WETDRY}  {gridCell.SHEAD}\n")
+                            f"{int(layer + 1)}  {int(row + 1)}  {int(col + 1)}  {grid_cell.top}  {grid_cell.bot}  {int(grid_cell.ibound)}  {grid_cell.hk}"
+                            f"  {grid_cell.hani}  {grid_cell.vka}  {grid_cell.vkcb}  {grid_cell.tkcb}  {grid_cell.sc1}  {grid_cell.sc2}"
+                            f"  {grid_cell.wetdry}  {grid_cell.shead}\n")
 
     def WriteRCH(self):
-        rchar = self.__package["RCH"]
+        rechr = self._package["RCH"]
         with open(os.path.join(self.folder_path, "RCH.in"), "w") as file:
             file.write("IPER  ILYR  IROW  ICOL  IRECH  RECHR\n")
-            for period, value in rchar.Rechr.items():
-                for layer in range(self.__NumLyr):
-                    for row in range(self.__NumRow):
-                        for col in range(self.__NumCol):
+            for period, value in rechr.rechr.items():
+                for layer in range(self._num_lyr):
+                    for row in range(self._num_row):
+                        for col in range(self._num_col):
                             if value[layer, row, col] != 0:
                                 file.write(
-                                    f"{period + 1}  {layer + 1}  {row + 1}  {col + 1}  {rchar.IRech}  {value[layer, row, col]} \n")
+                                    f"{period + 1}  {layer + 1}  {row + 1}  {col + 1}  {rechr.rech}  {value[layer, row, col]} \n")
 
     def WriteDRN(self):
-        drn = self.__package["DRN"]
+        drn = self._package["DRN"]
         with open(os.path.join(self.folder_path, "DRN.in"), "w") as file:
             file.write("IPER  ILYR  IROW  ICOL  DELEV  COND\n")
             periods = sorted(drn.Cond.keys())
             for period in periods:
                 cond_value = drn.Cond[period]
                 delev_value = drn.Delev[period]
-                for layer in range(self.__NumLyr):
-                    for row in range(self.__NumRow):
-                        for col in range(self.__NumCol):
+                for layer in range(self._num_lyr):
+                    for row in range(self._num_row):
+                        for col in range(self._num_col):
                             if cond_value[layer, row, col] > 0:
                                 file.write(
                                     f"{period + 1}  {layer + 1}  {row + 1}  {col + 1}  {delev_value[layer, row, col]}  "
                                     f"{cond_value[layer, row, col]}\n")
 
     def WriteGHB(self):
-        ghb = self.__package["GHB"]
+        ghb = self._package["GHB"]
         with open(os.path.join(self.folder_path, "GHB.in"), "w") as file:
             file.write("IPER  ILYR  IROW  ICOL  SHEAD  EHEAD  COND\n")
             periods = sorted(ghb.Cond.keys())
@@ -204,16 +202,16 @@ class WriteFiles:
                 cond_value = ghb.Cond[period]
                 shead_value = ghb.Shead[period]
                 ehead_value = ghb.Ehead[period]
-                for layer in range(self.__NumLyr):
-                    for row in range(self.__NumRow):
-                        for col in range(self.__NumCol):
+                for layer in range(self._num_lyr):
+                    for row in range(self._num_row):
+                        for col in range(self._num_col):
                             if cond_value[layer, row, col] > 0:
                                 file.write(
                                     f"{period + 1}  {layer + 1}  {row + 1}  {col + 1}  {shead_value[layer, row, col]}  "
                                     f"{ehead_value[layer, row, col]}  {cond_value[layer, row, col]}\n")
 
     def WriteHFB(self):
-        hfb: pycomus.ComusHfb = self.__package["HFB"]
+        hfb: pycomus.ComusHfb = self._package["HFB"]
         with open(os.path.join(self.folder_path, "HFB.in"), "w") as file:
             file.write("ILYR  IROW1  ICOL1  IROW2  ICOL2  HCDW\n")
             for hfb_data in hfb.hfb_data:
@@ -222,39 +220,39 @@ class WriteFiles:
                     f"{hfb_data[5]}\n")
 
     def WriteSHB(self):
-        shb = self.__package["SHB"]
+        shb = self._package["SHB"]
         with open(os.path.join(self.folder_path, "SHB.in"), "w") as file:
             file.write("IPER  ILYR  IROW  ICOL  SHEAD  EHEAD\n")
             periods = sorted(shb.Shead.keys())
             for period in periods:
                 shead_value = shb.Shead[period]
                 ehead_value = shb.Ehead[period]
-                for layer in range(self.__NumLyr):
-                    for row in range(self.__NumRow):
-                        for col in range(self.__NumCol):
+                for layer in range(self._num_lyr):
+                    for row in range(self._num_row):
+                        for col in range(self._num_col):
                             if shead_value[layer, row, col] != 0 and ehead_value[layer, row, col] != 0:
                                 file.write(
                                     f"{period + 1}  {layer + 1}  {row + 1}  {col + 1}  {shead_value[layer, row, col]}  "
                                     f"{ehead_value[layer, row, col]}\n")
 
     def WriteWEL(self):
-        wel = self.__package["WEL"]
+        wel = self._package["WEL"]
         with open(os.path.join(self.folder_path, "WEL.in"), "w") as file:
             file.write("IPER  ILYR  IROW  ICOL  WELLR  SATTHR\n")
             periods = sorted(wel.Wellr.keys())
             for period in periods:
                 wellr_value = wel.Wellr[period]
                 satthr_value = wel.Satthr[period]
-                for layer in range(self.__NumLyr):
-                    for row in range(self.__NumRow):
-                        for col in range(self.__NumCol):
+                for layer in range(self._num_lyr):
+                    for row in range(self._num_row):
+                        for col in range(self._num_col):
                             if wellr_value[layer, row, col] != 0:
                                 file.write(
                                     f"{period + 1}  {layer + 1}  {row + 1}  {col + 1}  {wellr_value[layer, row, col]}  "
                                     f"{satthr_value[layer, row, col]}\n")
 
     def WriteEVT(self):
-        evt = self.__package["EVT"]
+        evt = self._package["EVT"]
         with open(os.path.join(self.folder_path, "EVT.in"), "w") as file:
             file.write("IPER  ILYR  IROW  ICOL  IEVT  ETSURF  ETRATE  ETMXD  ETEXP  NUMSEG\n")
             periods = sorted(evt.ETSurf.keys())
@@ -264,9 +262,9 @@ class WriteFiles:
                 ETRate_value = evt.ETRate[period]
                 ETMxd_value = evt.ETMxd[period]
                 ETExp_value = evt.ETExp[period]
-                for layer in range(self.__NumLyr):
-                    for row in range(self.__NumRow):
-                        for col in range(self.__NumCol):
+                for layer in range(self._num_lyr):
+                    for row in range(self._num_row):
+                        for col in range(self._num_col):
                             if ETExp_value[layer, row, col] > 0:
                                 file.write(
                                     f"{period + 1}  {layer + 1}  {row + 1}  {col + 1}  {evt.IEvt}  {ETSurf_value[layer, row, col]}  "
@@ -274,7 +272,7 @@ class WriteFiles:
                                     f"{ETExp_value[layer, row, col]}  {evt.NumSeg}\n")
 
     def WriteRIV(self):
-        riv = self.__package["RIV"]
+        riv = self._package["RIV"]
         with open(os.path.join(self.folder_path, "RIV.in"), "w") as file:
             file.write("IPER  ILYR  IROW  ICOL  SHEAD  EHEAD  COND  RIVBTM\n")
             periods = sorted(riv.Cond.keys())
@@ -283,16 +281,16 @@ class WriteFiles:
                 shead_value = riv.Shead[period]
                 ehead_value = riv.Ehead[period]
                 rivBtm_value = riv.RivBtm[period]
-                for layer in range(self.__NumLyr):
-                    for row in range(self.__NumRow):
-                        for col in range(self.__NumCol):
+                for layer in range(self._num_lyr):
+                    for row in range(self._num_row):
+                        for col in range(self._num_col):
                             if cond_value[layer, row, col] > 0:
                                 file.write(
                                     f"{period + 1}  {layer + 1}  {row + 1}  {col + 1}  {shead_value[layer, row, col]}  "
                                     f"{ehead_value[layer, row, col]}  {cond_value[layer, row, col]}  {rivBtm_value[layer, row, col]}\n")
 
     def WriteRES(self):
-        res = self.__package["RES"].ResValue
+        res = self._package["RES"].ResValue
         control_data = res.ControlParams
         period_data = res.PeriodData
         grid_data = res.GridData
@@ -315,9 +313,9 @@ class WriteFiles:
                 btm_value = grid_data["Btm"][resId]
                 bvk_value = grid_data["Bvk"][resId]
                 btk_value = grid_data["Btk"][resId]
-                for layer in range(self.__NumLyr):
-                    for row in range(self.__NumRow):
-                        for col in range(self.__NumCol):
+                for layer in range(self._num_lyr):
+                    for row in range(self._num_row):
+                        for col in range(self._num_col):
                             if bvk_value[layer, row, col] >= 0 and btk_value[layer, row, col] > 0:
                                 file.write(
                                     f"{resId + 1}  {index}  {layer + 1}  {row + 1}  {col + 1}  {btm_value[layer, row, col]}  "
@@ -325,7 +323,7 @@ class WriteFiles:
                                 index += 1
 
     def WriteSTR(self):
-        str = self.__package["STR"].StreamValue
+        str = self._package["STR"].StreamValue
         control_data = str.ControlParams
         period_data = str.PeriodData
         grid_data = str.GridData
@@ -348,9 +346,9 @@ class WriteFiles:
                 btm_value = grid_data["Btm"][resId]
                 bvk_value = grid_data["Bvk"][resId]
                 btk_value = grid_data["Btk"][resId]
-                for layer in range(self.__NumLyr):
-                    for row in range(self.__NumRow):
-                        for col in range(self.__NumCol):
+                for layer in range(self._num_lyr):
+                    for row in range(self._num_row):
+                        for col in range(self._num_col):
                             if bvk_value[layer, row, col] >= 0 and btk_value[layer, row, col] > 0:
                                 file.write(
                                     f"{resId + 1}  {index}  {layer + 1}  {row + 1}  {col + 1}  {btm_value[layer, row, col]}  "

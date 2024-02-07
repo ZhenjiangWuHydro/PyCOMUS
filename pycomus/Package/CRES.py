@@ -26,10 +26,10 @@ class ComusRes:
         if res_num < 1:
             raise ValueError("The number of reservoirs should be greater than or equal to 1.")
         self.__res_num = res_num
-        cmsDis = model._cmsDis
-        self.__NumLyr = cmsDis.NumLyr
-        self.__NumRow = cmsDis.NumRow
-        self.__NumCol = cmsDis.NumCol
+        cmsDis = model.CmsDis
+        self._num_lyr = cmsDis.NumLyr
+        self._num_row = cmsDis.NumRow
+        self._num_col = cmsDis.NumCol
         self.__period = model._cmsTime.period
         self.__res: Res = Res()
         model._addPackage("RES", self)
@@ -108,9 +108,9 @@ class ComusRes:
             BTK represents the thickness of the low-permeability medium at the reservoir grid cell (L).
         """
         resIds = [i for i in range(self.__res_num)]
-        self.__btm = BoundaryCheck.CheckValueFormat(Btm, "Btm", resIds, self.__NumLyr, self.__NumRow, self.__NumCol)
-        self.__bvk = BoundaryCheck.CheckValueGtZero(Bvk, "Bvk", resIds, self.__NumLyr, self.__NumRow, self.__NumCol)
-        self.__btk = BoundaryCheck.CheckValueGtZero(Btk, "Btk", resIds, self.__NumLyr, self.__NumRow, self.__NumCol)
+        self.__btm = BoundaryCheck.CheckValueFormat(Btm, "Btm", resIds, self._num_lyr, self._num_row, self._num_col)
+        self.__bvk = BoundaryCheck.CheckValueGtZero(Bvk, "Bvk", resIds, self._num_lyr, self._num_row, self._num_col)
+        self.__btk = BoundaryCheck.CheckValueGtZero(Btk, "Btk", resIds, self._num_lyr, self._num_row, self._num_col)
         if sorted(self.__btm.keys()) != sorted(self.__bvk.keys()) != sorted(self.__btk.keys()):
             raise ValueError("The ResId for the 'Btm' parameter,'Bvk' and 'Btk' should be the same.")
         self.__res.GridData = {"Btm": self.__btm, "Bvk": self.__bvk, "Btk": self.__btk}

@@ -57,7 +57,7 @@ if __name__ == "__main__":
 
     # Set RCH
     recharge = getBotAndShead("./Recharge.txt", 3)
-    rechargePackage = pycomus.Package.ComusRch(model, Rechr={0: recharge}, IRech=2)
+    rechargePackage = pycomus.Package.ComusRch(model, rechr={0: recharge}, rech=2)
 
     # Write Output
     model.writeOutPut()

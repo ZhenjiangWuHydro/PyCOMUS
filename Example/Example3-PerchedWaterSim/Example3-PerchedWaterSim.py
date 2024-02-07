@@ -9,7 +9,7 @@ if __name__ == "__main__":
     model = pycomus.ComusModel(model_name="PerchedWater")
 
     # Control Params
-    controlParams = pycomus.ComusConPars(model=model, SimType=1, IntBkm=2, MaxIt=100000, Damp=0.95, RClose=0.0001)
+    controlParams = pycomus.ComusConPars(model=model, sim_type=1, intblkm=2, max_iter=100000, damp=0.95, r_close=0.0001)
 
     outParams = pycomus.ComusOutputPars(model, 2, 2, 2, 2, 2, 2, 2, 2)
 
@@ -17,8 +17,8 @@ if __name__ == "__main__":
     NumLyr = 10
     NumRow = 1
     NumCol = 100
-    modelDis = pycomus.ComusDisLpf(model, NumLyr, NumRow, NumCol, RowSpace=100, ColSpace=100,
-                                 LyrType=[1 for _ in range(NumLyr)])
+    modelDis = pycomus.ComusDisLpf(model, NumLyr, NumRow, NumCol, row_space=100, col_space=100,
+                                 lyr_type=[1 for _ in range(NumLyr)])
 
     # Grid Attribute
     top = np.full((NumRow, NumCol), 2000, dtype=float)
@@ -35,18 +35,18 @@ if __name__ == "__main__":
     KxKyKz[3, 0, 44:55] = 0.00001
     shead = np.full((NumLyr, NumRow, NumCol), 800, dtype=float)
     shead[9, 0, 99] = 100
-    modelGridPar = pycomus.ComusGridPars(model, Top=top, Bot=bot, Ibound=ibound, Kx=KxKyKz, Ky=KxKyKz, Kz=KxKyKz,
-                                       Shead=shead)
+    modelGridPar = pycomus.ComusGridPars(model, top=top, bot=bot, ibound=ibound, kx=KxKyKz, ky=KxKyKz, kz=KxKyKz,
+                                       shead=shead)
     # Set Period
     period = pycomus.ComusPeriod(model, (1, 1, 1))
 
     # Set RCH
     recharge = np.zeros((NumLyr, NumRow, NumCol))
     recharge[0, 0, 49:52] = 0.0015
-    rechargePackage = pycomus.Package.ComusRch(model, Rechr={0: recharge}, IRech=1)
+    rechargePackage = pycomus.Package.ComusRch(model, rechr={0: recharge}, rech=1)
 
     # Write Output
-    model.writeOutPut()
+    model.write_files()
 
     # Run Model
-    model.runModel()
+    model.run()

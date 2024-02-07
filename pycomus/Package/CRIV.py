@@ -33,20 +33,20 @@ class ComusRiv:
         RivBtm:
             The elevation of the bottom of the low permeability medium in the riverbed on the grid cell (L).
         """
-        cmsDis = model._cmsDis
-        self.__NumLyr = cmsDis.NumLyr
-        self.__NumRow = cmsDis.NumRow
-        self.__NumCol = cmsDis.NumCol
+        cmsDis = model.CmsDis
+        self._num_lyr = cmsDis.NumLyr
+        self._num_row = cmsDis.NumRow
+        self._num_col = cmsDis.NumCol
         self.__period = model._cmsTime.period
         # Other Pars
-        self.__Cond = BoundaryCheck.CheckValueGtZero(Cond, "Cond", self.__period, self.__NumLyr,
-                                                       self.__NumRow, self.__NumCol)
-        self.__Shead = BoundaryCheck.CheckValueFormat(Shead, "Shead", self.__period, self.__NumLyr,
-                                                       self.__NumRow, self.__NumCol)
-        self.__Ehead = BoundaryCheck.CheckValueFormat(Ehead, "Ehead", self.__period, self.__NumLyr,
-                                                      self.__NumRow, self.__NumCol)
-        self.__RivBtm = BoundaryCheck.CheckValueFormat(RivBtm, "RivBtm", self.__period, self.__NumLyr,
-                                                      self.__NumRow, self.__NumCol)
+        self.__Cond = BoundaryCheck.CheckValueGtZero(Cond, "Cond", self.__period, self._num_lyr,
+                                                       self._num_row, self._num_col)
+        self.__Shead = BoundaryCheck.CheckValueFormat(Shead, "Shead", self.__period, self._num_lyr,
+                                                       self._num_row, self._num_col)
+        self.__Ehead = BoundaryCheck.CheckValueFormat(Ehead, "Ehead", self.__period, self._num_lyr,
+                                                      self._num_row, self._num_col)
+        self.__RivBtm = BoundaryCheck.CheckValueFormat(RivBtm, "RivBtm", self.__period, self._num_lyr,
+                                                      self._num_row, self._num_col)
         if sorted(self.Cond.keys()) != sorted(self.Shead.keys()) != sorted(self.Ehead.keys()) != sorted(
                 self.RivBtm.keys()):
             raise ValueError(

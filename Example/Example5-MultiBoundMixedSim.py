@@ -19,7 +19,7 @@ if __name__ == "__main__":
     NumRow = 20
     NumCol = 20
     modelDis = pycomus.ComusDisLpf(model, NumLyr, NumRow, NumCol, RowSpace=50, ColSpace=50,
-                                   LyrType=[1 for _ in range(NumLyr)], LyrCbd=[1, 0], YCoord=1000)
+                                   LyrType=[1 for _ in range(NumLyr)], lyr_cbd=[1, 0], YCoord=1000)
 
     # Grid Attribute
     bot = np.zeros((NumLyr, NumRow, NumCol))

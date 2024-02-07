@@ -40,10 +40,10 @@ class ComusEvt:
             The number of segments in the curve representing the change of subsurface evaporation with depth at the grid cell,
             with a minimum of 2 segments and a maximum of 20 segments.
         """
-        cmsDis = model._cmsDis
-        self.__NumLyr = cmsDis.NumLyr
-        self.__NumRow = cmsDis.NumRow
-        self.__NumCol = cmsDis.NumCol
+        cmsDis = model.CmsDis
+        self._num_lyr = cmsDis.NumLyr
+        self._num_row = cmsDis.NumRow
+        self._num_col = cmsDis.NumCol
         self.__period = model._cmsTime.period
         # Check IEvt
         if IEvt not in [1, 2]:
@@ -54,14 +54,14 @@ class ComusEvt:
             raise ValueError("NumSeg should be less than or equal to 20 and greater than or equal to 2.")
         self.__NumSeg = NumSeg
         # Other Pars
-        self.__ETSurf = BoundaryCheck.CheckValueFormat(ETSurf, "ETSurf", self.__period, self.__NumLyr,
-                                                       self.__NumRow, self.__NumCol)
-        self.__ETRate = BoundaryCheck.CheckValueFormat(ETRate, "ETRate", self.__period, self.__NumLyr,
-                                                       self.__NumRow, self.__NumCol)
-        self.__ETMxd = BoundaryCheck.CheckValueFormat(ETMxd, "ETMxd", self.__period, self.__NumLyr,
-                                                      self.__NumRow, self.__NumCol)
-        self.__ETExp = BoundaryCheck.CheckValueGtZero(ETExp, "ETExp", self.__period, self.__NumLyr,
-                                                      self.__NumRow, self.__NumCol)
+        self.__ETSurf = BoundaryCheck.CheckValueFormat(ETSurf, "ETSurf", self.__period, self._num_lyr,
+                                                       self._num_row, self._num_col)
+        self.__ETRate = BoundaryCheck.CheckValueFormat(ETRate, "ETRate", self.__period, self._num_lyr,
+                                                       self._num_row, self._num_col)
+        self.__ETMxd = BoundaryCheck.CheckValueFormat(ETMxd, "ETMxd", self.__period, self._num_lyr,
+                                                      self._num_row, self._num_col)
+        self.__ETExp = BoundaryCheck.CheckValueGtZero(ETExp, "ETExp", self.__period, self._num_lyr,
+                                                      self._num_row, self._num_col)
         if sorted(self.ETSurf.keys()) != sorted(self.ETRate.keys()) != sorted(self.ETMxd.keys()) != sorted(
                 self.ETExp.keys()):
             raise ValueError(

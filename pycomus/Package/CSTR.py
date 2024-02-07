@@ -26,10 +26,10 @@ class ComusStr:
         if stream_num < 1:
             raise ValueError("The number of streams should be greater than or equal to 1.")
         self.__stream_num = stream_num
-        cmsDis = model._cmsDis
-        self.__NumLyr = cmsDis.NumLyr
-        self.__NumRow = cmsDis.NumRow
-        self.__NumCol = cmsDis.NumCol
+        cmsDis = model.CmsDis
+        self._num_lyr = cmsDis.NumLyr
+        self._num_row = cmsDis.NumRow
+        self._num_col = cmsDis.NumCol
         self.__period = model._cmsTime.period
         self.__stream: Stream = Stream()
         model._addPackage("STR", self)
@@ -257,19 +257,19 @@ class ComusStr:
             NDC is a double precision floating-point number representing the Manning's roughness coefficient (n) of the river segment.
         """
         strIds = [i for i in range(self.__stream_num)]
-        CELLID = BoundaryCheck.CheckValueGtZero(CELLID, "CELLID", strIds, self.__NumLyr, self.__NumRow,
-                                                self.__NumCol)
-        LEN = BoundaryCheck.CheckValueGtZero(LEN, "LEN", strIds, self.__NumLyr, self.__NumRow, self.__NumCol)
-        BTM = BoundaryCheck.CheckValueGtZero(BTM, "BTM", strIds, self.__NumLyr, self.__NumRow, self.__NumCol)
-        BWDT = BoundaryCheck.CheckValueGtZero(BWDT, "BWDT", strIds, self.__NumLyr, self.__NumRow, self.__NumCol)
-        SIZH1 = BoundaryCheck.CheckValueGtZero(SIZH1, "SIZH1", strIds, self.__NumLyr, self.__NumRow,
-                                               self.__NumCol)
-        SIZH2 = BoundaryCheck.CheckValueGtZero(SIZH2, "SIZH2", strIds, self.__NumLyr, self.__NumRow,
-                                               self.__NumCol)
-        BVK = BoundaryCheck.CheckValueGtZero(BVK, "BVK", strIds, self.__NumLyr, self.__NumRow, self.__NumCol)
-        BTK = BoundaryCheck.CheckValueGtZero(BTK, "BTK", strIds, self.__NumLyr, self.__NumRow, self.__NumCol)
-        SLP = BoundaryCheck.CheckValueGtZero(SLP, "SLP", strIds, self.__NumLyr, self.__NumRow, self.__NumCol)
-        NDC = BoundaryCheck.CheckValueGtZero(NDC, "NDC", strIds, self.__NumLyr, self.__NumRow, self.__NumCol)
+        CELLID = BoundaryCheck.CheckValueGtZero(CELLID, "CELLID", strIds, self._num_lyr, self._num_row,
+                                                self._num_col)
+        LEN = BoundaryCheck.CheckValueGtZero(LEN, "LEN", strIds, self._num_lyr, self._num_row, self._num_col)
+        BTM = BoundaryCheck.CheckValueGtZero(BTM, "BTM", strIds, self._num_lyr, self._num_row, self._num_col)
+        BWDT = BoundaryCheck.CheckValueGtZero(BWDT, "BWDT", strIds, self._num_lyr, self._num_row, self._num_col)
+        SIZH1 = BoundaryCheck.CheckValueGtZero(SIZH1, "SIZH1", strIds, self._num_lyr, self._num_row,
+                                               self._num_col)
+        SIZH2 = BoundaryCheck.CheckValueGtZero(SIZH2, "SIZH2", strIds, self._num_lyr, self._num_row,
+                                               self._num_col)
+        BVK = BoundaryCheck.CheckValueGtZero(BVK, "BVK", strIds, self._num_lyr, self._num_row, self._num_col)
+        BTK = BoundaryCheck.CheckValueGtZero(BTK, "BTK", strIds, self._num_lyr, self._num_row, self._num_col)
+        SLP = BoundaryCheck.CheckValueGtZero(SLP, "SLP", strIds, self._num_lyr, self._num_row, self._num_col)
+        NDC = BoundaryCheck.CheckValueGtZero(NDC, "NDC", strIds, self._num_lyr, self._num_row, self._num_col)
 
         if sorted(CELLID.keys()) != sorted(LEN.keys()) != sorted(BTM.keys()) != sorted(BWDT.keys()) != sorted(
                 SIZH1.keys()) != sorted(SIZH2.keys()) != sorted(BVK.keys()) != sorted(BTK.keys()) != sorted(
@@ -292,10 +292,10 @@ class ComusStr:
             recharge for the river unit on the grid cell (-). It must be greater than or equal to 0.
         """
         wuGrdIdList = [value[6] for value in self.__stream.ControlParams.values()]
-        WUREGID = BoundaryCheck.Check3DValueExistGrid(WUREGID, "WUREGID", self.__NumLyr, self.__NumRow,
-                                                      self.__NumCol, wuGrdIdList)
-        RATIO = BoundaryCheck.Check3DValueGtZero(RATIO, "RATIO", self.__NumLyr, self.__NumRow,
-                                                 self.__NumCol)
+        WUREGID = BoundaryCheck.Check3DValueExistGrid(WUREGID, "WUREGID", self._num_lyr, self._num_row,
+                                                      self._num_col, wuGrdIdList)
+        RATIO = BoundaryCheck.Check3DValueGtZero(RATIO, "RATIO", self._num_lyr, self._num_row,
+                                                 self._num_col)
         self.__stream.WatUseData = [WUREGID, RATIO]
 
     def setWatDrnGrid(self, DELEV: Union[int, np.ndarray], COND: Union[int, float, np.ndarray],
@@ -315,10 +315,10 @@ class ComusStr:
             identifier of the river segment of the seasonal river to which the grid cell drainage flows (starting from 1).
         """
         SegIdList = list(self.__stream.ControlParams.keys())
-        DELEV = BoundaryCheck.Check3DValueFormat(DELEV, "DELEV", self.__NumLyr, self.__NumRow, self.__NumCol)
-        COND = BoundaryCheck.Check3DValueGtZero(COND, "COND", self.__NumLyr, self.__NumRow, self.__NumCol)
-        SEGMID = BoundaryCheck.Check3DValueExistGrid(SEGMID, "SEGMID", self.__NumLyr, self.__NumRow,
-                                                     self.__NumCol, SegIdList)
+        DELEV = BoundaryCheck.Check3DValueFormat(DELEV, "DELEV", self._num_lyr, self._num_row, self._num_col)
+        COND = BoundaryCheck.Check3DValueGtZero(COND, "COND", self._num_lyr, self._num_row, self._num_col)
+        SEGMID = BoundaryCheck.Check3DValueExistGrid(SEGMID, "SEGMID", self._num_lyr, self._num_row,
+                                                     self._num_col, SegIdList)
         self.__stream.WatUseData = [DELEV, COND, SEGMID]
 
     def loadCtrlParFile(self, ctrlFile: str):
@@ -345,52 +345,52 @@ class ComusStr:
                 int_parts = [int(part) for part in parts[:5]]
                 float_part = [float(part) for part in parts[5:]]
                 if not int_parts[0] - 1 in CELLID:
-                    CELLID[int_parts[0] - 1] = np.zeros((self.__NumLyr, self.__NumRow, self.__NumCol))
+                    CELLID[int_parts[0] - 1] = np.zeros((self._num_lyr, self._num_row, self._num_col))
                 else:
                     CELLID[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = int_parts[1]
 
                 if not int_parts[0] - 1 in LEN:
-                    LEN[int_parts[0] - 1] = np.zeros((self.__NumLyr, self.__NumRow, self.__NumCol))
+                    LEN[int_parts[0] - 1] = np.zeros((self._num_lyr, self._num_row, self._num_col))
                 else:
                     LEN[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[0]
 
                 if not int_parts[0] - 1 in BTM:
-                    BTM[int_parts[0] - 1] = np.zeros((self.__NumLyr, self.__NumRow, self.__NumCol))
+                    BTM[int_parts[0] - 1] = np.zeros((self._num_lyr, self._num_row, self._num_col))
                 else:
                     BTM[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[1]
 
                 if not int_parts[0] - 1 in BWDT:
-                    BWDT[int_parts[0] - 1] = np.zeros((self.__NumLyr, self.__NumRow, self.__NumCol))
+                    BWDT[int_parts[0] - 1] = np.zeros((self._num_lyr, self._num_row, self._num_col))
                 else:
                     BWDT[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[2]
 
                 if not int_parts[0] - 1 in SIZH1:
-                    SIZH1[int_parts[0] - 1] = np.zeros((self.__NumLyr, self.__NumRow, self.__NumCol))
+                    SIZH1[int_parts[0] - 1] = np.zeros((self._num_lyr, self._num_row, self._num_col))
                 else:
                     SIZH1[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[3]
 
                 if not int_parts[0] - 1 in SIZH2:
-                    SIZH2[int_parts[0] - 1] = np.zeros((self.__NumLyr, self.__NumRow, self.__NumCol))
+                    SIZH2[int_parts[0] - 1] = np.zeros((self._num_lyr, self._num_row, self._num_col))
                 else:
                     SIZH2[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[4]
 
                 if not int_parts[0] - 1 in BVK:
-                    BVK[int_parts[0] - 1] = np.zeros((self.__NumLyr, self.__NumRow, self.__NumCol))
+                    BVK[int_parts[0] - 1] = np.zeros((self._num_lyr, self._num_row, self._num_col))
                 else:
                     BVK[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[5]
 
                 if not int_parts[0] - 1 in BTK:
-                    BTK[int_parts[0] - 1] = np.zeros((self.__NumLyr, self.__NumRow, self.__NumCol))
+                    BTK[int_parts[0] - 1] = np.zeros((self._num_lyr, self._num_row, self._num_col))
                 else:
                     BTK[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[5]
 
                 if not int_parts[0] - 1 in SLP:
-                    SLP[int_parts[0] - 1] = np.zeros((self.__NumLyr, self.__NumRow, self.__NumCol))
+                    SLP[int_parts[0] - 1] = np.zeros((self._num_lyr, self._num_row, self._num_col))
                 else:
                     SLP[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[6]
 
                 if not int_parts[0] - 1 in NDC:
-                    NDC[int_parts[0] - 1] = np.zeros((self.__NumLyr, self.__NumRow, self.__NumCol))
+                    NDC[int_parts[0] - 1] = np.zeros((self._num_lyr, self._num_row, self._num_col))
                 else:
                     NDC[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[7]
 
@@ -399,8 +399,8 @@ class ComusStr:
 
     def loadWatUseFile(self, watUseFile: str):
         with open(watUseFile, 'r') as file:
-            WUREGID = np.zeros((self.__NumLyr, self.__NumRow, self.__NumCol))
-            RATIO = np.zeros((self.__NumLyr, self.__NumRow, self.__NumCol))
+            WUREGID = np.zeros((self._num_lyr, self._num_row, self._num_col))
+            RATIO = np.zeros((self._num_lyr, self._num_row, self._num_col))
             for line_num, line in enumerate(file, start=1):
                 if line_num == 1:
                     continue
@@ -417,9 +417,9 @@ class ComusStr:
 
     def loadWatDrnFile(self, watDrnFile: str):
         with open(watDrnFile, 'r') as file:
-            DELEV = np.zeros((self.__NumLyr, self.__NumRow, self.__NumCol))
-            COND = np.zeros((self.__NumLyr, self.__NumRow, self.__NumCol))
-            SEGMID = np.zeros((self.__NumLyr, self.__NumRow, self.__NumCol))
+            DELEV = np.zeros((self._num_lyr, self._num_row, self._num_col))
+            COND = np.zeros((self._num_lyr, self._num_row, self._num_col))
+            SEGMID = np.zeros((self._num_lyr, self._num_row, self._num_col))
             for line_num, line in enumerate(file, start=1):
                 if line_num == 1:
                     continue

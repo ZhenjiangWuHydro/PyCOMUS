@@ -3,19 +3,19 @@ from typing import List
 from .GridCell import GridCell
 
 
-class LPFLayers:
-    def __init__(self, LyrId: int, LyrType: int, LyrCbd: int, LyrIbs: int, GridCells: List[List[GridCell]]):
-        self.LyrId = LyrId
-        self.LyrType = LyrType
-        self.LyrCbd = LyrCbd
-        self.LyrIbs = LyrIbs
-        self.GridCells = GridCells
+class LpfLayers:
+    def __init__(self, lyr_id: int, lyr_type: int, lyr_cbd: int, lyr_ibs: int, grid_cells: List[List[GridCell]]):
+        self.lyr_id = lyr_id
+        self.lyr_type = lyr_type
+        self.lyr_cbd = lyr_cbd
+        self.lyr_ibs = lyr_ibs
+        self.grid_cells = grid_cells
 
 
-class BCFLayers:
-    def __init__(self, LyrId: int, LyrType: int, LyrTrpy: float, LyrIbs: int, GridCells: List[List[GridCell]]):
-        self.LyrId = LyrId
-        self.LyrType = LyrType
-        self.LyrTrpy = LyrTrpy
-        self.LyrIbs = LyrIbs
-        self.GridCells = GridCells
+class BcfLayers:
+    def __init__(self, lyr_id: int, lyr_type: int, lyr_trpy: float, lyr_ibs: int, grid_cells: List[List[GridCell]]):
+        self.lyr_id = lyr_id
+        self.lyr_type = lyr_type
+        self.lyr_trpy = lyr_trpy
+        self.lyr_ibs = lyr_ibs
+        self.grid_cells = grid_cells

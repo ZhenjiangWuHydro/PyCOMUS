@@ -68,7 +68,7 @@ def CheckValueGtZero(Value: Union[int, float, Dict[int, Union[int, float, np.nda
                 res[key] = np.full((NumLyr, NumRow, NumCol), value, dtype=float)
             elif isinstance(value, np.ndarray):
                 if value.shape == (NumLyr, NumRow, NumCol):
-                    if (value >= 0).all():
+                    if (value < 0).all():
                         raise ValueError(f"{ValueName} value must be greater than or equal to 0.")
                     res[key] = value
                 else:

@@ -21,10 +21,10 @@ class ComusHfb:
         hfb_data:
             List[Tuple] type data, in which the Tuple should contain six parameters: ILYR, IROW1, ICOL1, IROW2, ICOL2, HCDW.
         """
-        cmsDis = model._cmsDis
-        self.__NumLyr = cmsDis.NumLyr
-        self.__NumRow = cmsDis.NumRow
-        self.__NumCol = cmsDis.NumCol
+        cmsDis = model.CmsDis
+        self._num_lyr = cmsDis.NumLyr
+        self._num_row = cmsDis.NumRow
+        self._num_col = cmsDis.NumCol
         self.__hfb_data: List[Tuple[int, int, int, int, int, Union[int, float]]] = self.__CheckData(hfb_data)
         model._addPackage("HFB", self)
 
@@ -38,11 +38,11 @@ class ComusHfb:
             lay, row1, col1, row2, col2, hydchr = barrier
 
             # Check layer, row, and column indices
-            if not (0 <= lay < self.__NumLyr):
+            if not (0 <= lay < self._num_lyr):
                 raise ValueError(f"Layer index {lay} out of bounds for barrier {barrier}")
-            if not (0 <= row1 < self.__NumRow and 0 <= row2 < self.__NumRow):
+            if not (0 <= row1 < self._num_row and 0 <= row2 < self._num_row):
                 raise ValueError(f"Row indices {row1} or {row2} out of bounds for barrier {barrier}")
-            if not (0 <= col1 < self.__NumCol and 0 <= col2 < self.__NumCol):
+            if not (0 <= col1 < self._num_col and 0 <= col2 < self._num_col):
                 raise ValueError(f"Column indices {col1} or {col2} out of bounds for barrier {barrier}")
 
             # Check hydraulic characteristic

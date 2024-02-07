@@ -28,15 +28,15 @@ class ComusDrn:
             The elevation of the bottom of the drainage ditch at the grid cell (L).
         """
 
-        cmsDis = model._cmsDis
-        self.__NumLyr = cmsDis.NumLyr
-        self.__NumRow = cmsDis.NumRow
-        self.__NumCol = cmsDis.NumCol
+        cmsDis = model.CmsDis
+        self._num_lyr = cmsDis.NumLyr
+        self._num_row = cmsDis.NumRow
+        self._num_col = cmsDis.NumCol
         self.__period = model._cmsTime.period
-        self.__cond = BoundaryCheck.CheckValueGtZero(Cond, "Cond", self.__period, self.__NumLyr,
-                                                     self.__NumRow, self.__NumCol)
-        self.__delev = BoundaryCheck.CheckValueFormat(Delev, "Delev", self.__period, self.__NumLyr,
-                                                      self.__NumRow, self.__NumCol)
+        self.__cond = BoundaryCheck.CheckValueGtZero(Cond, "Cond", self.__period, self._num_lyr,
+                                                     self._num_row, self._num_col)
+        self.__delev = BoundaryCheck.CheckValueFormat(Delev, "Delev", self.__period, self._num_lyr,
+                                                      self._num_row, self._num_col)
         if sorted(self.Cond.keys()) != sorted(self.Delev.keys()):
             raise ValueError("The stress periods for the 'Cond' parameter and 'Delev' should be the same.")
         model._addPackage("DRN", self)

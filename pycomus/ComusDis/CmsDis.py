@@ -4,188 +4,355 @@
 # Author: Zhenjiang Wu
 # Description: Set COMUS Model LPF And BCF Grid And Layer Property Flow Package.
 # --------------------------------------------------------------
-from typing import List, Union
+from typing import List, Union, Tuple
 
 from pycomus.ComusDis.GridCell import GridCell
-from pycomus.ComusDis.GridLyr import LPFLayers, BCFLayers
+from pycomus.ComusDis.GridLyr import LpfLayers, BcfLayers
 
 
-class __ComusDis:
-    def __init__(self, model, NumLyr: int, NumRow: int, NumCol: int, RowSpace: Union[float, int, List[float]],
-                 ColSpace: Union[float, int, List[float]], XCoord: float = 0,
-                 YCoord: float = 0):
-        """
-        Set COMUS Model LPF And BCF Grid And Layer Property Flow Package(Base Class).
-
-        Parameters:
-        ----------------------------
-        model:
-            model object
-        NumLyr:
-            Number of layers
-        NumRow:
-            Number of rows
-        NumCol:
-            Number of cols
-        RowSpace:
-            A float or List data that represents row spacing
-        ColSpace:
-            A float or List data that represents col spacing
-        XCoord:
-            Top left corner X coordinate
-        YCoord:
-            Top left corner Y coordinate
-        """
-        if NumRow < 1:
-            raise ValueError("NumRow should be greater than 0!")
-        if NumCol < 1:
-            raise ValueError("NumCol should be greater than 0!")
-        if NumLyr < 1:
-            raise ValueError("NumLyr should be greater than 0!")
-        self.NumLyr: int = NumLyr
-        self.NumRow: int = NumRow
-        self.NumCol: int = NumCol
-        self.XCoord: float = XCoord
-        self.YCoord: float = YCoord
-        if isinstance(RowSpace, float) or isinstance(RowSpace, int):
-            self.RowSpaceList = [RowSpace] * NumRow
-        elif isinstance(RowSpace, list) and NumRow != len(RowSpace):
-            raise ValueError("RowSpace grid spacing length should be the same as NumRow!")
+class ComusDis:
+    def __init__(self, model, num_lyr: int = 1, num_row: int = 1, num_col: int = 1, x_coord: float = 0,
+                 y_coord: float = 0, row_space: Union[float, int, List[float]] = 1,
+                 col_space: Union[float, int, List[float]] = 1):
+        if num_row < 1:
+            raise ValueError("num_row should be greater than 0!")
+        if num_col < 1:
+            raise ValueError("num_col should be greater than 0!")
+        if num_lyr < 1:
+            raise ValueError("num_lyr should be greater than 0!")
+        self.num_lyr: int = num_lyr
+        self.num_row: int = num_row
+        self.num_col: int = num_col
+        self.x_coord: float = x_coord
+        self.y_coord: float = y_coord
+        if isinstance(row_space, (float, int)):
+            self.row_space: List[Union[int, float]] = [row_space] * num_row
+        elif isinstance(row_space, list) and num_row != len(row_space):
+            raise ValueError("row_space grid spacing length should be the same as num_row!")
         else:
-            self.RowSpaceList = RowSpace
-        if isinstance(ColSpace, float) or isinstance(ColSpace, int):
-            self.ColSpaceList = [ColSpace] * NumCol
-        elif isinstance(ColSpace, list) and NumCol != len(ColSpace):
-            raise ValueError("ColSpace grid spacing length should be the same as NumCol!")
+            self.row_space: List[Union[int, float]] = row_space
+        if isinstance(col_space, (float, int)):
+            self.col_space: List[Union[int, float]] = [col_space] * num_col
+        elif isinstance(col_space, list) and num_col != len(col_space):
+            raise ValueError("col_space grid spacing length should be the same as num_col!")
         else:
-            self.ColSpaceList = ColSpace
-        if not all(x > 0 for x in self.RowSpaceList):
-            raise ValueError("RowSpace should be greater than 0")
-        if not all(x > 0 for x in self.ColSpaceList):
-            raise ValueError("ColSpace should be greater than 0")
-        model._addDis(self)
+            self.col_space: List[Union[int, float]] = col_space
+        if not all(x > 0 for x in self.row_space):
+            raise ValueError("row_space should be greater than 0")
+        if not all(x > 0 for x in self.col_space):
+            raise ValueError("col_space should be greater than 0")
+        model.CmsDis = self
+
+    @classmethod
+    def _load_control_params(cls, ctrl_params_file: str) -> Tuple:
+        # Load And Check "ctrl_params_file"
+        with open(ctrl_params_file, 'r') as file:
+            lines = file.readlines()
+        if len(lines) != 2:
+            raise ValueError("The Control Params file should have exactly two lines of data.")
+        if len(lines[0].strip().split()) != 30:
+            raise ValueError("The Control Params file should have 30 fields.")
+        data = lines[1].strip().split()
+        num_lyr: int = int(data[0])
+        num_row: int = int(data[1])
+        num_col: int = int(data[2])
+        x_coord: float = float(data[5])
+        y_coord: float = float(data[6])
+        if num_lyr < 1:
+            raise ValueError("num_lyr should be greater than 0!")
+        if num_row < 1:
+            raise ValueError("num_row should be greater than 0!")
+        if num_col < 1:
+            raise ValueError("num_col should be greater than 0!")
+        return num_lyr, num_row, num_col, x_coord, y_coord
+
+    @classmethod
+    def _load_grid_space(cls, grd_space_file: str, num_row: int, num_col: int) -> Tuple:
+        # load and check grd_space_file
+        with open(grd_space_file, 'r') as file:
+            lines = file.readlines()[1:]
+        expectLength = num_row + num_col
+        if len(lines) != expectLength:
+            raise ValueError(
+                f"The Grid Space file should have exactly {expectLength} lines of data(not include header).")
+        if len(lines[0].strip().split()) != 3:
+            raise ValueError("The Control Params file should have 3 fields(ATTI  NUMID  DELT).")
+        row_space = []
+        col_space = []
+        for line in lines:
+            data = line.strip().split()
+            if float(data[2]) <= 0:
+                raise ValueError("Row space or col space should be greater than 0")
+            if data[0] == "R":
+                col_space.append(float(data[2]))
+            else:
+                row_space.append(float(data[2]))
+        return row_space, col_space
 
     def __str__(self):
-        return f"Mesh Grid And Layer:\n    Number of layers : {self.NumLyr}  Number of rows : {self.NumRow}  Number of cols : {self.NumCol}  \n" \
-               f"    RowSpace : {self.RowSpaceList}  \n    ColSpace : {self.ColSpaceList}  XCoord : {self.XCoord}   " \
-               f"YCoord : {self.YCoord}"
+        return f"Mesh Grid And Layer:\n    Number of layers : {self.num_lyr}  Number of rows : {self.num_row}  Number of cols : {self.num_col}  \n" \
+               f"    RowSpace : {self.row_space}  \n    ColSpace : {self.col_space}  \n    XCoord : {self.x_coord}   " \
+               f"YCoord : {self.y_coord}"
 
 
-class ComusDisLpf(__ComusDis):
-    def __init__(self, model, NumLyr: int, NumRow: int, NumCol: int, RowSpace: Union[float, int, List[float]],
-                 ColSpace: Union[float, int, List[float]], LyrType: List[int], LyrCbd: List[int] = None,
-                 LyrIbs: List[int] = None, XCoord: float = 0, YCoord: float = 0):
+class ComusDisLpf(ComusDis):
+    def __init__(self, model, num_lyr: int = 1, num_row: int = 1, num_col: int = 1,
+                 row_space: Union[float, int, List[float]] = 1,
+                 col_space: Union[float, int, List[float]] = 1,
+                 x_coord: float = 0, y_coord: float = 0,
+                 lyr_type: List[int] = None,
+                 lyr_cbd: List[int] = None,
+                 lyr_ibs: List[int] = None):
         """
         COMUS Grid And Layer Property Flow Package Class(LPF).
 
         Parameters:
         ----------------------------
-        model:
-            model object
-        NumLyr:
+        model: pycomus.ComusModel
+            COMUS Model Object
+        num_lyr: int
             Number of layers
-        NumRow:
+        num_row: int
             Number of rows
-        NumCol:
-            Number of cols
-        RowSpace:
-            A float or List data that represents row spacing
-        ColSpace:
-            A float or List data that represents col spacing
-        LyrType:
-            The data in LyrType should be in [0:Confined,1:Convertible]
-        LyrCbd:
-            The data in LyrCbd should be in [0:Quasi Three Dimensions-Disable,1:Quasi Three Dimensions-Enable]
-        LyrIbs:
-            The data in LyrIbs should be in [0:IBS-Disable,1:IBS-Enable]
-        XCoord:
-            Top left corner X coordinate
-        YCoord:
-            Top left corner Y coordinate
+        num_col: int
+            Number of columns
+        row_space: Union[float, int, List[float]]
+            A float, int, or List representing row spacing
+        col_space: Union[float, int, List[float]]
+            A float, int, or List representing column spacing
+        x_coord: float
+            top left corner X coordinate
+        y_coord: float
+            top left corner Y coordinate
+        lyr_type: List[int]
+            The data in lyr_type should be in [0: Confined, 1: Convertible]
+        lyr_cbd: List[int]
+            The data in lyr_cbd should be in [0: Quasi Three Dimensions-Disable, 1: Quasi Three Dimensions-Enable]
+        lyr_ibs: List[int]
+            The data in lyr_ibs should be in [0: IBS-Disable, 1: IBS-Enable]
+
+        Returns:
+        --------
+        instance: pycomus.ComusDisLpf
+            COMUS LPF Layer Params Object.
+
+        Example:
+        --------
+        >>> import pycomus
+        >>> model1 = pycomus.ComusModel(model_name="OneDimFlowSim")
+        >>> modelDis = pycomus.ComusDisLpf(model1, 1, 20, 20, row_space=1, col_space=1, lyr_type=[1 for _ in range(1)], y_coord=1)
         """
-        super().__init__(model, NumLyr, NumRow, NumCol, RowSpace, ColSpace, XCoord, YCoord)
-        if model._conPars.IntBkm == 1:
+        super().__init__(model, num_lyr, num_row, num_col, x_coord, y_coord, row_space, col_space)
+        self._model = model
+        if model.CmsPars.intblkm == 1:
             raise ValueError("In BCF format has been selected, it is not possible to add layers in LPF format.")
-        if model._INTBLKM == "LPF":
-            raise ValueError("You cannot add duplicate LPF type layers.")
-        if LyrCbd is None:
-            LyrCbd = [0] * NumLyr
-        if LyrIbs is None:
-            LyrIbs = [0] * NumLyr
-        if NumLyr != len(LyrType):
-            raise ValueError("LyrType length should be the same as NumLyr!")
-        if not all(x in [0, 1] for x in LyrType):
-            raise ValueError("The data in LyrType should be in [0:Confined,1:Convertible]!")
-        if NumLyr != len(LyrCbd):
-            raise ValueError("LyrCbd length should be the same as NumLyr!")
-        if not all(x in [0, 1] for x in LyrCbd):
+        if not lyr_type:
+            lyr_type = [0] * num_lyr
+        if not lyr_cbd:
+            lyr_cbd = [0] * num_lyr
+        if not lyr_ibs:
+            lyr_ibs = [0] * num_lyr
+        if num_lyr != len(lyr_type):
+            raise ValueError("lyr_type length should be the same as num_lyr!")
+        if not all(x in [0, 1] for x in lyr_type):
+            raise ValueError("The data in lyr_type should be in [0: Confined, 1: Convertible]!")
+        if num_lyr != len(lyr_cbd):
+            raise ValueError("lyr_cbd length should be the same as num_lyr!")
+        if not all(x in [0, 1] for x in lyr_cbd):
             raise ValueError(
-                "The data in LyrCbd should be in [0:Quasi Three Dimensions-Disable,1:Quasi Three Dimensions-Enable]!")
-        if NumLyr != len(LyrIbs):
-            raise ValueError("LyrIbs length should be the same as NumLyr!")
-        if not all(x in [0, 1] for x in LyrIbs):
-            raise ValueError("The data in LyrIbs should be in [0:IBS-Disable,1:IBS-Enable]!")
-        for i in range(NumLyr):
-            gridCell = [[GridCell() for _ in range(NumCol)] for _ in range(NumRow)]
-            model._Layers.append(
-                LPFLayers(i + 1, LyrType=LyrType[i], LyrCbd=LyrCbd[i], LyrIbs=LyrIbs[i], GridCells=gridCell))
-        model._INTBLKM = "LPF"
+                "The data in lyr_cbd should be in [0: Quasi Three Dimensions-Disable, 1: Quasi Three Dimensions-Enable]!")
+        if num_lyr != len(lyr_ibs):
+            raise ValueError("lyr_ibs length should be the same as num_lyr!")
+        if not all(x in [0, 1] for x in lyr_ibs):
+            raise ValueError("The data in lyr_ibs should be in [0: IBS-Disable, 1: IBS-Enable]!")
+        model.Layers = []
+        for i in range(num_lyr):
+            grid_cell = [[GridCell() for _ in range(num_col)] for _ in range(num_row)]
+            model.layers.append(
+                LpfLayers(i + 1, lyr_type=lyr_type[i], lyr_cbd=lyr_cbd[i], lyr_ibs=lyr_ibs[i], grid_cells=grid_cell))
+
+    @classmethod
+    def load(cls, model, ctrl_params_file: str, grd_space_file: str, lpf_lyr_file: str):
+        """
+        Load parameters from a LpfLyr.in file and create a ComusDisLpf instance.
+
+        Parameters:
+        ----------------------------
+        model: pycomus.ComusModel
+            COMUS Model Object.
+        ctrl_params_file: str
+            Control Params File(CtrlPar.in)
+        grd_space_file: str
+            Grid Space File(GrdSpace.in)
+        lpf_lyr_file: str
+            Lpf Layer Attribute File(LpfLyr.in)
+
+        Returns:
+        --------
+        instance: pycomus.ComusDisLpf
+            COMUS Lpf Layer Attribute Object.
+
+        Example:
+        --------
+        >>> import pycomus
+        >>> model1 = pycomus.ComusModel(model_name="OneDimFlowSim")
+        >>> modelDis = pycomus.ComusDisLpf.load(model1, "./InputFiles/CtrlPar.in", "./InputFiles/GrdSpace.in", "./InputFiles/LpfLyr.in")
+        """
+        # Check INTBLKM
+        if model.CmsPars.intblkm == 1:
+            raise ValueError("In BCF format has been selected, it is not possible to add layers in LPF format.")
+
+        # Check Control Params
+        num_lyr, num_row, num_col, x_coord, y_coord = ComusDis._load_control_params(ctrl_params_file)
+
+        # Check Grid Space Params
+        row_space, col_space = ComusDis._load_grid_space(grd_space_file, num_row, num_col)
+
+        # Check Bcf Layer Attribute
+        with open(lpf_lyr_file, 'r') as file:
+            lines = file.readlines()[1:]
+        if len(lines) != num_lyr:
+            raise ValueError(f"The LPF Layer Params file should have exactly {num_lyr} lines of data.")
+        if len(lines[0].strip().split()) != 6:
+            raise ValueError("The LPF Layer Params file should have 6 fields.")
+        idx_list = [int(line.strip().split()[0]) for line in lines]
+        if sorted(idx_list) != [i for i in range(1, num_lyr + 1)]:
+            raise ValueError(f"Layer id should start from 1 and continue consecutively to {num_lyr + 1}.")
+        lyr_type = [int(line.strip().split()[1]) for line in lines]
+        lyr_cbd = [int(line.strip().split()[4]) for line in lines]
+        lyr_ibs = [int(line.strip().split()[5]) for line in lines]
+        instance = cls(model, num_lyr, num_row, num_col, row_space, col_space, x_coord, y_coord, lyr_type, lyr_cbd,
+                       lyr_ibs)
+        return instance
+
+    def __str__(self):
+        return super().__str__()
 
 
-class ComusDisBcf(__ComusDis):
-    def __init__(self, model, NumLyr: int, NumRow: int, NumCol: int, RowSpace: Union[float, int, List[float]],
-                 ColSpace: Union[float, int, List[float]], LyrType: List[int], LyrTrpy: List[float] = None,
-                 LyrIbs: List[int] = None, XCoord: float = 0, YCoord: float = 0):
+class ComusDisBcf(ComusDis):
+    def __init__(self, model, num_lyr: int = 1, num_row: int = 1, num_col: int = 1,
+                 row_space: Union[float, int, List[float]] = 1,
+                 col_space: Union[float, int, List[float]] = 1,
+                 x_coord: float = 0, y_coord: float = 0,
+                 lyr_type: List[int] = None, lyr_trpy: List[float] = None, lyr_ibs: List[int] = None) -> None:
         """
         COMUS Grid And Layer Property Flow Package Class(BCF).
 
         Parameters:
         ----------------------------
-        model:
-            model object
-        NumLyr:
+        model: pycomus.ComusModel
+            COMUS model object
+        num_lyr: int
             Number of layers
-        NumRow:
+        num_row: int
             Number of rows
-        NumCol:
+        num_col: int
             Number of cols
-        RowSpace:
+        row_space: Union[float, int, List[float]]
             A float or List data that represents row spacing
-        ColSpace:
+        col_space: Union[float, int, List[float]]
             A float or List data that represents col spacing
-        LyrType:
-            The data in LyrType should be in [0:Confined,1:Unconfined,2:Limited Convertible,3:Full Convertible]
-        LyrTrpy:
-            Ky/Kx
-        LyrIbs:
-            The data in LyrIbs should be in [0:IBS-Disable,1:IBS-Enable]!
-        XCoord:
-            Top left corner X coordinate
-        YCoord:
-            Top left corner Y coordinate
+        x_coord: float, optional
+            top left corner X coordinate, by default 0
+        y_coord: float, optional
+            top left corner Y coordinate, by default 0
+        lyr_type: List[int]
+            The data in lyr_type should be in [0:Confined,1:Unconfined,2:Limited Convertible,3:Full Convertible]
+        lyr_trpy: List[float], optional
+            ky/kx, by default None
+        lyr_ibs: List[int], optional
+            The data in lyr_ibs should be in [0:IBS-Disable,1:IBS-Enable]!, by default None
+
+        Returns:
+        --------
+        instance: pycomus.ComusDisBcf
+            COMUS BCF Layer Params Object.
+
+        Example:
+        --------
+        >>> import pycomus
+        >>> model1 = pycomus.ComusModel(model_name="OneDimFlowSim")
+        >>> modelDis = pycomus.ComusDisBcf(model1, 1, 20, 20, row_space=1, col_space=1, lyr_type=[1 for _ in range(1)], y_coord=1)
         """
-        super().__init__(model, NumLyr, NumRow, NumCol, RowSpace, ColSpace, XCoord, YCoord)
-        if model._conPars.IntBkm == 2:
+        super().__init__(model, num_lyr, num_row, num_col, x_coord, y_coord, row_space, col_space)
+        if model.CmsPars.intblkm == 2:
             raise ValueError("In LPF format has been selected, it is not possible to add layers in BCF format.")
-        if model._INTBLKM == "BCF":
-            raise ValueError("You cannot add duplicate BCF type layers.")
-        if LyrTrpy is None:
-            LyrTrpy = [1.0] * NumLyr
-        if LyrIbs is None:
-            LyrIbs = [0] * NumLyr
-        if NumLyr != len(LyrType):
-            raise ValueError("LyrType length should be the same as NumLyr!")
-        if not all(x in [0, 1, 2, 3] for x in LyrType):
+        if not lyr_type:
+            lyr_type = [0] * num_lyr
+        if not lyr_trpy:
+            lyr_trpy = [1.0] * num_lyr
+        if not lyr_ibs:
+            lyr_ibs = [0] * num_lyr
+        if num_lyr != len(lyr_type):
+            raise ValueError("lyr_type length should be the same as num_lyr!")
+        if not all(x in [0, 1, 2, 3] for x in lyr_type):
             raise ValueError(
-                "The data in LyrType should be in [0:Confined,1:Unconfined,2:Limited Convertible,3:Full Convertible]!")
-        if NumLyr != len(LyrTrpy):
-            raise ValueError("LyrTrpy length should be the same as NumLyr!")
-        if NumLyr != len(LyrIbs):
-            raise ValueError("LyrIbs length should be the same as NumLyr!")
-        if not all(x in [0, 1] for x in LyrIbs):
-            raise ValueError("The data in LyrIbs should be in [0:IBS-Disable,1:IBS-Enable]!")
-        for i in range(NumLyr):
-            gridCell = [[GridCell() for _ in range(NumCol)] for _ in range(NumRow)]
-            model._Layers.append(
-                BCFLayers(i + 1, LyrType=LyrType[i], LyrTrpy=LyrTrpy[i], LyrIbs=LyrIbs[i], GridCells=gridCell))
-        model._INTBLKM = "BCF"
+                "The data in lyr_type should be in [0:Confined,1:Unconfined,2:Limited Convertible,3:Full Convertible]!")
+        if num_lyr != len(lyr_trpy):
+            raise ValueError("lyr_trpy length should be the same as num_lyr!")
+        if num_lyr != len(lyr_ibs):
+            raise ValueError("lyr_ibs length should be the same as num_lyr!")
+        if not all(x in [0, 1] for x in lyr_ibs):
+            raise ValueError("The data in lyr_ibs should be in [0:IBS-Disable,1:IBS-Enable]!")
+        model.layers = []
+        for i in range(num_lyr):
+            gridCell = [[GridCell() for _ in range(num_col)] for _ in range(num_row)]
+            model.layers.append(
+                BcfLayers(i + 1, lyr_type=lyr_type[i], lyr_trpy=lyr_trpy[i], lyr_ibs=lyr_ibs[i], grid_cells=gridCell))
+
+    @classmethod
+    def load(cls, model, ctrl_params_file: str, grd_space_file: str, bcf_lyr_file: str):
+        """
+        Load parameters from a LpfLyr.in file and create a ComusDisLpf instance.
+
+        Parameters:
+        ----------------------------
+        model: pycomus.ComusModel
+            COMUS Model Object.
+        ctrl_params_file: str
+            Control Params File(CtrlPar.in)
+        grd_space_file: str
+            Grid Space File(GrdSpace.in)
+        bcf_lyr_file: str
+            Bcf Layer Attribute File(BcfLyr.in)
+
+        Returns:
+        --------
+        instance: pycomus.ComusDisLpf
+            COMUS Bcf Layer Attribute Object.
+
+        Example:
+        --------
+        >>> import pycomus
+        >>> model1 = pycomus.ComusModel(model_name="OneDimFlowSim")
+        >>> modelDis = pycomus.ComusDisBcf.load(model1, "./InputFiles/CtrlPar.in", "./InputFiles/GrdSpace.in", "./InputFiles/BcfLyr.in")
+        """
+        # Check INTBLKM
+        if model.CmsPars.intblkm == 2:
+            raise ValueError("In LPF format has been selected, it is not possible to add layers in BCF format.")
+
+        # Check Control Params
+        num_lyr, num_row, num_col, x_coord, y_coord = ComusDis._load_control_params(ctrl_params_file)
+
+        # Check Grid Space Params
+        row_space, col_space = ComusDis._load_grid_space(grd_space_file, num_row, num_col)
+
+        # Check Bcf Layer Attribute
+        with open(bcf_lyr_file, 'r') as file:
+            lines = file.readlines()[1:]
+        if len(lines) != num_lyr:
+            raise ValueError(f"The BCF Layer Params file should have exactly {num_lyr} lines of data.")
+        if len(lines[0].strip().split()) != 4:
+            raise ValueError("The BCF Layer Params file should have 4 fields.")
+        idx_list = [int(line.strip().split()[0]) for line in lines]
+        if sorted(idx_list) != [i for i in range(1, num_lyr + 1)]:
+            raise ValueError(f"Layer id should start from 1 and continue consecutively to {num_lyr + 1}.")
+        lyr_type = [int(line.strip().split()[1]) for line in lines]
+        lyr_trpy = [float(line.strip().split()[2]) for line in lines]
+        lyr_ibs = [int(line.strip().split()[3]) for line in lines]
+        instance = cls(model, num_lyr, num_row, num_col, row_space, col_space, x_coord, y_coord, lyr_type, lyr_trpy,
+                       lyr_ibs)
+        return instance
+
+    def __str__(self):
+        return super().__str__()

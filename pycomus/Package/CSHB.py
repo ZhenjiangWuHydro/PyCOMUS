@@ -27,15 +27,15 @@ class ComusShb:
         Ehead:
             The hydraulic head value of the grid cell at the end of the stress period (L).
         """
-        cmsDis = model._cmsDis
-        self.__NumLyr = cmsDis.NumLyr
-        self.__NumRow = cmsDis.NumRow
-        self.__NumCol = cmsDis.NumCol
+        cmsDis = model.CmsDis
+        self._num_lyr = cmsDis.NumLyr
+        self._num_row = cmsDis.NumRow
+        self._num_col = cmsDis.NumCol
         self.__period = model._cmsTime.period
-        self.__shead = BoundaryCheck.CheckValueFormat(Shead, "Shead", self.__period, self.__NumLyr,
-                                                      self.__NumRow, self.__NumCol)
-        self.__ehead = BoundaryCheck.CheckValueFormat(Ehead, "Ehead", self.__period, self.__NumLyr,
-                                                      self.__NumRow, self.__NumCol)
+        self.__shead = BoundaryCheck.CheckValueFormat(Shead, "Shead", self.__period, self._num_lyr,
+                                                      self._num_row, self._num_col)
+        self.__ehead = BoundaryCheck.CheckValueFormat(Ehead, "Ehead", self.__period, self._num_lyr,
+                                                      self._num_row, self._num_col)
         if sorted(self.Shead.keys()) != sorted(self.Ehead.keys()):
             raise ValueError("The stress periods for the 'Shead' parameter and 'Ehead' should be the same.")
         model._addPackage("SHB", self)

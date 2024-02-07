@@ -10,22 +10,30 @@ from typing import List, Tuple, Union
 class ComusPeriod:
     def __init__(self, model, period: Union[Tuple, List[Tuple]]):
         """
-        Set COMUS Model Stress Period Attributes.
+        Set COMUS Model Period Attributes.
 
         Parameters:
         ----------------------------
         model:
             COMUS Model Object.
         period:
-            It can be a Tuple or a List[Tuple], and each Tuple should contain three elements, which are PERLEN, NSTEP, and MULTR, and each element should be greater than 0.
-        """
-        self.__period = self._validate_period(period)
-        self.__model = model
-        model._addPeriod(self)
+            It can be a Tuple or a List[Tuple], and each Tuple should contain three elements, which are PERLEN, NSTEP,
+             and MULTR, and each element should be greater than 0.
 
-    @property
-    def period(self):
-        return self.__period
+        Returns:
+        --------
+        controlParams: pycomus.ComusPeriod
+            COMUS Period Attributes Object.
+
+        Example:
+        --------
+        >>> import pycomus
+        >>> model1 = pycomus.ComusModel(model_name="OneDimFlowSim")
+        >>> period1 = pycomus.ComusPeriod(model, (1, 1, 1))
+        """
+        self.period = self._validate_period(period)
+        self._model = model
+        model.CmsTime = self
 
     @staticmethod
     def _validate_period(period: Union[Tuple, List[Tuple]]) -> Union[Tuple, List[Tuple]]:
@@ -44,23 +52,60 @@ class ComusPeriod:
         else:
             raise ValueError("Invalid period format. 'period' should be a tuple or a list of tuples.")
 
+    @classmethod
+    def load(cls, model, period_file: str):
+        """
+        Load parameters from a PerAttr.in file and create a ComusPeriod instance.
+
+        Parameters:
+        --------
+        model: pycomus.ComusModel
+            COMUS Model Object.
+        period_file: str
+            Period Params file path.
+
+        Returns:
+        --------
+        instance: pycomus.ComusPeriod
+            COMUS Period Params Object.
+
+        Example:
+        --------
+        >>> import pycomus
+        >>> model1 = pycomus.ComusModel(model_name="OneDimFlowSim(File-Input)")
+        >>> modelPeriod = pycomus.ComusPeriod.load(model1,"./InputFiles/PerAttr.in")
+        """
+        with open(period_file, 'r') as file:
+            lines = file.readlines()[1:]
+        if len(lines[0].strip().split()) != 4:
+            raise ValueError("The Control Params file header should have 30 fields.")
+        idx_list = [int(line[0]) for line in lines]
+        if sorted(idx_list) != [i for i in range(1, len(idx_list) + 1)]:
+            raise ValueError(f"Period id should start from 1 and continue consecutively to {len(idx_list) + 1}.")
+        period = []
+        for line in lines:
+            line = line.strip().split()
+            period.append((float(line[1]), float(line[2]), float(line[3])))
+        instance = cls(model, period)
+        return instance
+
     def __str__(self) -> str:
         return "IPER  PERLEN  NSTEP  MULTR\n" + "\n".join(
-            [f"{i + 1} {'  '.join(map(str, tpl))}" for i, tpl in enumerate(self.__period)]) + "\n"
+            [f"{i + 1} {'  '.join(map(str, tpl))}" for i, tpl in enumerate(self.period)]) + "\n"
 
     def __len__(self) -> int:
-        return len(self.__period)
+        return len(self.period)
 
     def __getitem__(self, item):
         if isinstance(item, slice):
-            return self.__period[item]
-        elif isinstance(item, int) and 0 <= item < len(self.__period):
-            return self.__period[item]
+            return self.period[item]
+        elif isinstance(item, int) and 0 <= item < len(self.period):
+            return self.period[item]
         else:
             raise IndexError("Index out of range")
 
     def __add__(self, other):
-        if isinstance(other, ComusPeriod) and self.__model is other.__model:
-            return ComusPeriod(self.__model, self.__period + other.period)
+        if isinstance(other, ComusPeriod) and self._model is other._model:
+            return ComusPeriod(self._model, self.period + other.period)
         else:
             raise TypeError("Can only concatenate with another ComusPeriod of the same model.")

@@ -76,7 +76,7 @@ if __name__ == "__main__":
     # Set RCH
     recharge = np.zeros((NumLyr, NumRow, NumCol))
     recharge[0, 0, 49:52] = 0.0015
-    rechargePackage = pycomus.ComusRch(model, Rechr={0: recharge}, IRech=1)
+    rechargePackage = pycomus.ComusRch(model, rechr={0: recharge}, rech=1)
 
     # Write Output
     model.writeOutPut()

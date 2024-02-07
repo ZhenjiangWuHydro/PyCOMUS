@@ -28,15 +28,15 @@ class ComusWel:
              It is the saturation thickness threshold (L) for the grid cell.
         """
 
-        cmsDis = model._cmsDis
-        self.__NumLyr = cmsDis.NumLyr
-        self.__NumRow = cmsDis.NumRow
-        self.__NumCol = cmsDis.NumCol
+        cmsDis = model.CmsDis
+        self._num_lyr = cmsDis.NumLyr
+        self._num_row = cmsDis.NumRow
+        self._num_col = cmsDis.NumCol
         self.__period = model._cmsTime.period
-        self.__wellr = BoundaryCheck.CheckValueFormat(Wellr, "Wellr", self.__period, self.__NumLyr,
-                                                      self.__NumRow, self.__NumCol)
-        self.__satthr = BoundaryCheck.CheckValueFormat(Satthr, "Satthr", self.__period, self.__NumLyr,
-                                                       self.__NumRow, self.__NumCol)
+        self.__wellr = BoundaryCheck.CheckValueFormat(Wellr, "Wellr", self.__period, self._num_lyr,
+                                                      self._num_row, self._num_col)
+        self.__satthr = BoundaryCheck.CheckValueFormat(Satthr, "Satthr", self.__period, self._num_lyr,
+                                                       self._num_row, self._num_col)
         if sorted(self.Wellr.keys()) != sorted(self.Satthr.keys()):
             raise ValueError("The stress periods for the 'Wellr' parameter and 'Satthr' should be the same.")
         model._addPackage("WEL", self)
