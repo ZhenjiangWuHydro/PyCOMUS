@@ -26,6 +26,19 @@ class ComusDrn:
             The hydraulic conductivity coefficient between the drainage ditch and the aquifer at the grid cell (L²/T).
         Delev:
             The elevation of the bottom of the drainage ditch at the grid cell (L).
+
+        Returns:
+        --------
+        instance: pycomus.ComusRch
+           COMUS Recharge(RCH) Params Object.
+
+        Example:
+        --------
+        >>> import pycomus
+        >>> model1 = pycomus.ComusModel(model_name="test")
+        >>> recharge = np.zeros((40, 1, 100))
+        >>> recharge[0, 0, 49:52] = 0.0015
+        >>> rechargePackage = pycomus.Package.ComusRch(model, rechr={0: recharge}, rech=1)
         """
 
         cmsDis = model.CmsDis
