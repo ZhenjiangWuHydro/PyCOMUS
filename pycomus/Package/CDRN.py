@@ -37,6 +37,7 @@ class ComusDrn:
         >>> import pycomus
         >>> model1 = pycomus.ComusModel(model_name="test")
         >>> drnPackage = pycomus.Package.ComusDrn(model, Cond={0: 1}, Delev={0: 20})
+
         """
 
         self._num_lyr = model.CmsDis.num_lyr
