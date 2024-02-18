@@ -38,7 +38,7 @@ class ComusRch:
         >>> model1 = pycomus.ComusModel(model_name="test")
         >>> recharge = np.zeros((40, 1, 100))
         >>> recharge[0, 0, 49:52] = 0.0015
-        >>> rechargePackage = pycomus.Package.ComusRch(model, rechr={0: recharge}, rech=1)
+        >>> rchPackage = pycomus.ComusRch(model1, rechr={0: recharge}, rech=1)
         """
         self._num_lyr = model.CmsDis.num_lyr
         self._num_row = model.CmsDis.num_row
@@ -59,9 +59,9 @@ class ComusRch:
         Parameters:
         --------
         model: pycomus.ComusModel
-         COMUS Model Object.
-        grid_params_file: str
-         Grid Attribute Params File Path.
+            COMUS Model Object.
+        rch_params_file: str
+            Grid RCH Params File Path(RCH.in).
 
         Returns:
         --------
@@ -72,12 +72,11 @@ class ComusRch:
         --------
         >>> import pycomus
         >>> model1 = pycomus.ComusModel(model_name="OneDimFlowSim(File-Input)")
-        >>> modelGridPar = pycomus.ComusRch.load(model, "./InputFiles/RCH.in")
+        >>> rchPkg = pycomus.ComusRch.load(model, "./InputFiles/RCH.in")
         """
         num_lyr = model.CmsDis.num_lyr
         num_row = model.CmsDis.num_row
         num_col = model.CmsDis.num_col
-        period = model.CmsTime.period
         with open(rch_params_file, 'r') as file:
             lines = file.readlines()
         if len(lines[0].strip().split()) != 6:

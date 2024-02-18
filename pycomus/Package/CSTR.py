@@ -5,7 +5,7 @@
 # Description: Set COMUS Model With STR Package.
 # --------------------------------------------------------------
 from typing import Dict, Tuple, Union
-
+from collections import OrderedDict
 import numpy as np
 
 from pycomus.Utils import BoundaryCheck
@@ -14,29 +14,25 @@ from pycomus.Utils import BoundaryCheck
 class ComusStr:
     def __init__(self, model, stream_num: int):
         """
-       Set COMUS Model With Stream(STR) Package.
+        Initialize the COMUS Model with the Stream(STR) package.
 
-       Parameters:
-       ----------------------------
-       model:
+        Parameters:
+        ----------------------------
+        model:
            COMUS Model Object.
-       stream_num:
+        stream_num:
            Number of streams.
         """
         if stream_num < 1:
             raise ValueError("The number of streams should be greater than or equal to 1.")
-        self.__stream_num = stream_num
-        cmsDis = model.CmsDis
-        self._num_lyr = cmsDis.NumLyr
-        self._num_row = cmsDis.NumRow
-        self._num_col = cmsDis.NumCol
-        self.__period = model._cmsTime.period
-        self.__stream: Stream = Stream()
-        model._addPackage("STR", self)
+        self._stream_num = stream_num
+        self._num_lyr = model.CmsDis.num_lyr
+        self._num_row = model.CmsDis.num_row
+        self._num_col = model.CmsDis.num_col
+        self._period = model.CmsTime.period
+        self.streamValue: Stream = Stream()
+        model.package["STR"] = self
 
-    @property
-    def StreamValue(self):
-        return self.__stream
 
     def setControlParams(self, control_params: Dict[int, Tuple[int, int, int, int, int, int, int, int, int]]) -> None:
         """
@@ -48,7 +44,7 @@ class ComusStr:
         """
 
         # Sorted Dict
-        control_params = dict(sorted(control_params.items(), key=lambda item: item[0]))
+        control_params = OrderedDict(sorted(zip(control_params.keys(), control_params.values())))
 
         # Check starts from 1 and continues.
         if not self.__is_consecutive_dict_keys(control_params.keys()):
@@ -63,8 +59,8 @@ class ComusStr:
                 raise ValueError("control_params's value(tuple's value) should be int.")
 
             # Check stream id
-            if str_id < 0 or str_id >= self.__stream_num:
-                raise ValueError(f"Stream ID should be between 0 and {self.__stream_num - 1}.")
+            if str_id < 0 or str_id >= self._stream_num:
+                raise ValueError(f"Stream ID should be between 0 and {self._stream_num - 1}.")
 
             # Check params length
 
@@ -128,7 +124,7 @@ class ComusStr:
                 raise ValueError(
                     f"The DRNOPT data for the river segment with ID {str_id} must be 0 or 1. Please check!")
 
-        self.__stream.ControlParams = control_params
+        self.streamValue.ControlParams = control_params
 
     def setPeriodData(self, period_data: Dict[int, Dict[
         int, Tuple[int, float, float, float, float, float, float, float, float, float, float, float]]]) -> None:
@@ -143,9 +139,9 @@ class ComusStr:
         :param period_data:
         :return:
         """
-        if not self.__stream.ControlParams:
+        if not self.streamValue.ControlParams:
             raise ValueError("ControlParams function of 'ComusStr' should be set first.")
-        period_data = dict(sorted(period_data.items(), key=lambda item: item[0]))
+        period_data = OrderedDict(sorted(zip(period_data.keys(), period_data.values())))
         if not self.__is_consecutive_dict_keys(period_data.keys()):
             raise ValueError(
                 "The river segment identifier data (SEGMID) is not starting from 1 or is not continuous. Please check!")
@@ -153,17 +149,17 @@ class ComusStr:
             # Check data type
             if not isinstance(str_id, int):
                 raise ValueError("period_data's dict key should be int.")
-            if str_id < 0 or str_id >= self.__stream_num:
-                raise ValueError(f"Stream ID should be between 0 and {self.__stream_num - 1}.")
+            if str_id < 0 or str_id >= self._stream_num:
+                raise ValueError(f"Stream ID should be between 0 and {self._stream_num - 1}.")
             for period_id, value in periodData.items():
                 # Check period key type
                 if not isinstance(period_id, int):
                     raise ValueError("period_data's value's dict key should be int.")
 
                 # Check period id
-                if not (0 <= period_id < len(self.__period)):
+                if not (0 <= period_id < len(self._period)):
                     raise ValueError(
-                        f"Invalid key {period_id} in period_data[{str_id}] dictionary. Keys should be in the range 0 to {len(self.__period) - 1}.")
+                        f"Invalid key {period_id} in period_data[{str_id}] dictionary. Keys should be in the range 0 to {len(self._period) - 1}.")
 
                 # Check data length
                 if len(value) != 12:
@@ -186,8 +182,8 @@ class ComusStr:
                         f"The along-channel supplementary flow data (WATWAY) for period {period_id} of river segment with ID {str_id} must be greater than or equal to 0.0. Please check!")
 
                 # Check WATDIV
-                if self.__stream.ControlParams[str_id][2] != 0 and self.__stream.ControlParams[str_id][4] != 3:
-                    if self.__stream.ControlParams[str_id][4] == 1:
+                if self.streamValue.ControlParams[str_id][2] != 0 and self.streamValue.ControlParams[str_id][4] != 3:
+                    if self.streamValue.ControlParams[str_id][4] == 1:
                         if value[7] < 0:
                             raise ValueError(
                                 f"The WATDIV data for period {period_id} of river segment with ID {str_id}, when dividing flow as specified, must be greater than or equal to 0.0. Please check!")
@@ -208,18 +204,18 @@ class ComusStr:
                         f"The EVRATE data for period {period_id} of river segment with ID {str_id} must be greater than or equal to 0.0. Please check!")
 
                 # Check RCHCOE
-                if value[8] > 0 and self.__stream.ControlParams[str_id][6] >= 1:
+                if value[8] > 0 and self.streamValue.ControlParams[str_id][6] >= 1:
                     if value[10] < 0 or value[10] > 1:
                         raise ValueError(
                             f"The RCHCOE data for period {period_id} of river segment with ID {str_id} must be between 0.0 and 1.0 inclusive. Please check!")
 
                 # Check WBKCOE
-                if value[8] > 0 and self.__stream.ControlParams[str_id][6] >= 1 and self.__stream.ControlParams[str_id][
+                if value[8] > 0 and self.streamValue.ControlParams[str_id][6] >= 1 and self.streamValue.ControlParams[str_id][
                     7] == 1:
                     if value[10] + value[11] > 1:
                         raise ValueError(
                             f"The sum of RCHCOE and WBKCOE data for period {period_id} of river segment with ID {str_id} must be less than 1.0. Please check!")
-        self.__stream.PeriodData = period_data
+        self.streamValue.PeriodData = period_data
 
     def setGridData(self, CELLID: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
                     LEN: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
@@ -256,7 +252,7 @@ class ComusStr:
         :param NDC:
             NDC is a double precision floating-point number representing the Manning's roughness coefficient (n) of the river segment.
         """
-        strIds = [i for i in range(self.__stream_num)]
+        strIds = [i for i in range(self._stream_num)]
         CELLID = BoundaryCheck.CheckValueGtZero(CELLID, "CELLID", strIds, self._num_lyr, self._num_row,
                                                 self._num_col)
         LEN = BoundaryCheck.CheckValueGtZero(LEN, "LEN", strIds, self._num_lyr, self._num_row, self._num_col)
@@ -276,7 +272,7 @@ class ComusStr:
             SLP.keys()) != sorted(NDC.keys()):
             raise ValueError(
                 "The StreamId for the 'CELLID','LEN','BTM','BWDT','SIZH1','SIZH2','BVK','BTK','SLP' and 'NDC' should be the same.")
-        self.__stream.GridData = {"CELLID": CELLID, "LEN": LEN, "BTM": BTM, "BWDT": BWDT, "SIZH1": SIZH1,
+        self.streamValue.GridData = {"CELLID": CELLID, "LEN": LEN, "BTM": BTM, "BWDT": BWDT, "SIZH1": SIZH1,
                                   "SIZH2": SIZH2, "BVK": BVK, "SLP": SLP, "DC": NDC}
 
     def setWatUseGrid(self, WUREGID: Union[int, np.ndarray], RATIO: Union[int, float, np.ndarray]) -> None:

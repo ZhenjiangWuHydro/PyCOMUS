@@ -36,7 +36,7 @@ class ComusModel:
     def write_files(self) -> None:
         """
         Compile the input data and save it in the <Data.in> directory located at runtime.
-        :return:
+
         """
         writeOutPut = pycomus.Utils.WriteFiles.WriteFiles(self)
         writeOutPut.WriteConPars()

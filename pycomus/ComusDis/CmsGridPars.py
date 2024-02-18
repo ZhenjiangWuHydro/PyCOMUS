@@ -444,10 +444,10 @@ class ComusGridPars:
                 for col in range(self._num_col):
                     # HANI
                     if self.kx[layer, row, col] != 0:
-                        self._model.layers[layer].grid_cells[row][col].HANI = self.ky[layer, row, col] / self.kx[
+                        self._model.layers[layer].grid_cells[row][col].hani = self.ky[layer, row, col] / self.kx[
                             layer, row, col]
                     else:
-                        self._model.layers[layer].grid_cells[row][col].HANI = 0
+                        self._model.layers[layer].grid_cells[row][col].hani = 0
                     # VKA
                     self._model.layers[layer].grid_cells[row][col].vka = self.kz[layer, row, col]
                     self._model.layers[layer].grid_cells[row][col].vkcb = self.vkcb[layer, row, col]

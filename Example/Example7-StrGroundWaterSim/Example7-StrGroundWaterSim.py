@@ -24,7 +24,7 @@ if __name__ == "__main__":
     model = pycomus.ComusModel(model_name="StrGroundWaterSim")
 
     # Control Params
-    controlParams = pycomus.ComusConPars(model=model, SimMtd=1, MaxIt=10000, RClose=0.0001, IRelax=1)
+    controlParams = pycomus.ComusConPars(model=model, sim_mtd=1, max_iter=10000, r_close=0.0001, relax=1)
 
     # Output Params
     outParams = pycomus.ComusOutputPars(model, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2)
@@ -33,8 +33,8 @@ if __name__ == "__main__":
     NumLyr = 1
     NumRow = 20
     NumCol = 20
-    modelDis = pycomus.ComusDisBcf(model, NumLyr, NumRow, NumCol, RowSpace=500, ColSpace=500,
-                                   LyrType=[1], LyrTrpy=[1], YCoord=10000)
+    modelDis = pycomus.ComusDisBcf(model, NumLyr, NumRow, NumCol, row_space=500, col_space=500,
+                                   lyr_type=[1], lyr_trpy=[1], y_coord=10000)
 
     # Grid Attribute
     top = getValue("./TOP.txt")
@@ -46,14 +46,14 @@ if __name__ == "__main__":
         shead[0, i, 0] = 8
         shead[0, i, 19] = 2
 
-    modelGridPar = pycomus.ComusGridPars(model, Top=top, Bot=-40, Ibound=ibound, Kx=5, Shead=shead)
+    modelGridPar = pycomus.ComusGridPars(model, top=top, bot=-40, ibound=ibound, kx=5, shead=shead)
 
     # Set Period
     period = pycomus.ComusPeriod(model, (1, 1, 1))
 
     # Set Evt
     etSurf = getValue("./EVT.txt").reshape((NumLyr, NumRow, NumCol))
-    evtPackage = pycomus.ComusEvt(model, ETSurf={0: etSurf}, ETRate=0.003, ETMxd=3.5, ETExp=2.5, IEvt=1, NumSeg=10)
+    evtPackage = pycomus.ComusEvt(model, et_surf={0: etSurf}, et_rate=0.003, et_mxd=3.5, et_exp=2.5, evt=1, num_seg=10)
 
     # Set Stream
     strPackage = pycomus.ComusStr(model, 12)
@@ -73,25 +73,25 @@ if __name__ == "__main__":
             11: (0, 0, 0, 0, 0, 1, 0, 0, 0)
         }
     )
-    strPackage.setPeriodData(
-        {
-            0: {0: (1, 0, 0, 0, 0, 100000, 0, 0, 0, 0.003, 0, 0)},
-            1: {0: (1, 0, 0, 0, 0, 0, 0, 0, 0, 0.003, 0, 0)},
-            2: {0: (1, 0, 0, 0, 0, 0, 0, 0, 0, 0.003, 0, 0)},
-            3: {0: (1, 0, 0, 0, 0, 0, 0, 0, 50000, 0.003, 0.2, 0)},
-            4: {0: (1, 0, 0, 0, 0, 0, 0, 0, 50000, 0.003, 0.2, 0)},
-            5: {0: (1, 0, 0, 0, 0, 0, 0, 0, 50000, 0.003, 0.2, 0)},
-            6: {0: (1, 0, 0, 0, 0, 0, 0, 0, 0, 0.003, 0, 0)},
-            7: {0: (1, 0, 0, 0, 0, 0, 0, 0, 0, 0.003, 0, 0)},
-            8: {0: (1, 0, 0, 0, 0, 0, 0, 0, 0, 0.003, 0, 0)},
-            9: {0: (1, 0, 0, 0, 0, 0, 0, 0, 0, 0.003, 0, 0)},
-            10: {0: (1, 0, 0, 0, 0, 0, 0, 0, 0, 0.003, 0, 0)},
-            11: {0: (1, 0, 0, 0, 0, 0, 0, 0, 0, 0.003, 0, 0)}
-        }
-    )
-    strPackage.loadCtrlParFile("./STRGrd.txt")
-    strPackage.loadWatUseFile("./STRWatUse.txt")
-    strPackage.loadWatDrnFile("./STRWatDrn.txt")
+    # strPackage.setPeriodData(
+    #     {
+    #         0: {0: (1, 0, 0, 0, 0, 100000, 0, 0, 0, 0.003, 0, 0)},
+    #         1: {0: (1, 0, 0, 0, 0, 0, 0, 0, 0, 0.003, 0, 0)},
+    #         2: {0: (1, 0, 0, 0, 0, 0, 0, 0, 0, 0.003, 0, 0)},
+    #         3: {0: (1, 0, 0, 0, 0, 0, 0, 0, 50000, 0.003, 0.2, 0)},
+    #         4: {0: (1, 0, 0, 0, 0, 0, 0, 0, 50000, 0.003, 0.2, 0)},
+    #         5: {0: (1, 0, 0, 0, 0, 0, 0, 0, 50000, 0.003, 0.2, 0)},
+    #         6: {0: (1, 0, 0, 0, 0, 0, 0, 0, 0, 0.003, 0, 0)},
+    #         7: {0: (1, 0, 0, 0, 0, 0, 0, 0, 0, 0.003, 0, 0)},
+    #         8: {0: (1, 0, 0, 0, 0, 0, 0, 0, 0, 0.003, 0, 0)},
+    #         9: {0: (1, 0, 0, 0, 0, 0, 0, 0, 0, 0.003, 0, 0)},
+    #         10: {0: (1, 0, 0, 0, 0, 0, 0, 0, 0, 0.003, 0, 0)},
+    #         11: {0: (1, 0, 0, 0, 0, 0, 0, 0, 0, 0.003, 0, 0)}
+    #     }
+    # )
+    # strPackage.loadCtrlParFile("./STRGrd.txt")
+    # strPackage.loadWatUseFile("./STRWatUse.txt")
+    # strPackage.loadWatDrnFile("./STRWatDrn.txt")
 
 
 

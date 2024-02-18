@@ -181,10 +181,10 @@ class WriteFiles:
         drn = self._package["DRN"]
         with open(os.path.join(self.folder_path, "DRN.in"), "w") as file:
             file.write("IPER  ILYR  IROW  ICOL  DELEV  COND\n")
-            periods = sorted(drn.Cond.keys())
+            periods = sorted(drn.cond.keys())
             for period in periods:
-                cond_value = drn.Cond[period]
-                delev_value = drn.Delev[period]
+                cond_value = drn.cond[period]
+                delev_value = drn.delev[period]
                 for layer in range(self._num_lyr):
                     for row in range(self._num_row):
                         for col in range(self._num_col):
@@ -197,11 +197,11 @@ class WriteFiles:
         ghb = self._package["GHB"]
         with open(os.path.join(self.folder_path, "GHB.in"), "w") as file:
             file.write("IPER  ILYR  IROW  ICOL  SHEAD  EHEAD  COND\n")
-            periods = sorted(ghb.Cond.keys())
+            periods = sorted(ghb.cond.keys())
             for period in periods:
-                cond_value = ghb.Cond[period]
-                shead_value = ghb.Shead[period]
-                ehead_value = ghb.Ehead[period]
+                cond_value = ghb.cond[period]
+                shead_value = ghb.shead[period]
+                ehead_value = ghb.ehead[period]
                 for layer in range(self._num_lyr):
                     for row in range(self._num_row):
                         for col in range(self._num_col):
@@ -223,10 +223,10 @@ class WriteFiles:
         shb = self._package["SHB"]
         with open(os.path.join(self.folder_path, "SHB.in"), "w") as file:
             file.write("IPER  ILYR  IROW  ICOL  SHEAD  EHEAD\n")
-            periods = sorted(shb.Shead.keys())
+            periods = sorted(shb.shead.keys())
             for period in periods:
-                shead_value = shb.Shead[period]
-                ehead_value = shb.Ehead[period]
+                shead_value = shb.shead[period]
+                ehead_value = shb.ehead[period]
                 for layer in range(self._num_lyr):
                     for row in range(self._num_row):
                         for col in range(self._num_col):
@@ -239,10 +239,10 @@ class WriteFiles:
         wel = self._package["WEL"]
         with open(os.path.join(self.folder_path, "WEL.in"), "w") as file:
             file.write("IPER  ILYR  IROW  ICOL  WELLR  SATTHR\n")
-            periods = sorted(wel.Wellr.keys())
+            periods = sorted(wel.wellr.keys())
             for period in periods:
-                wellr_value = wel.Wellr[period]
-                satthr_value = wel.Satthr[period]
+                wellr_value = wel.wellr[period]
+                satthr_value = wel.satthr[period]
                 for layer in range(self._num_lyr):
                     for row in range(self._num_row):
                         for col in range(self._num_col):
@@ -255,32 +255,32 @@ class WriteFiles:
         evt = self._package["EVT"]
         with open(os.path.join(self.folder_path, "EVT.in"), "w") as file:
             file.write("IPER  ILYR  IROW  ICOL  IEVT  ETSURF  ETRATE  ETMXD  ETEXP  NUMSEG\n")
-            periods = sorted(evt.ETSurf.keys())
+            periods = sorted(evt.et_surf.keys())
             print(periods)
             for period in periods:
-                ETSurf_value = evt.ETSurf[period]
-                ETRate_value = evt.ETRate[period]
-                ETMxd_value = evt.ETMxd[period]
-                ETExp_value = evt.ETExp[period]
+                ETSurf_value = evt.et_surf[period]
+                ETRate_value = evt.et_rate[period]
+                ETMxd_value = evt.et_mxd[period]
+                ETExp_value = evt.et_exp[period]
                 for layer in range(self._num_lyr):
                     for row in range(self._num_row):
                         for col in range(self._num_col):
                             if ETExp_value[layer, row, col] > 0:
                                 file.write(
-                                    f"{period + 1}  {layer + 1}  {row + 1}  {col + 1}  {evt.IEvt}  {ETSurf_value[layer, row, col]}  "
+                                    f"{period + 1}  {layer + 1}  {row + 1}  {col + 1}  {evt.evt}  {ETSurf_value[layer, row, col]}  "
                                     f"{ETRate_value[layer, row, col]}  {ETMxd_value[layer, row, col]}  "
-                                    f"{ETExp_value[layer, row, col]}  {evt.NumSeg}\n")
+                                    f"{ETExp_value[layer, row, col]}  {evt.num_seg}\n")
 
     def WriteRIV(self):
         riv = self._package["RIV"]
         with open(os.path.join(self.folder_path, "RIV.in"), "w") as file:
             file.write("IPER  ILYR  IROW  ICOL  SHEAD  EHEAD  COND  RIVBTM\n")
-            periods = sorted(riv.Cond.keys())
+            periods = sorted(riv.cond.keys())
             for period in periods:
-                cond_value = riv.Cond[period]
-                shead_value = riv.Shead[period]
-                ehead_value = riv.Ehead[period]
-                rivBtm_value = riv.RivBtm[period]
+                cond_value = riv.cond[period]
+                shead_value = riv.shead[period]
+                ehead_value = riv.ehead[period]
+                rivBtm_value = riv.riv_btm[period]
                 for layer in range(self._num_lyr):
                     for row in range(self._num_row):
                         for col in range(self._num_col):
@@ -290,7 +290,7 @@ class WriteFiles:
                                     f"{ehead_value[layer, row, col]}  {cond_value[layer, row, col]}  {rivBtm_value[layer, row, col]}\n")
 
     def WriteRES(self):
-        res = self._package["RES"].ResValue
+        res = self._package["RES"].res
         control_data = res.ControlParams
         period_data = res.PeriodData
         grid_data = res.GridData
