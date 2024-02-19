@@ -1,5 +1,6 @@
 import os
 import shutil
+from collections import OrderedDict
 
 import pycomus
 
@@ -323,34 +324,74 @@ class WriteFiles:
                                 index += 1
 
     def WriteSTR(self):
-        str = self._package["STR"].StreamValue
+        str = self._package["STR"].streamValue
         control_data = str.ControlParams
         period_data = str.PeriodData
         grid_data = str.GridData
-        with open(os.path.join(self.folder_path, "RESCtrl.in"), "w") as file:
-            file.write("RESID  EVEXP  EVMAXD  NUMSEG  NUMPT\n")
-            for res_id, params in control_data.items():
-                file.write(f"{res_id + 1}  {params[0]}  {params[1]}  {params[2]}  {params[3]}\n")
+        watUse_data = str.WatUseData
+        watDrn_data = str.WatDrnData
+        with open(os.path.join(self.folder_path, "STRCtrl.in"), "w") as file:
+            file.write("SEGMID  NEXTID  NEXTAT  DIVSID  DIVSAT  DIVTPOPT  WUTPOPT  WUREGID  WUBKOPT  DRNOPT\n")
+            for stream_id, params in control_data.items():
+                file.write(f"{stream_id + 1}  {params[0]}  {params[1]}  {params[2]}  {params[3]}  {params[4]}  {params[5]}"
+                           f"  {params[6]}  {params[7]}  {params[8]}\n")
 
-        with open(os.path.join(self.folder_path, "RESPer.in"), "w") as file:
-            file.write("IPER  RESID  SHEAD  EHEAD  RCHRG  GEVT\n")
+        with open(os.path.join(self.folder_path, "STRPer.in"), "w") as file:
+            file.write("IPER  SEGMID  HCALOPT  USLEV  UELEV  DSLEV  DELEV  WATPNT  WATWAY  WATDIV  WATUSE  EVRATE  RCHCOE  WBKCOE\n")
+            period_data = OrderedDict(sorted(period_data.items()))
+            for key, value in period_data.items():
+                period_data[key] = OrderedDict(sorted(value.items()))
             for res_id, periodData in period_data.items():
                 for period_id, value in periodData.items():
-                    file.write(f"{period_id + 1}  {res_id + 1}  {value[0]}  {value[1]}  {value[2]}  {value[3]}\n")
+                    file.write(f"{int(period_id + 1)}  {int(res_id + 1)}  {int(value[0])}  {float(value[1])}  {float(value[2])}  {float(value[3])}  "
+                               f"{float(value[4])}  {float(value[5])}  {float(value[6])}  {float(value[7])}  {float(value[8])}  {float(value[9])}  {float(value[10])}  {float(value[11])}\n")
 
-        with open(os.path.join(self.folder_path, "RESGrd.in"), "w") as file:
-            file.write("RESID  CELLID  ILYR  IROW  ICOL  BTM  BVK  BTK\n")
-            resIds = sorted(grid_data["Btm"].keys())
-            for resId in resIds:
+        with open(os.path.join(self.folder_path, "STRGrd.in"), "w") as file:
+            file.write("SEGMID  CELLID  ILYR  IROW  ICOL  LEN  BTM  BWDT  SIZH1  SIZH2  BVK  BTK  SLP  NDC\n")
+            segIds = sorted(grid_data["CELLID"].keys())
+            for segId in segIds:
                 index = 1
-                btm_value = grid_data["Btm"][resId]
-                bvk_value = grid_data["Bvk"][resId]
-                btk_value = grid_data["Btk"][resId]
+                cellID_value = grid_data["CELLID"][segId]
+                len_value = grid_data["LEN"][segId]
+                btm_value = grid_data["BTM"][segId]
+                bwdt_value = grid_data["BWDT"][segId]
+                sizh1_value = grid_data["SIZH1"][segId]
+                sizh2_value = grid_data["SIZH2"][segId]
+                bvk_value = grid_data["BVK"][segId]
+                btk_value = grid_data["BTK"][segId]
+                slp_value = grid_data["SLP"][segId]
+                ndc_value = grid_data["NDC"][segId]
                 for layer in range(self._num_lyr):
                     for row in range(self._num_row):
                         for col in range(self._num_col):
                             if bvk_value[layer, row, col] >= 0 and btk_value[layer, row, col] > 0:
                                 file.write(
-                                    f"{resId + 1}  {index}  {layer + 1}  {row + 1}  {col + 1}  {btm_value[layer, row, col]}  "
-                                    f"{bvk_value[layer, row, col]}  {btk_value[layer, row, col]}\n")
+                                    f"{segId + 1}  {int(cellID_value[layer, row, col])}  {layer + 1}  {row + 1}  {col + 1}  {len_value[layer, row, col]}  "
+                                    f"{btm_value[layer, row, col]}  {bwdt_value[layer, row, col]}  {sizh1_value[layer, row, col]}  {sizh2_value[layer, row, col]}  "
+                                    f"{bvk_value[layer, row, col]}  {btk_value[layer, row, col]}  {slp_value[layer, row, col]}  {ndc_value[layer, row, col]}\n")
                                 index += 1
+
+        with open(os.path.join(self.folder_path, "STRWatUse.in"), "w") as file:
+            file.write("WUREGID  ILYR  IROW  ICOL  RATIO\n")
+            print(watUse_data.keys())
+            wuregId_value = watUse_data["WUREGID"]
+            ratio_value = watUse_data["RATIO"]
+            for layer in range(self._num_lyr):
+                for row in range(self._num_row):
+                    for col in range(self._num_col):
+                        if wuregId_value[layer, row, col] > 0:
+                            file.write(
+                                f"{int(wuregId_value[layer, row, col])}  {layer + 1}  {row + 1}  {col + 1}  {ratio_value[layer, row, col]}\n")
+
+        with open(os.path.join(self.folder_path, "STRWatDrn.in"), "w") as file:
+            file.write("ILYR  IROW  ICOL  DELEV  COND  SEGMID\n")
+            delev_value = watDrn_data["DELEV"]
+            cond_value = watDrn_data["COND"]
+            segmid_value = watDrn_data["SEGMID"]
+            for layer in range(self._num_lyr):
+                for row in range(self._num_row):
+                    for col in range(self._num_col):
+                        if segmid_value[layer, row, col] > 0:
+                            file.write(
+                                f"{layer + 1}  {row + 1}  {col + 1}  {delev_value[layer, row, col]}  "
+                                f"{cond_value[layer, row, col]}  {segmid_value[layer, row, col]}\n")

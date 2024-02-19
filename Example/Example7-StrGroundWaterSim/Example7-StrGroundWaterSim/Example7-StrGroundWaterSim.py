@@ -37,7 +37,7 @@ if __name__ == "__main__":
                                    lyr_type=[1], lyr_trpy=[1], y_coord=10000)
 
     # Grid Attribute
-    top = getValue("./TOP.txt")
+    top = getValue("TOP.txt")
     ibound = np.full((NumLyr, NumRow, NumCol), 1, dtype=int)
     shead = np.full((NumLyr, NumRow, NumCol), 5, dtype=float)
     for i in range(20):
@@ -51,13 +51,13 @@ if __name__ == "__main__":
     # Set Period
     period = pycomus.ComusPeriod(model, (1, 1, 1))
 
-    # Set Evt
-    etSurf = getValue("./EVT.txt").reshape((NumLyr, NumRow, NumCol))
+    # Set EVT
+    etSurf = getValue("EVT.txt").reshape((NumLyr, NumRow, NumCol))
     evtPackage = pycomus.ComusEvt(model, et_surf={0: etSurf}, et_rate=0.003, et_mxd=3.5, et_exp=2.5, evt=1, num_seg=10)
 
     # Set Stream
     strPackage = pycomus.ComusStr(model, 12)
-    strPackage.setControlParams(
+    strPackage.set_ControlData(
         {
             0: (0, 0, 0, 0, 1, 1, 0, 0, 0),
             1: (0, 0, 1, 1, 3, 1, 0, 0, 0),
@@ -73,31 +73,30 @@ if __name__ == "__main__":
             11: (0, 0, 0, 0, 0, 1, 0, 0, 0)
         }
     )
-    # strPackage.setPeriodData(
-    #     {
-    #         0: {0: (1, 0, 0, 0, 0, 100000, 0, 0, 0, 0.003, 0, 0)},
-    #         1: {0: (1, 0, 0, 0, 0, 0, 0, 0, 0, 0.003, 0, 0)},
-    #         2: {0: (1, 0, 0, 0, 0, 0, 0, 0, 0, 0.003, 0, 0)},
-    #         3: {0: (1, 0, 0, 0, 0, 0, 0, 0, 50000, 0.003, 0.2, 0)},
-    #         4: {0: (1, 0, 0, 0, 0, 0, 0, 0, 50000, 0.003, 0.2, 0)},
-    #         5: {0: (1, 0, 0, 0, 0, 0, 0, 0, 50000, 0.003, 0.2, 0)},
-    #         6: {0: (1, 0, 0, 0, 0, 0, 0, 0, 0, 0.003, 0, 0)},
-    #         7: {0: (1, 0, 0, 0, 0, 0, 0, 0, 0, 0.003, 0, 0)},
-    #         8: {0: (1, 0, 0, 0, 0, 0, 0, 0, 0, 0.003, 0, 0)},
-    #         9: {0: (1, 0, 0, 0, 0, 0, 0, 0, 0, 0.003, 0, 0)},
-    #         10: {0: (1, 0, 0, 0, 0, 0, 0, 0, 0, 0.003, 0, 0)},
-    #         11: {0: (1, 0, 0, 0, 0, 0, 0, 0, 0, 0.003, 0, 0)}
-    #     }
-    # )
-    # strPackage.loadCtrlParFile("./STRGrd.txt")
-    # strPackage.loadWatUseFile("./STRWatUse.txt")
-    # strPackage.loadWatDrnFile("./STRWatDrn.txt")
+    strPackage.set_PeriodData(
+        {
+            0: {0: (1, 0, 0, 0, 0, 100000, 0, 0, 0, 0.003, 0, 0)},
+            1: {0: (1, 0, 0, 0, 0, 0, 0, 0, 0, 0.003, 0, 0)},
+            2: {0: (1, 0, 0, 0, 0, 0, 0, 0, 0, 0.003, 0, 0)},
+            3: {0: (1, 0, 0, 0, 0, 0, 0, 0, 50000, 0.003, 0.2, 0)},
+            4: {0: (1, 0, 0, 0, 0, 0, 0, 0, 50000, 0.003, 0.2, 0)},
+            5: {0: (1, 0, 0, 0, 0, 0, 0, 0, 50000, 0.003, 0.2, 0)},
+            6: {0: (1, 0, 0, 0, 0, 0, 0, 0, 0, 0.003, 0, 0)},
+            7: {0: (1, 0, 0, 0, 0, 0, 0, 0, 0, 0.003, 0, 0)},
+            8: {0: (1, 0, 0, 0, 0, 0, 0, 0, 0, 0.003, 0, 0)},
+            9: {0: (1, 0, 0, 0, 0, 0, 0, 0, 0, 0.003, 0, 0)},
+            10: {0: (1, 0, 0, 0, 0, 0, 0, 0, 0, 0.003, 0, 0)},
+            11: {0: (1, 0, 0, 0, 0, 0, 0, 0, 0, 0.003, 0, 0)}
+        }
+    )
+    # strPackage.load_ctrlPars_file("./STRCtrl.txt")
+    # strPackage.load_period_file("./STRPer.txt")
+    strPackage.load_strGrid_file("./STRGrd.txt")
+    strPackage.load_watUse_file("./STRWatUse.txt")
+    strPackage.load_watDrn_file("./STRWatDrn.txt")
 
+    # Write Output
+    model.write_files()
 
-
-    #
-    # # Write Output
-    # model.writeOutPut()
-    #
-    # # Run Model
-    # model.runModel()
+    # Run Model
+    model.run()

@@ -107,7 +107,7 @@ def Check3DValueGtZero(Value: Union[int, float, np.ndarray], ValueName: str, Num
         return np.full((NumLyr, NumRow, NumCol), Value, dtype=float)
     elif isinstance(Value, np.ndarray):
         if Value.shape == (NumLyr, NumRow, NumCol):
-            if (Value >= 0).all():
+            if (Value < 0).all():
                 raise ValueError(f"{ValueName} value must be greater than or equal to 0.")
             return Value
         else:
