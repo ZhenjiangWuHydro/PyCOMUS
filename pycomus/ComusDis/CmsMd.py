@@ -70,6 +70,10 @@ class ComusModel:
             writeOutPut.WriteRES()
         if "STR" in self.package:
             writeOutPut.WriteSTR()
+        if "LAK" in self.package:
+            writeOutPut.WriteLAK()
+        if "IBS" in self.package:
+            writeOutPut.WriteIBS()
 
     def run(self) -> None:
         """

@@ -333,18 +333,21 @@ class WriteFiles:
         with open(os.path.join(self.folder_path, "STRCtrl.in"), "w") as file:
             file.write("SEGMID  NEXTID  NEXTAT  DIVSID  DIVSAT  DIVTPOPT  WUTPOPT  WUREGID  WUBKOPT  DRNOPT\n")
             for stream_id, params in control_data.items():
-                file.write(f"{stream_id + 1}  {params[0]}  {params[1]}  {params[2]}  {params[3]}  {params[4]}  {params[5]}"
-                           f"  {params[6]}  {params[7]}  {params[8]}\n")
+                file.write(
+                    f"{stream_id + 1}  {params[0]}  {params[1]}  {params[2]}  {params[3]}  {params[4]}  {params[5]}"
+                    f"  {params[6]}  {params[7]}  {params[8]}\n")
 
         with open(os.path.join(self.folder_path, "STRPer.in"), "w") as file:
-            file.write("IPER  SEGMID  HCALOPT  USLEV  UELEV  DSLEV  DELEV  WATPNT  WATWAY  WATDIV  WATUSE  EVRATE  RCHCOE  WBKCOE\n")
+            file.write(
+                "IPER  SEGMID  HCALOPT  USLEV  UELEV  DSLEV  DELEV  WATPNT  WATWAY  WATDIV  WATUSE  EVRATE  RCHCOE  WBKCOE\n")
             period_data = OrderedDict(sorted(period_data.items()))
             for key, value in period_data.items():
                 period_data[key] = OrderedDict(sorted(value.items()))
             for res_id, periodData in period_data.items():
                 for period_id, value in periodData.items():
-                    file.write(f"{int(period_id + 1)}  {int(res_id + 1)}  {int(value[0])}  {float(value[1])}  {float(value[2])}  {float(value[3])}  "
-                               f"{float(value[4])}  {float(value[5])}  {float(value[6])}  {float(value[7])}  {float(value[8])}  {float(value[9])}  {float(value[10])}  {float(value[11])}\n")
+                    file.write(
+                        f"{int(period_id + 1)}  {int(res_id + 1)}  {int(value[0])}  {float(value[1])}  {float(value[2])}  {float(value[3])}  "
+                        f"{float(value[4])}  {float(value[5])}  {float(value[6])}  {float(value[7])}  {float(value[8])}  {float(value[9])}  {float(value[10])}  {float(value[11])}\n")
 
         with open(os.path.join(self.folder_path, "STRGrd.in"), "w") as file:
             file.write("SEGMID  CELLID  ILYR  IROW  ICOL  LEN  BTM  BWDT  SIZH1  SIZH2  BVK  BTK  SLP  NDC\n")
@@ -395,3 +398,57 @@ class WriteFiles:
                             file.write(
                                 f"{layer + 1}  {row + 1}  {col + 1}  {delev_value[layer, row, col]}  "
                                 f"{cond_value[layer, row, col]}  {segmid_value[layer, row, col]}\n")
+
+    def WriteLAK(self):
+        lake = self._package["LAK"].lakeValue
+        control_data = lake.ControlParams
+        period_data = lake.PeriodData
+        grid_data = lake.GridData
+        with open(os.path.join(self.folder_path, "LAKCtrl.in"), "w") as file:
+            file.write(
+                "LAKEID  STRID  DIVSID  DIVSAT  BETA  INIHLEV  DEADHLEV  EVEXP  EVMAXD  NUMSEG  STRBED  STRWDT  STRNDC  STRSLP\n")
+            for lake_id, params in control_data.items():
+                file.write(f"{lake_id + 1}  {params[0]}  {params[1]}  {params[2]}  {params[3]}  {params[4]}  {params[5]}"
+                           f"  {params[6]}  {params[7]}  {params[8]}  {params[9]}  {params[10]}  {params[11]}  {params[12]}\n")
+
+        with open(os.path.join(self.folder_path, "LAKPer.in"), "w") as file:
+            file.write("IPER  LAKEID  PCP  RNFCOF  PRHCOF  ET0  EVWBCOF  GEVCOF  WATDIV  WATUSE\n")
+            for lake_id, periodData in period_data.items():
+                for period_id, value in periodData.items():
+                    file.write(f"{period_id + 1}  {lake_id + 1}  {value[0]}  {value[1]}  {value[2]}  {value[3]}"
+                               f"  {value[4]}  {value[5]}  {value[6]}  {value[7]}\n")
+
+        with open(os.path.join(self.folder_path, "LAKGrd.in"), "w") as file:
+            file.write("LAKEID  CELLID  ILYR  IROW  ICOL  BTM  LNK  SC1  SC2\n")
+            lakIds = sorted(grid_data["BTM"].keys())
+            for lakId in lakIds:
+                index = 1
+                btm_value = grid_data["BTM"][lakId]
+                lnk_value = grid_data["LNK"][lakId]
+                sc1_value = grid_data["SC1"][lakId]
+                sc2_value = grid_data["SC2"][lakId]
+                for layer in range(self._num_lyr):
+                    for row in range(self._num_row):
+                        for col in range(self._num_col):
+                            if lnk_value[layer, row, col] > 0:
+                                file.write(
+                                    f"{lakId + 1}  {index}  {layer + 1}  {row + 1}  {col + 1}  {btm_value[layer, row, col]}  "
+                                    f"{lnk_value[layer, row, col]}  {sc1_value[layer, row, col]}  {sc2_value[layer, row, col]}\n")
+                                index += 1
+
+    def WriteIBS(self):
+        ibs = self._package["IBS"]
+        with open(os.path.join(self.folder_path, "IBS.in"), "w") as file:
+            file.write("ILYR  IROW  ICOL  HC  SFE  SFV  COM\n")
+            hc_value = ibs.hc
+            sfe_value = ibs.sfe
+            sfv_value = ibs.sfv
+            com_value = ibs.com
+            for layer in range(self._num_lyr):
+                for row in range(self._num_row):
+                    for col in range(self._num_col):
+                        if sfe_value[layer, row, col] > 0 and sfv_value[layer, row, col] > 0:
+                            file.write(
+                                f"{layer + 1}  {row + 1}  {col + 1}  {hc_value[layer, row, col]}  "
+                                f"{sfe_value[layer, row, col]}  {sfv_value[layer, row, col]}  {com_value[layer, row, col]}\n")
+

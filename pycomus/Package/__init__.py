@@ -8,3 +8,6 @@ from .CEVT import ComusEvt
 from .CRIV import ComusRiv
 from .CRES import ComusRes
 from .CSTR import ComusStr
+from .CLAK import ComusLak
+from .CIBS import ComusIbs
+from .CSUB import ComusSub
