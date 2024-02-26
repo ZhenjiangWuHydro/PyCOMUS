@@ -29,5 +29,12 @@ if __name__ == "__main__":
     for i in range(1, 22):
         ibound[0, i, 0] = -1
         ibound[0, i, -1] = -1
+    shead = np.zeros((NumLyr, NumRow, NumCol))
+    for i in range(NumRow):
+        shead[0, i, :] = [135, 134.0196, 132.451, 130.8824, 129.3137, 127.7451, 126.7647, 126.3725, 125.9804, 125.5882,
+                          125.1961, 124.8039, 124.4118, 124.0196, 123.6275, 123.2353, 122.2549, 120.6863, 119.1176, 117.549,
+                          115.9804, 115]
 
-    # modelGridPar = pycomus.ComusGridPars(model, top=117, bot=67, ibound=ibound, kx=30)
+    modelGridPar = pycomus.ComusGridPars(model, top=117, bot=67, ibound=ibound, kx=30)
+
+    # 
