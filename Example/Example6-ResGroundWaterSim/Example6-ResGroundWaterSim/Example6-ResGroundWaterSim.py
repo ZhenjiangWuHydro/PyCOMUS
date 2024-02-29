@@ -33,7 +33,7 @@ if __name__ == "__main__":
     controlParams = pycomus.ComusConPars(model=model, solve=1, max_iter=10000, r_close=0.01)
 
     # Output Params
-    outParams = pycomus.ComusOutputPars(model, 2, 2, 2, 2, 2, 2)
+    outParams = pycomus.ComusOutputPars(model)
 
     # Create Grid And Layer
     NumLyr = 1
@@ -63,14 +63,9 @@ if __name__ == "__main__":
         {0: (2.5, 3, 10, 20)}
     )
     resPackage.set_period_data(
-        {0:  # res id
-             {0:  # period id
-                  (4, 12, 0, 0),
-              1:
-                  (12, 14, 0, 0),
-              2:
-                  (14, 4, 0, 0)
-              }
+        {0: {0: (4, 12, 0, 0)},
+         1: {0: (12, 14, 0, 0)},
+         2: {0: (14, 4, 0, 0)}
          }
     )
     btm, bvk, btk = getResValue("GridValue.txt")
@@ -81,3 +76,7 @@ if __name__ == "__main__":
 
     # Run Model
     model.run()
+
+    # res = pycomus.ComusResult(model)
+    # res = res.read_cell_head(tar_period=2, tar_iter=0, tar_layer=0)
+    # print(res)

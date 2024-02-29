@@ -4,11 +4,14 @@
 # Author: Zhenjiang Wu
 # Description: Set COMUS Model With LAK Package.
 # --------------------------------------------------------------
+import os
+import sys
 from typing import Dict, Tuple, Union
 
 import numpy as np
 
 from pycomus.Utils import BoundaryCheck
+from pycomus.Utils.CONST_VALUE import LAK_PKG_NAME, LAK_CTRL_FILE_NAME, LAK_PERIOD_FILE_NAME, LAK_GRID_FILE_NAME
 
 
 class ComusLak:
@@ -36,23 +39,26 @@ class ComusLak:
         """
         if lake_num < 1:
             raise ValueError("The number of lakes should be greater than or equal to 1.")
+        BoundaryCheck.check_bnd_queue(model)
+        cms_dis = BoundaryCheck.get_cms_pars(model)
+        cms_period = BoundaryCheck.get_period(model)
+        self._num_lyr = cms_dis.num_lyr
+        self._num_row = cms_dis.num_row
+        self._num_col = cms_dis.num_col
+        self._period = cms_period.period
         self._lake_num = lake_num
-        self._num_lyr = model.CmsDis.num_lyr
-        self._num_row = model.CmsDis.num_row
-        self._num_col = model.CmsDis.num_col
-        self._period = model.CmsTime.period
         self.lakeValue: Lak = Lak()
         self._model = model
-        model.package["LAK"] = self
+        model.package[LAK_PKG_NAME] = self
 
     def set_control_params(self, control_params: Dict[
-        int, Tuple[int, int, int, float, float, float, float, float, int, float, float, float, float]]) -> None:
+            int, Tuple[int, int, int, float, float, float, float, float, int, float, float, float, float]]) -> None:
         """
         Set Lake Control Params.
 
         :param control_params:
             A Dict type data where the keys represent the lake IDs, and the values are Tuples containing 13
-            elements: STRID,DIVSID,DIVSAT,BETA,INIHLEV,DEADHLEV,EVEXP,EVMAXD,NUMSEG,STRBED,STRWDT,STRNDC,STRSLP.
+            elements: STRID, DIVSID, DIVSAT, BETA, INIHLEV, DEADHLEV, EVEXP, EVMAXD, NUMSEG, STRBED, STRWDT, STRNDC, STRSLP.
         """
         for lak_id, params in control_params.items():
             if lak_id < 0 or lak_id >= self._lake_num:
@@ -70,7 +76,6 @@ class ComusLak:
             str_id = params[0]
             divs_id = params[1]
             div_sat = params[2]
-            beta = params[3]
             ev_exp = params[6]
             ev_maxd = params[7]
             num_seg = params[8]
@@ -101,22 +106,22 @@ class ComusLak:
         self.lakeValue.ControlParams = control_params
 
     def set_period_data(self, period_data: Dict[
-        int, Dict[int, Tuple[float, float, float, float, float, float, float, float]]]) -> None:
+            int, Dict[int, Tuple[float, float, float, float, float, float, float, float]]]) -> None:
         """
         Set Reservoir Period Data.
 
         :param period_data:
-            A Dict type data where the keys represent the reservoir IDs, and the values are Dicts with Period IDs as
-            keys. Within the inner Dicts, the values are Tuples containing four elements: PCP,RNFCOF,PRHCOF,ET0,EVWBCOF,GEVCOF,WATDIV,WATUSE.
+            A Dict type data where the keys represent the Period IDs, and the values are Dicts with reservoir IDs as
+            keys. Within the inner Dicts, the values are Tuples containing four elements: PCP, RNFCOF, PRHCOF,
+             ET0, EVWBCOF, GEVCOF, WATDIV, WATUSE.
         """
-        for lak_id, periodData in period_data.items():
-            if lak_id < 0 or lak_id >= self._lake_num:
-                raise ValueError(f"Lake ID should be between 0 and {self._lake_num - 1}.")
-            for period_id, value in periodData.items():
-                if not (0 <= period_id < len(self._period)):
-                    raise ValueError(
-                        f"Invalid key {period_id} in period_data[{lak_id}] dictionary. Keys should be in the range 0 to {len(self._period) - 1}.")
-
+        for period_id, periodData in period_data.items():
+            if not (0 <= period_id < len(self._period)):
+                raise ValueError(
+                    f"Invalid key {period_id} in period_data dictionary. Keys should be in the range 0 to {len(self._period) - 1}.")
+            for lak_id, value in periodData.items():
+                if lak_id < 0 or lak_id >= self._lake_num:
+                    raise ValueError(f"Lake ID should be between 0 and {self._lake_num - 1}.")
                 if len(value) != 8:
                     raise ValueError(
                         "Each period data should contain 8 values(PCP,RNFCOF,PRHCOF,ET0,EVWBCOF,GEVCOF,WATDIV,WATUSE).")
@@ -201,9 +206,11 @@ class ComusLak:
         >>> lakPackage = pycomus.ComusLak.load(model1, "./InputFiles/LAKCtrl.in", "./InputFiles/LAKPer.in",
         >>> "./InputFiles/LAKGrd.in")
         """
-        num_lyr = model.CmsDis.num_lyr
-        num_row = model.CmsDis.num_row
-        num_col = model.CmsDis.num_col
+        BoundaryCheck.check_bnd_queue(model)
+        cms_dis = BoundaryCheck.get_cms_pars(model)
+        num_lyr = cms_dis.num_lyr
+        num_row = cms_dis.num_row
+        num_col = cms_dis.num_col
 
         # load ctrl_pars_file
         with open(ctrl_pars_file, 'r') as file:
@@ -243,10 +250,10 @@ class ComusLak:
             line = line.strip().split()
             period_id = int(line[0]) - 1
             lake_id = int(line[1]) - 1
-            if lake_id not in period_data:
-                period_data[lake_id] = {}
-            if period_id not in period_data[lake_id]:
-                period_data[lake_id][period_id] = (
+            if period_id not in period_data:
+                period_data[period_id] = {}
+            if lake_id not in period_data[period_id]:
+                period_data[period_id][lake_id] = (
                     float(line[2]), float(line[3]), float(line[4]), float(line[5]), float(line[6]), float(line[7]),
                     float(line[8]), float(line[9]))
         instance.set_period_data(period_data)
@@ -286,6 +293,107 @@ class ComusLak:
                 sc2[lake_id][lyr, row, col] = float(line[8])
         instance.set_grid_data(btm, lnk, sc1, sc2)
         return instance
+
+    def __str__(self):
+        res = f"{LAK_PKG_NAME}:\n"
+        res += f"    Lake Control Params : {self.lakeValue.ControlParams}\n"
+        res += f"    Lake Period Params : {self.lakeValue.PeriodData}\n"
+        res += f"    Lake Grid Params : {self.lakeValue.GridData}\n"
+        return res
+
+    def write_file(self, folder_path: str):
+        if not self._write_file_test(folder_path):
+            lak_file = os.path.join(folder_path, LAK_CTRL_FILE_NAME)
+            if os.path.exists(lak_file):
+                os.remove(lak_file)
+            lak_file = os.path.join(folder_path, LAK_PERIOD_FILE_NAME)
+            if os.path.exists(lak_file):
+                os.remove(lak_file)
+            lak_file = os.path.join(folder_path, LAK_GRID_FILE_NAME)
+            if os.path.exists(lak_file):
+                os.remove(lak_file)
+            sys.exit()
+
+    def _write_file_test(self, folder_path: str) -> bool:
+        # Control Param Check And Write
+        ctrl_pars = self.lakeValue.ControlParams
+        data_row_index = 0
+        with open(os.path.join(folder_path, LAK_CTRL_FILE_NAME), "w") as file:
+            file.write("LAKEID  STRID  DIVSID  DIVSAT  BETA  INIHLEV  DEADHLEV  EVEXP  EVMAXD  NUMSEG  "
+                       "STRBED  STRWDT  STRNDC  STRSLP\n")
+            for lak_id, params in ctrl_pars.items():
+                if data_row_index != lak_id:
+                    print("LAKEID does not start from 1 or is not consecutive!")
+                isStrExist: bool = False
+                if "STR" in self._model.package:
+                    isStrExist = True
+                str_id = params[0]
+                divs_id = params[1]
+                div_sat = params[2]
+                ev_exp = params[6]
+                ev_maxd = params[7]
+                num_seg = params[8]
+                str_wdt = params[10]
+                str_ndc = params[11]
+                str_slp = params[12]
+                # Check is exist stream
+                if isStrExist:
+                    if str_id < 0:
+                        print("The downstream river cell unit numbers must be greater than or equal to 0.Please check!")
+                        return False
+                    if divs_id < 0:
+                        print("The diversion water source unit numbers for lake cells must be greater than or equal to"
+                              " 0. Please check!")
+                        return False
+                    if divs_id != 0:
+                        if div_sat not in (1, 2):
+                            print("The DIVSAT data must be equal to 1 or 2. Please check! ")
+                            return False
+                if ev_exp <= 0 or ev_maxd <= 0:
+                    print(f"The EVEXP and EVMAXD parameters for lake number {lak_id} must be greater than 0.0. "
+                          f"Please check!")
+                    return False
+                if num_seg < 2 or num_seg > 20:
+                    print(f"The NUMSEG parameter for lake number {lak_id} must be between 2 and 20. Please check!")
+                    return False
+                if str_id != 0:
+                    if str_wdt <= 0 or str_ndc <= 0 or str_slp <= 0:
+                        print(f"Lake number {lak_id} has downstream river reach units. Parameters like STRWDT, STRNDC,"
+                              f" STRSLP, etc., must be greater than 0.0. Please verify!")
+                        return False
+                file.write(f"{lak_id + 1}  {params[0]}  {params[1]}  {params[2]}  {params[3]}  {params[4]}  {params[5]}"
+                           f"  {params[6]}  {params[7]}  {params[8]}  {params[9]}  {params[10]}  {params[11]}  {params[12]}\n")
+                data_row_index += 1
+
+        # Check Period Check And Write
+        period_data = self.lakeValue.PeriodData
+        with open(os.path.join(folder_path, LAK_PERIOD_FILE_NAME), "w") as file:
+            file.write("IPER  LAKEID  PCP  RNFCOF  PRHCOF  ET0  EVWBCOF  GEVCOF  WATDIV  WATUSE\n")
+            for period_id, periodData in period_data.items():
+                for lake_id, value in periodData.items():
+                    file.write(f"{period_id + 1}  {lake_id + 1}  {value[0]}  {value[1]}  {value[2]}  {value[3]}"
+                               f"  {value[4]}  {value[5]}  {value[6]}  {value[7]}\n")
+
+        # Check Grid Check And Write
+        grid_data = self.lakeValue.GridData
+        with open(os.path.join(folder_path, LAK_GRID_FILE_NAME), "w") as file:
+            file.write("LAKEID  CELLID  ILYR  IROW  ICOL  BTM  LNK  SC1  SC2\n")
+            lakIds = sorted(grid_data["BTM"].keys())
+            for lakId in lakIds:
+                index = 1
+                btm_value = grid_data["BTM"][lakId]
+                lnk_value = grid_data["LNK"][lakId]
+                sc1_value = grid_data["SC1"][lakId]
+                sc2_value = grid_data["SC2"][lakId]
+                for layer in range(self._num_lyr):
+                    for row in range(self._num_row):
+                        for col in range(self._num_col):
+                            if lnk_value[layer, row, col] > 0:
+                                file.write(
+                                    f"{lakId + 1}  {index}  {layer + 1}  {row + 1}  {col + 1}  {btm_value[layer, row, col]}  "
+                                    f"{lnk_value[layer, row, col]}  {sc1_value[layer, row, col]}  {sc2_value[layer, row, col]}\n")
+                                index += 1
+        return True
 
 
 class Lak:

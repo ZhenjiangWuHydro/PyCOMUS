@@ -2,12 +2,15 @@
 # CmsDis.py
 # Version: 1.0.0
 # Author: Zhenjiang Wu
-# Description: Set COMUS Model LPF And BCF Grid And Layer Property Flow Package.
+# Description: Set COMUS Model LPF Or BCF Layer Property.
 # --------------------------------------------------------------
+import os
 from typing import List, Union, Tuple
 
 from pycomus.ComusDis.GridCell import GridCell
 from pycomus.ComusDis.GridLyr import LpfLayers, BcfLayers
+from pycomus.Utils.CONST_VALUE import LPF_LYR_FILE_NAME, BCF_LYR_FILE_NAME, LPF_LYR_PKG_NAME, BCF_LYR_PKG_NAME, \
+    GRID_SPACE_FILE_NAME, CON_PKG_NAME
 
 
 class ComusDis:
@@ -41,11 +44,10 @@ class ComusDis:
             raise ValueError("row_space should be greater than 0")
         if not all(x > 0 for x in self.col_space):
             raise ValueError("col_space should be greater than 0")
-        model.CmsDis = self
+        self._model = model
 
     @classmethod
     def _load_control_params(cls, ctrl_params_file: str) -> Tuple:
-        # Load And Check "ctrl_params_file"
         with open(ctrl_params_file, 'r') as file:
             lines = file.readlines()
         if len(lines) != 2:
@@ -68,7 +70,6 @@ class ComusDis:
 
     @classmethod
     def _load_grid_space(cls, grd_space_file: str, num_row: int, num_col: int) -> Tuple:
-        # load and check grd_space_file
         with open(grd_space_file, 'r') as file:
             lines = file.readlines()[1:]
         expectLength = num_row + num_col
@@ -93,6 +94,18 @@ class ComusDis:
         return f"Mesh Grid And Layer:\n    Number of layers : {self.num_lyr}  Number of rows : {self.num_row}  Number of cols : {self.num_col}  \n" \
                f"    RowSpace : {self.row_space}  \n    ColSpace : {self.col_space}  \n    XCoord : {self.x_coord}   " \
                f"YCoord : {self.y_coord}"
+
+    def write_file(self, folder_path):
+        with open(os.path.join(folder_path, GRID_SPACE_FILE_NAME), "w") as file:
+            file.write("ATTI  NUMID  DELT\n")
+            index = 1
+            for rowSpace in self.row_space:
+                file.write(f"C  {index}  {rowSpace}\n")
+                index += 1
+            index = 1
+            for colSpace in self.col_space:
+                file.write(f"R  {index}  {colSpace}\n")
+                index += 1
 
 
 class ComusDisLpf(ComusDis):
@@ -139,12 +152,13 @@ class ComusDisLpf(ComusDis):
         Example:
         --------
         >>> import pycomus
-        >>> model1 = pycomus.ComusModel(model_name="OneDimFlowSim")
+        >>> model1 = pycomus.ComusModel(model_name="test")
         >>> modelDis = pycomus.ComusDisLpf(model1, 1, 20, 20, row_space=1, col_space=1, lyr_type=[1 for _ in range(1)], y_coord=1)
         """
         super().__init__(model, num_lyr, num_row, num_col, x_coord, y_coord, row_space, col_space)
         self._model = model
-        if model.CmsPars.intblkm == 1:
+        cms_pars = model.package[CON_PKG_NAME]
+        if cms_pars.intblkm == 1:
             raise ValueError("In BCF format has been selected, it is not possible to add layers in LPF format.")
         if not lyr_type:
             lyr_type = [0] * num_lyr
@@ -165,11 +179,12 @@ class ComusDisLpf(ComusDis):
             raise ValueError("lyr_ibs length should be the same as num_lyr!")
         if not all(x in [0, 1] for x in lyr_ibs):
             raise ValueError("The data in lyr_ibs should be in [0: IBS-Disable, 1: IBS-Enable]!")
-        model.Layers = []
+        model.layers = []
         for i in range(num_lyr):
             grid_cell = [[GridCell() for _ in range(num_col)] for _ in range(num_row)]
             model.layers.append(
                 LpfLayers(i + 1, lyr_type=lyr_type[i], lyr_cbd=lyr_cbd[i], lyr_ibs=lyr_ibs[i], grid_cells=grid_cell))
+        model.package[LPF_LYR_PKG_NAME] = self
 
     @classmethod
     def load(cls, model, ctrl_params_file: str, grd_space_file: str, lpf_lyr_file: str):
@@ -195,11 +210,12 @@ class ComusDisLpf(ComusDis):
         Example:
         --------
         >>> import pycomus
-        >>> model1 = pycomus.ComusModel(model_name="OneDimFlowSim")
+        >>> model1 = pycomus.ComusModel(model_name="test")
         >>> modelDis = pycomus.ComusDisLpf.load(model1, "./InputFiles/CtrlPar.in", "./InputFiles/GrdSpace.in", "./InputFiles/LpfLyr.in")
         """
         # Check INTBLKM
-        if model.CmsPars.intblkm == 1:
+        cms_pars = model.package[CON_PKG_NAME]
+        if cms_pars.intblkm == 1:
             raise ValueError("In BCF format has been selected, it is not possible to add layers in LPF format.")
 
         # Check Control Params
@@ -208,7 +224,7 @@ class ComusDisLpf(ComusDis):
         # Check Grid Space Params
         row_space, col_space = ComusDis._load_grid_space(grd_space_file, num_row, num_col)
 
-        # Check Bcf Layer Attribute
+        # Check Lpf Layer Attribute
         with open(lpf_lyr_file, 'r') as file:
             lines = file.readlines()[1:]
         if len(lines) != num_lyr:
@@ -227,6 +243,21 @@ class ComusDisLpf(ComusDis):
 
     def __str__(self):
         return super().__str__()
+
+    def write_file(self, folder_path: str):
+        """
+        Typically used as an internal function but can also be called directly, it outputs the `pycomus.ComusDisLpf`
+        module to the specified path as <LpfLyr.in>.
+
+        :param folder_path: Output folder path.
+        """
+        super().write_file(folder_path)
+        with open(os.path.join(folder_path, LPF_LYR_FILE_NAME), "w") as file:
+            file.write("LYRID  LYRTYPE  LYRHANI  LYRVKA  LYRCBD  LYRIBS\n")
+            for i in range(self.num_lyr):
+                file.write(
+                    f"{self._model.layers[i].lyr_id}  {self._model.layers[i].lyr_type}  -1  0  "
+                    f"{self._model.layers[i].lyr_cbd}  {self._model.layers[i].lyr_ibs}\n")
 
 
 class ComusDisBcf(ComusDis):
@@ -271,11 +302,12 @@ class ComusDisBcf(ComusDis):
         Example:
         --------
         >>> import pycomus
-        >>> model1 = pycomus.ComusModel(model_name="OneDimFlowSim")
+        >>> model1 = pycomus.ComusModel(model_name="test")
         >>> modelDis = pycomus.ComusDisBcf(model1, 1, 20, 20, row_space=1, col_space=1, lyr_type=[1 for _ in range(1)], y_coord=1)
         """
         super().__init__(model, num_lyr, num_row, num_col, x_coord, y_coord, row_space, col_space)
-        if model.CmsPars.intblkm == 2:
+        cms_pars = model.package[CON_PKG_NAME]
+        if cms_pars.intblkm == 2:
             raise ValueError("In LPF format has been selected, it is not possible to add layers in BCF format.")
         if not lyr_type:
             lyr_type = [0] * num_lyr
@@ -295,10 +327,12 @@ class ComusDisBcf(ComusDis):
         if not all(x in [0, 1] for x in lyr_ibs):
             raise ValueError("The data in lyr_ibs should be in [0:IBS-Disable,1:IBS-Enable]!")
         model.layers = []
+        self._model = model
         for i in range(num_lyr):
             gridCell = [[GridCell() for _ in range(num_col)] for _ in range(num_row)]
             model.layers.append(
                 BcfLayers(i + 1, lyr_type=lyr_type[i], lyr_trpy=lyr_trpy[i], lyr_ibs=lyr_ibs[i], grid_cells=gridCell))
+        model.package[BCF_LYR_PKG_NAME] = self
 
     @classmethod
     def load(cls, model, ctrl_params_file: str, grd_space_file: str, bcf_lyr_file: str):
@@ -324,11 +358,12 @@ class ComusDisBcf(ComusDis):
         Example:
         --------
         >>> import pycomus
-        >>> model1 = pycomus.ComusModel(model_name="OneDimFlowSim")
+        >>> model1 = pycomus.ComusModel(model_name="test")
         >>> modelDis = pycomus.ComusDisBcf.load(model1, "./InputFiles/CtrlPar.in", "./InputFiles/GrdSpace.in", "./InputFiles/BcfLyr.in")
         """
         # Check INTBLKM
-        if model.CmsPars.intblkm == 2:
+        cms_pars = model.package[CON_PKG_NAME]
+        if cms_pars.intblkm == 2:
             raise ValueError("In LPF format has been selected, it is not possible to add layers in BCF format.")
 
         # Check Control Params
@@ -356,3 +391,18 @@ class ComusDisBcf(ComusDis):
 
     def __str__(self):
         return super().__str__()
+
+    def write_file(self, folder_path: str):
+        """
+        Typically used as an internal function but can also be called directly, it outputs the `pycomus.ComusDisBcf`
+        module to the specified path as <BcfLyr.in>.
+
+        :param folder_path: Output folder path.
+        """
+        super().write_file(folder_path)
+        with open(os.path.join(folder_path, BCF_LYR_FILE_NAME), "w") as file:
+            file.write("LYRID  LYRCON  LYRTRPY  LYRIBS\n")
+            for i in range(self.num_lyr):
+                file.write(
+                    f"{self._model.layers[i].lyr_id}  {self._model.layers[i].lyr_type}  "
+                    f"{self._model.layers[i].lyr_trpy}  {self._model.layers[i].lyr_ibs}\n")

@@ -4,12 +4,15 @@
 # Author: Zhenjiang Wu
 # Description: Set COMUS Model With WEL Package.
 # --------------------------------------------------------------
+import os
+import sys
 from typing import Union, Dict
 
 import numpy as np
 
 import pycomus
 from pycomus.Utils import BoundaryCheck
+from pycomus.Utils.CONST_VALUE import WEL_PKG_NAME, WEL_FILE_NAME
 
 
 class ComusWel:
@@ -38,18 +41,21 @@ class ComusWel:
         >>> model1 = pycomus.ComusModel(model_name="test")
         >>> welPackage = pycomus.ComusWel(model, wellr={0: 1}, satthr=1)
         """
-
-        self._num_lyr = model.CmsDis.num_lyr
-        self._num_row = model.CmsDis.num_row
-        self._num_col = model.CmsDis.num_col
-        self._period = model.CmsTime.period
+        BoundaryCheck.check_bnd_queue(model)
+        cms_dis = BoundaryCheck.get_cms_pars(model)
+        cms_period = BoundaryCheck.get_period(model)
+        self._num_lyr = cms_dis.num_lyr
+        self._num_row = cms_dis.num_row
+        self._num_col = cms_dis.num_col
+        self._period = cms_period.period
+        self._model = model
         self.wellr = BoundaryCheck.CheckValueFormat(wellr, "Wellr", self._period, self._num_lyr,
                                                     self._num_row, self._num_col)
         self.satthr = BoundaryCheck.CheckValueFormat(satthr, "Satthr", self._period, self._num_lyr,
                                                      self._num_row, self._num_col)
         if sorted(self.wellr.keys()) != sorted(self.satthr.keys()):
             raise ValueError("The periods for the 'Wellr' parameter and 'Satthr' should be the same.")
-        model.package["WEL"] = self
+        model.package[WEL_PKG_NAME] = self
 
     @classmethod
     def load(cls, model, wel_params_file: str):
@@ -71,12 +77,14 @@ class ComusWel:
         Example:
         --------
         >>> import pycomus
-        >>> model1 = pycomus.ComusModel(model_name="OneDimFlowSim(File-Input)")
+        >>> model1 = pycomus.ComusModel(model_name="test")
         >>> welPackage = pycomus.ComusWel.load(model1, "./InputFiles/WEL.in")
         """
-        num_lyr = model.CmsDis.num_lyr
-        num_row = model.CmsDis.num_row
-        num_col = model.CmsDis.num_col
+        BoundaryCheck.check_bnd_queue(model)
+        cms_dis = BoundaryCheck.get_cms_pars(model)
+        num_lyr = cms_dis.num_lyr
+        num_row = cms_dis.num_row
+        num_col = cms_dis.num_col
         with open(wel_params_file, 'r') as file:
             lines = file.readlines()
         if len(lines[0].strip().split()) != 6:
@@ -111,3 +119,40 @@ class ComusWel:
         for period, value in self.wellr.items():
             res += f"    Period : {period}\n        Value Shape : {value.shape}\n"
         return res
+
+    def write_file(self, folder_path: str):
+        if not self._write_file_test(folder_path):
+            os.remove(os.path.join(folder_path, WEL_FILE_NAME))
+            sys.exit()
+
+    def _write_file_test(self, folder_path: str) -> bool:
+        period_len = len(self._period)
+        sim_dry_wet: bool = False
+        con_pars = BoundaryCheck.get_con_pars(self._model)
+        wd_flg = con_pars.wd_flg
+        sim_mtd = con_pars.sim_mtd
+        if sim_mtd == 1 or (sim_mtd == 2 and wd_flg == 1):
+            sim_dry_wet = True
+        with open(os.path.join(folder_path, WEL_FILE_NAME), "w") as file:
+            file.write("IPER  ILYR  IROW  ICOL  WELLR  SATTHR\n")
+            periods = sorted(self.wellr.keys())
+            for period in periods:
+                if not BoundaryCheck.check_period(period, period_len):
+                    return False
+                wellr_value = self.wellr[period]
+                satthr_value = self.satthr[period]
+                for layer in range(self._num_lyr):
+                    lyr_type: int = self._model.layers[layer].lyr_type
+                    for row in range(self._num_row):
+                        for col in range(self._num_col):
+                            if sim_dry_wet and wellr_value[layer, row, col] < 0:
+                                if lyr_type in (1, 3):
+                                    if satthr_value[layer, row, col] <= 0:
+                                        raise ValueError(
+                                            f"The model has selected to simulate the dry-wet conversion of "
+                                            f"grid cells. Satthr for grid cell ({layer},{row},{col}) cannot "
+                                            f"be less than or equal to 0.0.")
+                            file.write(
+                                f"{period + 1}  {layer + 1}  {row + 1}  {col + 1}  {wellr_value[layer, row, col]}  "
+                                f"{satthr_value[layer, row, col]}\n")
+        return True

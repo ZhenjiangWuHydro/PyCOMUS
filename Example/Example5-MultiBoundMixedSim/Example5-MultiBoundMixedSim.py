@@ -18,7 +18,7 @@ if __name__ == "__main__":
     NumLyr = 2
     NumRow = 20
     NumCol = 20
-    modelDis = pycomus.ComusDisLpf(model, NumLyr, NumRow, NumCol, row_space=50, col_space=50,
+    modelDis = pycomus.ComusDisLpf(model, num_lyr=NumLyr, num_row=NumRow, num_col=NumCol, row_space=50, col_space=50,
                                    lyr_type=[1 for _ in range(NumLyr)], lyr_cbd=[1, 0], y_coord=1000)
 
     # Grid Attribute
@@ -39,6 +39,7 @@ if __name__ == "__main__":
     shead_period1[0, :, 19] = 16
     shead_period2 = np.zeros((NumLyr, NumRow, NumCol))
     shead_period2[0, :, 19] = 17
+
     ehead_period1 = np.zeros((NumLyr, NumRow, NumCol))
     ehead_period1[0, :, 19] = 17
     ehead_period2 = np.zeros((NumLyr, NumRow, NumCol))

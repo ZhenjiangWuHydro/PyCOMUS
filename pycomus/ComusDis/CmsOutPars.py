@@ -4,6 +4,11 @@
 # Author: Zhenjiang Wu
 # Description: Set COMUS Model Output Parameter Attributes.
 # --------------------------------------------------------------
+import os
+
+from pycomus.Utils.CONST_VALUE import OUT_PKG_NAME, OUT_FILE_NAME
+
+
 class ComusOutputPars:
     def __init__(self, model, gdw_bd: int = 1, lyr_bd: int = 1, cell_bd: int = 1, cell_hh: int = 1,
                  cell_dd: int = 1, cell_flp: int = 1, lak_bd: int = 1, segm_bd: int = 1, rech_bd: int = 1,
@@ -59,7 +64,7 @@ class ComusOutputPars:
         --------
         >>> import pycomus
         >>> model1 = pycomus.ComusModel(model_name="OneDimFlowSim")
-        >>> outParams = pycomus.ComusOutputPars(model1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2)
+        >>> outParams = pycomus.ComusOutputPars(model1, 2, 2, 2, 2, 2, 2)
         """
         self.__params = {
             'gdw_bd': gdw_bd,
@@ -97,7 +102,7 @@ class ComusOutputPars:
         self.ndb = ndb
         self.db = db
         self.reg_bd = reg_bd
-        model.CmsOutPars = self
+        model.package[OUT_PKG_NAME] = self
 
     @classmethod
     def load(cls, model, output_params_file: str):
@@ -149,3 +154,19 @@ class ComusOutputPars:
                        db=int(data[12]),
                        reg_bd=int(data[13]))
         return instance
+
+    def write_file(self, folder_path: str):
+        """
+        Typically used as an internal function but can also be called directly, it outputs the `pycomus.ComusOutputPars`
+        module to the specified path as <OutOpt.in>.
+
+        :param folder_path: Output folder path.
+        """
+        with open(os.path.join(folder_path, OUT_FILE_NAME), "w") as file:
+            file.write(
+                "GDWBDPRN  LYRBDPRN  CELLBDPRN  CELLHHPRN  CELLDDPRN  CELLFLPRN  LAKBDPRN  SEGMBDPRN  RECHBDPRN  "
+                "IBSPRN  SUBPRN  NDBPRN  DBPRN  REGBDPRN\n")
+            file.write(f"{self.gdw_bd}  {self.lyr_bd}  {self.cell_bd}  {self.cell_hh}  "
+                       f"{self.cell_dd}  {self.cell_flp}  {self.lak_bd}  {self.segm_bd}  "
+                       f"{self.rech_bd}  {self.ibs}  {self.sub}  {self.ndb}  {self.db}  "
+                       f"{self.reg_bd}")

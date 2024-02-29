@@ -4,11 +4,14 @@
 # Author: Zhenjiang Wu
 # Description: Set COMUS Model With RES Package.
 # --------------------------------------------------------------
+import os
+import sys
 from typing import Dict, Tuple, Union
 
 import numpy as np
 
 from pycomus.Utils import BoundaryCheck
+from pycomus.Utils.CONST_VALUE import RES_PKG_NAME, RES_CTRL_FILE_NAME, RES_PERIOD_FILE_NAME, RES_GRID_FILE_NAME
 
 
 class ComusRes:
@@ -37,12 +40,16 @@ class ComusRes:
         if res_num < 1:
             raise ValueError("The number of reservoirs should be greater than or equal to 1.")
         self._res_num = res_num
-        self._num_lyr = model.CmsDis.num_lyr
-        self._num_row = model.CmsDis.num_row
-        self._num_col = model.CmsDis.num_col
-        self._period = model.CmsTime.period
+        BoundaryCheck.check_bnd_queue(model)
+        cms_dis = BoundaryCheck.get_cms_pars(model)
+        cms_period = BoundaryCheck.get_period(model)
+        self._num_lyr = cms_dis.num_lyr
+        self._num_row = cms_dis.num_row
+        self._num_col = cms_dis.num_col
+        self._period = cms_period.period
+        self._model = model
         self.resValue: Res = Res()
-        model.package["RES"] = self
+        model.package[RES_PKG_NAME] = self
 
     def set_control_params(self, control_params: Dict[int, Tuple[float, float, int, int]]) -> None:
         """
@@ -81,14 +88,13 @@ class ComusRes:
             A Dict type data where the keys represent the reservoir IDs, and the values are Dicts with Period IDs as
             keys. Within the inner Dicts, the values are Tuples containing four elements: Shead, Ehead, Rchrg, and Gevt.
         """
-        for res_id, periodData in period_data.items():
-            if res_id < 0 or res_id >= self._res_num:
-                raise ValueError(f"Reservoir ID should be between 0 and {self._res_num - 1}.")
-            for period_id, value in periodData.items():
-                if not (0 <= period_id < len(self._period)):
-                    raise ValueError(
-                        f"Invalid key {period_id} in period_data[{res_id}] dictionary. Keys should be in the range 0 to {len(self._period) - 1}.")
-
+        for period_id, periodData in period_data.items():
+            if not (0 <= period_id < len(self._period)):
+                raise ValueError(
+                    f"Invalid key {period_id} in period_data dictionary. Keys should be in the range 0 to {len(self._period) - 1}.")
+            for res_id, value in periodData.items():
+                if res_id < 0 or res_id >= self._res_num:
+                    raise ValueError(f"Reservoir ID should be between 0 and {self._res_num}.")
                 if len(value) != 4:
                     raise ValueError("Each period data should contain 4 values.")
 
@@ -149,9 +155,11 @@ class ComusRes:
         >>> resPackage = pycomus.ComusRes.load(model1, "./InputFiles/RESCtrl.in", "./InputFiles/RESPer.in",
         >>> "./InputFiles/RESGrd.in")
         """
-        num_lyr = model.CmsDis.num_lyr
-        num_row = model.CmsDis.num_row
-        num_col = model.CmsDis.num_col
+        BoundaryCheck.check_bnd_queue(model)
+        cms_dis = BoundaryCheck.get_cms_pars(model)
+        num_lyr = cms_dis.num_lyr
+        num_row = cms_dis.num_row
+        num_col = cms_dis.num_col
 
         # load ctrl_pars_file
         with open(ctrl_pars_file, 'r') as file:
@@ -188,10 +196,10 @@ class ComusRes:
             line = line.strip().split()
             period_id = int(line[0]) - 1
             res_id = int(line[1]) - 1
-            if res_id not in period_data:
-                period_data[res_id] = {}
-            if period_id not in period_data[res_id]:
-                period_data[res_id][period_id] = (float(line[2]), float(line[3]), float(line[4]), float(line[5]))
+            if period_id not in period_data:
+                period_data[period_id] = {}
+            if res_id not in period_data[period_id]:
+                period_data[period_id][res_id] = (float(line[2]), float(line[3]), float(line[4]), float(line[5]))
         instance.set_period_data(period_data)
 
         # load grid_data
@@ -214,17 +222,86 @@ class ComusRes:
             col = int(line[4]) - 1
             if res_id not in btm:
                 btm[res_id] = np.zeros((num_lyr, num_row, num_col))
-                btm[res_id][lyr, row, col] = float(line[5])
                 bvk[res_id] = np.zeros((num_lyr, num_row, num_col))
-                bvk[res_id][lyr, row, col] = float(line[6])
                 btk[res_id] = np.zeros((num_lyr, num_row, num_col))
-                btk[res_id][lyr, row, col] = float(line[7])
-            else:
-                btm[res_id][lyr, row, col] = float(line[5])
-                bvk[res_id][lyr, row, col] = float(line[6])
-                btk[res_id][lyr, row, col] = float(line[7])
+            btm[res_id][lyr, row, col] = float(line[5])
+            bvk[res_id][lyr, row, col] = float(line[6])
+            btk[res_id][lyr, row, col] = float(line[7])
         instance.set_grid_data(btm, bvk, btk)
         return instance
+
+    def write_file(self, folder_path: str):
+        if not self._write_file_test(folder_path):
+            res_file = os.path.join(folder_path, RES_CTRL_FILE_NAME)
+            if os.path.exists(res_file):
+                os.remove(res_file)
+            res_file = os.path.join(folder_path, RES_PERIOD_FILE_NAME)
+            if os.path.exists(res_file):
+                os.remove(res_file)
+            res_file = os.path.join(folder_path, RES_GRID_FILE_NAME)
+            if os.path.exists(res_file):
+                os.remove(res_file)
+            sys.exit()
+
+    def _write_file_test(self, folder_path: str) -> bool:
+        # Control Param Check And Write
+        ctrl_pars = self.resValue.ControlParams
+        data_row_index = 0
+        with open(os.path.join(folder_path, RES_CTRL_FILE_NAME), "w") as file:
+            file.write("RESID  EVEXP  EVMAXD  NUMSEG  NUMPT\n")
+            for res_id, params in ctrl_pars.items():
+                if data_row_index != res_id:
+                    print("RESID does not start from 1 or is not consecutive!")
+                    return False
+                if params[0] < 0:
+                    print(f"The EVEXP on the reservoir with the ID {res_id} on non-flooded units is unreasonable,"
+                          f" it should be greater than 0.")
+                    return False
+                if params[1] < 0:
+                    print(f"The EVMAXD on the reservoir with the ID {res_id} on non-flooded units is unreasonable,"
+                          f" it should be greater than 0.")
+                    return False
+                if params[2] < 2 or params[2] > 20:
+                    print(f"The NUMSEG on the reservoir with the ID {res_id} on non-flooded units should "
+                          f"be between 2 and 20.")
+                    return False
+                if params[3] < 2:
+                    print(f"The NUMPT of the reservoir with the ID {res_id} should be at least 2.")
+                    return False
+                file.write(f"{res_id + 1}  {params[0]}  {params[1]}  {params[2]}  {params[3]}\n")
+                data_row_index += 1
+
+        # Check Period Check And Write
+        period_data = self.resValue.PeriodData
+        with open(os.path.join(folder_path, RES_PERIOD_FILE_NAME), "w") as file:
+            file.write("IPER  RESID  SHEAD  EHEAD  RCHRG  GEVT\n")
+            for period_id, periodData in period_data.items():
+                for res_id, value in periodData.items():
+                    if value[2] < 0 or value[3] < 0:
+                        print(f"The RCHRG and GEVT data for reservoir {res_id} in the {period_id}th period cannot be "
+                              f"less than 0.0.")
+                        return False
+                    file.write(f"{period_id + 1}  {res_id + 1}  {value[0]}  {value[1]}  {value[2]}  {value[3]}\n")
+
+        # Check Grid Check And Write
+        grid_data = self.resValue.GridData
+        with open(os.path.join(folder_path, RES_GRID_FILE_NAME), "w") as file:
+            file.write("RESID  CELLID  ILYR  IROW  ICOL  BTM  BVK  BTK\n")
+            resIds = sorted(grid_data["Btm"].keys())
+            for resId in resIds:
+                index = 1
+                btm_value = grid_data["Btm"][resId]
+                bvk_value = grid_data["Bvk"][resId]
+                btk_value = grid_data["Btk"][resId]
+                for layer in range(self._num_lyr):
+                    for row in range(self._num_row):
+                        for col in range(self._num_col):
+                            if bvk_value[layer, row, col] >= 0 and btk_value[layer, row, col] > 0:
+                                file.write(
+                                    f"{resId + 1}  {index}  {layer + 1}  {row + 1}  {col + 1}  {btm_value[layer, row, col]}  "
+                                    f"{bvk_value[layer, row, col]}  {btk_value[layer, row, col]}\n")
+                                index += 1
+        return True
 
 
 class Res:

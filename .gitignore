@@ -24,3 +24,5 @@ build
 PyCOMUS.egg-info
 ComusModel
 CheckParam
+*.docx
+paper

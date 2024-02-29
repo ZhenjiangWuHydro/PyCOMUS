@@ -11,3 +11,4 @@ from .CSTR import ComusStr
 from .CLAK import ComusLak
 from .CIBS import ComusIbs
 from .CSUB import ComusSub
+from .CREG import ComusReg

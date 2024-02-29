@@ -4,12 +4,15 @@
 # Author: Zhenjiang Wu
 # Description: Set COMUS Model With STR Package.
 # --------------------------------------------------------------
+import os
 from collections import OrderedDict
 from typing import Dict, Tuple, Union
 
 import numpy as np
 
 from pycomus.Utils import BoundaryCheck
+from pycomus.Utils.CONST_VALUE import STR_PKG_NAME, STR_WAT_DRN_FILE_NAME, STR_WAT_USE_FILE_NAME, STR_GRID_FILE_NAME, \
+    STR_PERIOD_FILE_NAME, STR_CTRL_FILE_NAME
 
 
 class ComusStr:
@@ -27,12 +30,15 @@ class ComusStr:
         if stream_num < 1:
             raise ValueError("The number of streams should be greater than or equal to 1.")
         self._stream_num = stream_num
-        self._num_lyr = model.CmsDis.num_lyr
-        self._num_row = model.CmsDis.num_row
-        self._num_col = model.CmsDis.num_col
-        self._period = model.CmsTime.period
+        BoundaryCheck.check_bnd_queue(model)
+        cms_dis = BoundaryCheck.get_cms_pars(model)
+        cms_period = BoundaryCheck.get_period(model)
+        self._num_lyr = cms_dis.num_lyr
+        self._num_row = cms_dis.num_row
+        self._num_col = cms_dis.num_col
+        self._period = cms_period.period
         self.streamValue: Stream = Stream()
-        model.package["STR"] = self
+        model.package[STR_PKG_NAME] = self
 
     def set_ControlData(self, control_params: Dict[int, Tuple[int, int, int, int, int, int, int, int, int]]) -> None:
         """
@@ -142,22 +148,22 @@ class ComusStr:
         if not self.__is_consecutive_dict_keys(period_data.keys()):
             raise ValueError(
                 "The river segment identifier data (SEGMID) is not starting from 1 or is not continuous. Please check!")
-        for str_id, periodData in period_data.items():
+        for period_id, periodData in period_data.items():
             # Check data type
-            if not isinstance(str_id, int):
-                raise ValueError("period_data's dict key should be int.")
-            if str_id < 0 or str_id >= self._stream_num:
-                raise ValueError(f"Stream ID should be between 0 and {self._stream_num - 1}.")
-            for period_id, value in periodData.items():
-                # Check period key type
-                if not isinstance(period_id, int):
-                    raise ValueError("period_data's value's dict key should be int.")
+            if not isinstance(period_id, int):
+                raise ValueError("period_data's value's dict key should be int.")
 
                 # Check period id
-                if not (0 <= period_id < len(self._period)):
-                    raise ValueError(
-                        f"Invalid key {period_id} in period_data[{str_id}] dictionary. Keys should be in the range 0 to {len(self._period) - 1}.")
+            if not (0 <= period_id < len(self._period)):
+                raise ValueError(
+                    f"Invalid key {period_id} in period_data dictionary. Keys should be in the range 0 to {len(self._period) - 1}.")
 
+            for str_id, value in periodData.items():
+                # Check period key type
+                if not isinstance(str_id, int):
+                    raise ValueError("period_data's dict key should be int.")
+                if str_id < 0 or str_id >= self._stream_num:
+                    raise ValueError(f"Stream ID should be between 0 and {self._stream_num - 1}.")
                 # Check data length
                 if len(value) != 12:
                     raise ValueError(
@@ -287,8 +293,7 @@ class ComusStr:
         wuGrdIdList = [value[6] for value in self.streamValue.ControlParams.values()]
         wureg_id = BoundaryCheck.Check3DValueExistGrid(wureg_id, "WUREGID", self._num_lyr, self._num_row,
                                                        self._num_col, wuGrdIdList)
-        ratio = BoundaryCheck.Check3DValueGtZero(ratio, "RATIO", self._num_lyr, self._num_row,
-                                                 self._num_col)
+        ratio = BoundaryCheck.check_3d_zero(ratio, "RATIO", self._num_lyr, self._num_row, self._num_col)
         self.streamValue.WatUseData = {"WUREGID": wureg_id, "RATIO": ratio}
 
     def set_WatDrnData(self, delev: Union[int, np.ndarray], cond: Union[int, float, np.ndarray],
@@ -308,8 +313,8 @@ class ComusStr:
             identifier of the river segment of the seasonal river to which the grid cell drainage flows (starting from 1).
         """
         SegIdList = list(self.streamValue.ControlParams.keys())
-        delev = BoundaryCheck.Check3DValueFormat(delev, "DELEV", self._num_lyr, self._num_row, self._num_col)
-        cond = BoundaryCheck.Check3DValueGtZero(cond, "COND", self._num_lyr, self._num_row, self._num_col)
+        delev = BoundaryCheck.check_3d_format(delev, "DELEV", self._num_lyr, self._num_row, self._num_col)
+        cond = BoundaryCheck.check_3d_zero(cond, "COND", self._num_lyr, self._num_row, self._num_col)
         segm_id = BoundaryCheck.Check3DValueExistGrid(segm_id, "SEGMID", self._num_lyr, self._num_row,
                                                       self._num_col, SegIdList)
         self.streamValue.WatDrnData = {"DELEV": delev, "COND": cond, "SEGMID": segm_id}
@@ -381,63 +386,43 @@ class ComusStr:
                 float_part = [float(part) for part in parts[5:]]
                 if not int_parts[0] - 1 in CELLID:
                     CELLID[int_parts[0] - 1] = np.zeros((self._num_lyr, self._num_row, self._num_col))
-                    CELLID[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = int_parts[1]
-                else:
-                    CELLID[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = int_parts[1]
+                CELLID[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = int_parts[1]
 
                 if not int_parts[0] - 1 in LEN:
                     LEN[int_parts[0] - 1] = np.zeros((self._num_lyr, self._num_row, self._num_col))
-                    LEN[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[0]
-                else:
-                    LEN[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[0]
+                LEN[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[0]
 
                 if not int_parts[0] - 1 in BTM:
                     BTM[int_parts[0] - 1] = np.zeros((self._num_lyr, self._num_row, self._num_col))
-                    BTM[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[1]
-                else:
-                    BTM[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[1]
+                BTM[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[1]
 
                 if not int_parts[0] - 1 in BWDT:
                     BWDT[int_parts[0] - 1] = np.zeros((self._num_lyr, self._num_row, self._num_col))
-                    BWDT[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[2]
-                else:
-                    BWDT[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[2]
+                BWDT[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[2]
 
                 if not int_parts[0] - 1 in SIZH1:
                     SIZH1[int_parts[0] - 1] = np.zeros((self._num_lyr, self._num_row, self._num_col))
-                    SIZH1[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[3]
-                else:
-                    SIZH1[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[3]
+                SIZH1[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[3]
 
                 if not int_parts[0] - 1 in SIZH2:
                     SIZH2[int_parts[0] - 1] = np.zeros((self._num_lyr, self._num_row, self._num_col))
-                    SIZH2[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[4]
-                else:
-                    SIZH2[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[4]
+                SIZH2[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[4]
 
                 if not int_parts[0] - 1 in BVK:
                     BVK[int_parts[0] - 1] = np.zeros((self._num_lyr, self._num_row, self._num_col))
-                    BVK[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[5]
-                else:
-                    BVK[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[5]
+                BVK[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[5]
 
                 if not int_parts[0] - 1 in BTK:
                     BTK[int_parts[0] - 1] = np.zeros((self._num_lyr, self._num_row, self._num_col))
-                    BTK[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[6]
-                else:
-                    BTK[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[6]
+                BTK[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[6]
 
                 if not int_parts[0] - 1 in SLP:
                     SLP[int_parts[0] - 1] = np.zeros((self._num_lyr, self._num_row, self._num_col))
-                    SLP[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[7]
-                else:
-                    SLP[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[7]
+                SLP[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[7]
 
                 if not int_parts[0] - 1 in NDC:
                     NDC[int_parts[0] - 1] = np.zeros((self._num_lyr, self._num_row, self._num_col))
-                    NDC[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[8]
-                else:
-                    NDC[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[8]
+                NDC[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[8]
 
             self.streamValue.GridData = {"CELLID": CELLID, "LEN": LEN, "BTM": BTM, "BWDT": BWDT, "SIZH1": SIZH1,
                                          "SIZH2": SIZH2, "BVK": BVK, "BTK": BTK, "SLP": SLP, "NDC": NDC}
@@ -519,9 +504,11 @@ class ComusStr:
         >>> strPackage = pycomus.ComusRes.load(model1, "./InputFiles/STRCtrl.in", "./InputFiles/STRPer.in",
         >>> "./InputFiles/STRGrd.in", "./InputFiles/STRWatUse.in", "./InputFiles/STRWatDrn.in")
         """
-        num_lyr = model.CmsDis.num_lyr
-        num_row = model.CmsDis.num_row
-        num_col = model.CmsDis.num_col
+        BoundaryCheck.check_bnd_queue(model)
+        cms_dis = BoundaryCheck.get_cms_pars(model)
+        num_lyr = cms_dis.num_lyr
+        num_row = cms_dis.num_row
+        num_col = cms_dis.num_col
 
         # load ctrl_pars_file
         with open(ctrl_pars_file, 'r') as file:
@@ -547,20 +534,20 @@ class ComusStr:
         with open(period_file, 'r') as file:
             lines = file.readlines()
         if len(lines[0].strip().split()) != 14:
-            raise ValueError("The Stream(STR) Period Params Attribute file(STRPer.txt) header should have 14 fields.")
+            raise ValueError("The Stream(STR) Period Params Attribute file(STRPer.in) header should have 14 fields.")
         if len(lines[1].strip().split()) != 14:
             raise ValueError(
-                "The Stream(STR) Period Params Attribute file(STRPer.txt) data line should have 14 values.")
+                "The Stream(STR) Period Params Attribute file(STRPer.in) data line should have 14 values.")
         lines = lines[1:]
         period_data = {}
         for line in lines:
             line = line.strip().split()
             period_id = int(line[0]) - 1
             stream_id = int(line[1]) - 1
-            if stream_id not in period_data:
-                period_data[stream_id] = {}
-            if period_id not in period_data[stream_id]:
-                period_data[stream_id][period_id] = (
+            if period_id not in period_data:
+                period_data[period_id] = {}
+            if stream_id not in period_data[period_id]:
+                period_data[period_id][stream_id] = (
                     int(line[2]), float(line[3]), float(line[4]), float(line[5]), float(line[6]), float(line[7]),
                     float(line[8]), float(line[9]), float(line[10]), float(line[11]), float(line[12]), float(line[13]))
         instance.set_PeriodData(period_data)
@@ -590,63 +577,43 @@ class ComusStr:
                 float_part = [float(part) for part in parts[5:]]
                 if not int_parts[0] - 1 in CELLID:
                     CELLID[int_parts[0] - 1] = np.zeros((num_lyr, num_row, num_col))
-                    CELLID[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = int_parts[1]
-                else:
-                    CELLID[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = int_parts[1]
+                CELLID[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = int_parts[1]
 
                 if not int_parts[0] - 1 in LEN:
                     LEN[int_parts[0] - 1] = np.zeros((num_lyr, num_row, num_col))
-                    LEN[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[0]
-                else:
-                    LEN[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[0]
+                LEN[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[0]
 
                 if not int_parts[0] - 1 in BTM:
                     BTM[int_parts[0] - 1] = np.zeros((num_lyr, num_row, num_col))
-                    BTM[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[1]
-                else:
-                    BTM[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[1]
+                BTM[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[1]
 
                 if not int_parts[0] - 1 in BWDT:
                     BWDT[int_parts[0] - 1] = np.zeros((num_lyr, num_row, num_col))
-                    BWDT[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[2]
-                else:
-                    BWDT[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[2]
+                BWDT[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[2]
 
                 if not int_parts[0] - 1 in SIZH1:
                     SIZH1[int_parts[0] - 1] = np.zeros((num_lyr, num_row, num_col))
-                    SIZH1[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[3]
-                else:
-                    SIZH1[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[3]
+                SIZH1[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[3]
 
                 if not int_parts[0] - 1 in SIZH2:
                     SIZH2[int_parts[0] - 1] = np.zeros((num_lyr, num_row, num_col))
-                    SIZH2[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[4]
-                else:
-                    SIZH2[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[4]
+                SIZH2[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[4]
 
                 if not int_parts[0] - 1 in BVK:
                     BVK[int_parts[0] - 1] = np.zeros((num_lyr, num_row, num_col))
-                    BVK[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[5]
-                else:
-                    BVK[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[5]
+                BVK[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[5]
 
                 if not int_parts[0] - 1 in BTK:
                     BTK[int_parts[0] - 1] = np.zeros((num_lyr, num_row, num_col))
-                    BTK[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[6]
-                else:
-                    BTK[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[6]
+                BTK[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[6]
 
                 if not int_parts[0] - 1 in SLP:
                     SLP[int_parts[0] - 1] = np.zeros((num_lyr, num_row, num_col))
-                    SLP[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[7]
-                else:
-                    SLP[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[7]
+                SLP[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[7]
 
                 if not int_parts[0] - 1 in NDC:
                     NDC[int_parts[0] - 1] = np.zeros((num_lyr, num_row, num_col))
-                    NDC[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[8]
-                else:
-                    NDC[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[8]
+                NDC[int_parts[0] - 1][int_parts[2] - 1, int_parts[3] - 1, int_parts[4] - 1] = float_part[8]
 
             instance.set_GridData(CELLID, LEN, BTM, BWDT, SIZH1, SIZH2, BVK, BTK, SLP, NDC)
 
@@ -688,6 +655,93 @@ class ComusStr:
                 SEGMID[int_parts[0] - 1, int_parts[1] - 1, int_parts[2] - 1] = float_part[2]
             instance.set_WatDrnData(DELEV, COND, SEGMID)
         return instance
+
+    def write_file(self, folder_path: str):
+        control_data = self.streamValue.ControlParams
+        period_data = self.streamValue.PeriodData
+        grid_data = self.streamValue.GridData
+        watUse_data = self.streamValue.WatUseData
+        watDrn_data = self.streamValue.WatDrnData
+        with open(os.path.join(folder_path, STR_CTRL_FILE_NAME), "w") as file:
+            file.write("SEGMID  NEXTID  NEXTAT  DIVSID  DIVSAT  DIVTPOPT  WUTPOPT  WUREGID  WUBKOPT  DRNOPT\n")
+            for stream_id, params in control_data.items():
+                file.write(
+                    f"{stream_id + 1}  {params[0]}  {params[1]}  {params[2]}  {params[3]}  {params[4]}  {params[5]}"
+                    f"  {params[6]}  {params[7]}  {params[8]}\n")
+
+        with open(os.path.join(folder_path, STR_PERIOD_FILE_NAME), "w") as file:
+            file.write(
+                "IPER  SEGMID  HCALOPT  USLEV  UELEV  DSLEV  DELEV  WATPNT  WATWAY  WATDIV  WATUSE  EVRATE  RCHCOE  WBKCOE\n")
+            period_data = OrderedDict(sorted(period_data.items()))
+            for key, value in period_data.items():
+                period_data[key] = OrderedDict(sorted(value.items()))
+            for period_id, periodData in period_data.items():
+                for res_id, value in periodData.items():
+                    file.write(
+                        f"{int(period_id + 1)}  {int(res_id + 1)}  {int(value[0])}  {float(value[1])}  {float(value[2])}  {float(value[3])}  "
+                        f"{float(value[4])}  {float(value[5])}  {float(value[6])}  {float(value[7])}  {float(value[8])}  {float(value[9])}  {float(value[10])}  {float(value[11])}\n")
+
+        with open(os.path.join(folder_path, STR_GRID_FILE_NAME), "w") as file:
+            file.write("SEGMID  CELLID  ILYR  IROW  ICOL  LEN  BTM  BWDT  SIZH1  SIZH2  BVK  BTK  SLP  NDC\n")
+            segIds = sorted(grid_data["CELLID"].keys())
+
+            for segId in segIds:
+                # 收集该segId下的所有数据
+                data_to_sort = []
+                for layer in range(self._num_lyr):
+                    for row in range(self._num_row):
+                        for col in range(self._num_col):
+                            cellID_value = grid_data["CELLID"][segId][layer, row, col]
+                            len_value = grid_data["LEN"][segId][layer, row, col]
+                            btm_value = grid_data["BTM"][segId][layer, row, col]
+                            bwdt_value = grid_data["BWDT"][segId][layer, row, col]
+                            sizh1_value = grid_data["SIZH1"][segId][layer, row, col]
+                            sizh2_value = grid_data["SIZH2"][segId][layer, row, col]
+                            bvk_value = grid_data["BVK"][segId][layer, row, col]
+                            btk_value = grid_data["BTK"][segId][layer, row, col]
+                            slp_value = grid_data["SLP"][segId][layer, row, col]
+                            ndc_value = grid_data["NDC"][segId][layer, row, col]
+
+                            if bvk_value >= 0 and btk_value > 0:
+                                data_to_sort.append((cellID_value, layer, row, col, len_value, btm_value, bwdt_value,
+                                                     sizh1_value, sizh2_value, bvk_value, btk_value, slp_value,
+                                                     ndc_value))
+
+                # 根据cellID_value排序
+                sorted_data = sorted(data_to_sort, key=lambda x: x[0])
+
+                # 写入排序后的数据
+                for item in sorted_data:
+                    cellID_value, layer, row, col, len_value, btm_value, bwdt_value, sizh1_value, sizh2_value, bvk_value, btk_value, slp_value, ndc_value = item
+                    file.write(
+                        f"{segId + 1}  {int(cellID_value)}  {layer + 1}  {row + 1}  {col + 1}  {len_value}  "
+                        f"{btm_value}  {bwdt_value}  {sizh1_value}  {sizh2_value}  "
+                        f"{bvk_value}  {btk_value}  {slp_value}  {ndc_value}\n")
+
+        with open(os.path.join(folder_path, STR_WAT_USE_FILE_NAME), "w") as file:
+            file.write("WUREGID  ILYR  IROW  ICOL  RATIO\n")
+            print(watUse_data.keys())
+            wuregId_value = watUse_data["WUREGID"]
+            ratio_value = watUse_data["RATIO"]
+            for layer in range(self._num_lyr):
+                for row in range(self._num_row):
+                    for col in range(self._num_col):
+                        if wuregId_value[layer, row, col] > 0:
+                            file.write(
+                                f"{int(wuregId_value[layer, row, col])}  {layer + 1}  {row + 1}  {col + 1}  {ratio_value[layer, row, col]}\n")
+
+        with open(os.path.join(folder_path, STR_WAT_DRN_FILE_NAME), "w") as file:
+            file.write("ILYR  IROW  ICOL  DELEV  COND  SEGMID\n")
+            delev_value = watDrn_data["DELEV"]
+            cond_value = watDrn_data["COND"]
+            segmid_value = watDrn_data["SEGMID"]
+            for layer in range(self._num_lyr):
+                for row in range(self._num_row):
+                    for col in range(self._num_col):
+                        if segmid_value[layer, row, col] > 0:
+                            file.write(
+                                f"{layer + 1}  {row + 1}  {col + 1}  {delev_value[layer, row, col]}  "
+                                f"{cond_value[layer, row, col]}  {segmid_value[layer, row, col]}\n")
 
 
 class Stream:

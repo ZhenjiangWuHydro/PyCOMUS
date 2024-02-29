@@ -4,9 +4,13 @@
 # Author: Zhenjiang Wu
 # Description: Set COMUS Model GridCell Parameter Attributes.
 # --------------------------------------------------------------
+import os
 from typing import Union
 
 import numpy as np
+
+from pycomus.Utils.CONST_VALUE import BCF_GRID_FILE_NAME, LPF_GRID_FILE_NAME, GRID_PKG_NAME, BCF_LYR_PKG_NAME, \
+    LPF_LYR_PKG_NAME, CON_PKG_NAME
 
 
 class ComusGridPars:
@@ -62,15 +66,17 @@ class ComusGridPars:
         --------
         >>> import pycomus
         >>> model1 = pycomus.ComusModel(model_name="OneDimFlowSim")
-        >>> modelGridPar = pycomus.ComusGridPars(model, top=50, bot=0, ibound=1, kx=1, shead=20)
+        >>> modelGridPar = pycomus.ComusGridPars(model1, top=50, bot=0, ibound=1, kx=1, shead=20)
         """
+        cms_pars, cms_dis = self.__Check(model)
         self._model = model
-        self._num_lyr = model.CmsDis.num_lyr
-        self._num_row = model.CmsDis.num_row
-        self._num_col = model.CmsDis.num_col
-        self._intblkm = model.CmsPars.intblkm
-        self._sim_type = model.CmsPars.sim_type
+        self._num_lyr = cms_dis.num_lyr
+        self._num_row = cms_dis.num_row
+        self._num_col = cms_dis.num_col
+        self._intblkm = cms_pars.intblkm
+        self._sim_type = cms_pars.sim_type
         self._lyr_type = [model.layers[i].lyr_type for i in range(self._num_lyr)]
+        model.package[GRID_PKG_NAME] = self
 
         # top Check
         if isinstance(top, np.ndarray):
@@ -147,7 +153,8 @@ class ComusGridPars:
 
         # WETDRY Check
         self.wet_dry = np.zeros((self._num_lyr, self._num_row, self._num_col))
-        if model.CmsPars.sim_type == 2 and model.CmsPars.wd_flg == 1 and any(x in {1, 3} for x in self._lyr_type):
+        CmsPars = model.package["CMS_PARS"]
+        if CmsPars.sim_type == 2 and CmsPars.wd_flg == 1 and any(x in {1, 3} for x in self._lyr_type):
             if isinstance(wet_dry, np.ndarray):
                 if wet_dry.size == 0:
                     wet_dry = 0
@@ -316,12 +323,13 @@ class ComusGridPars:
         --------
         >>> import pycomus
         >>> model1 = pycomus.ComusModel(model_name="OneDimFlowSim(File-Input)")
-        >>> modelGridPar = pycomus.ComusGridPars.load(model, "./InputFiles/BcfGrd.in")
+        >>> modelGridPar = pycomus.ComusGridPars.load(model1, "./InputFiles/BcfGrd.in")
         """
-        num_lyr: int = model.CmsDis.num_lyr
-        num_row: int = model.CmsDis.num_row
-        num_col: int = model.CmsDis.num_col
-        intblkm: int = model.CmsPars.intblkm
+        cms_pars, cms_dis = cls.__Check(model)
+        num_lyr: int = cms_dis.num_lyr
+        num_row: int = cms_dis.num_row
+        num_col: int = cms_dis.num_col
+        intblkm: int = cms_pars.intblkm
         expLength = num_lyr * num_row * num_col
         with open(grid_params_file, 'r') as file:
             lines = file.readlines()
@@ -457,3 +465,48 @@ class ComusGridPars:
     def __ShowErrorMsg(self, parName):
         raise ValueError(
             f"{parName} must be a 3D numpy array(int, float, numpy array) with shape ({self._num_lyr}, {self._num_row}, {self._num_col})")
+
+    @staticmethod
+    def __Check(model):
+        if CON_PKG_NAME not in model.package:
+            raise ValueError("Before setting the ComusGridPars, `pycomus.ComusConPars` should be set first.")
+        cms_pars = model.package[CON_PKG_NAME]
+        if BCF_LYR_PKG_NAME not in model.package and LPF_LYR_PKG_NAME not in model.package:
+            raise ValueError(
+                "Before setting the ComusGridPars, `pycomus.ComusDisLpf` or `pycomus.ComusDisBcf` should be set first.")
+        if BCF_LYR_PKG_NAME in model.package:
+            cms_dis = model.package[BCF_LYR_PKG_NAME]
+        else:
+            cms_dis = model.package[LPF_LYR_PKG_NAME]
+        return cms_pars, cms_dis
+
+    def write_file(self, folder_path: str):
+        """
+        Typically used as an internal function but can also be called directly, it outputs the `pycomus.ComusGridPars`
+        module to the specified path as <BcfGrd.in> or <LpfGrd.in>.
+
+        :param folder_path: Output folder path.
+        """
+        ctrl_pars = self._model.package[CON_PKG_NAME]
+        if ctrl_pars.intblkm == 1:
+            with open(os.path.join(folder_path, BCF_GRID_FILE_NAME), "w") as file:
+                file.write("ILYR  IROW  ICOL  IBOUND  CELLTOP  CELLBOT  TRANSM  HK  VCONT  SC1  SC2  WETDRY  SHEAD\n")
+                for layer in range(self._num_lyr):
+                    for row in range(self._num_row):
+                        for col in range(self._num_col):
+                            grid_cell = self._model.layers[layer].grid_cells[row][col]
+                            file.write(
+                                f"{int(layer + 1)}  {int(row + 1)}  {int(col + 1)}  {int(grid_cell.ibound)}  {grid_cell.top}  {grid_cell.bot}  {grid_cell.tran}"
+                                f"  {grid_cell.hk}  {grid_cell.vcont}  {grid_cell.sc1}  {grid_cell.sc2}  {grid_cell.wetdry}  {grid_cell.shead}\n")
+        else:
+            with open(os.path.join(folder_path, LPF_GRID_FILE_NAME), "w") as file:
+                file.write(
+                    "ILYR  IROW  ICOL  CELLTOP  CELLBOT  IBOUND  HK  HANI  VKA  VKCB  TKCB  SC1  SC2  WETDRY  SHEAD\n")
+                for layer in range(self._num_lyr):
+                    for row in range(self._num_row):
+                        for col in range(self._num_col):
+                            grid_cell = self._model.layers[layer].grid_cells[row][col]
+                            file.write(
+                                f"{int(layer + 1)}  {int(row + 1)}  {int(col + 1)}  {grid_cell.top}  {grid_cell.bot}  {int(grid_cell.ibound)}  {grid_cell.hk}"
+                                f"  {grid_cell.hani}  {grid_cell.vka}  {grid_cell.vkcb}  {grid_cell.tkcb}  {grid_cell.sc1}  {grid_cell.sc2}"
+                                f"  {grid_cell.wetdry}  {grid_cell.shead}\n")

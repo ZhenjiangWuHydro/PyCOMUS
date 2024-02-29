@@ -4,7 +4,10 @@
 # Author: Zhenjiang Wu
 # Description: Set COMUS Model Stress Period Attributes.
 # --------------------------------------------------------------
+import os
 from typing import List, Tuple, Union
+
+from pycomus.Utils.CONST_VALUE import PERIOD_FILE_NAME, PERIOD_PKG_NAME
 
 
 class ComusPeriod:
@@ -33,7 +36,7 @@ class ComusPeriod:
         """
         self.period = self._validate_period(period)
         self._model = model
-        model.CmsTime = self
+        model.package[PERIOD_PKG_NAME] = self
 
     @staticmethod
     def _validate_period(period: Union[Tuple, List[Tuple]]) -> Union[Tuple, List[Tuple]]:
@@ -109,3 +112,17 @@ class ComusPeriod:
             return ComusPeriod(self._model, self.period + other.period)
         else:
             raise TypeError("Can only concatenate with another ComusPeriod of the same model.")
+
+    def write_file(self, folder_path: str):
+        """
+        Typically used as an internal function but can also be called directly, it outputs the `pycomus.ComusPeriod`
+        module to the specified path as <PerAttr.in>.
+
+        :param folder_path: Output folder path.
+        """
+        with open(os.path.join(folder_path, PERIOD_FILE_NAME), "w") as file:
+            file.write("IPER  PERLEN  NSTEP  MULTR\n")
+            index = 1
+            for value in self.period:
+                file.write(f"{int(index)}   {float(value[0])}   {int(value[1])}   {float(value[2])} \n")
+                index += 1

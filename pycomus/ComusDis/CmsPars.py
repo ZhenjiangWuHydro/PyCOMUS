@@ -8,6 +8,8 @@ import ctypes
 import os
 import sys
 
+from pycomus.Utils.CONST_VALUE import CON_PKG_NAME, CON_FILE_NAME, BCF_LYR_PKG_NAME, LPF_LYR_PKG_NAME
+
 
 class ComusConPars:
 
@@ -39,7 +41,7 @@ class ComusConPars:
         intblkm: int
             Option for the input format of layer type and grid cell data. 1 for BCF format; 2 for LPF format.
         solve: int
-            The option for the method of solving the matrix equation (SIP or PCG).
+            The option for the method of solving the matrix equation (1 for SIP; 2 for PCG).
         max_iter: int
             The maximum number of iterations for matrix solving.
         damp: float
@@ -85,12 +87,11 @@ class ComusConPars:
         Example:
         --------
         >>> import pycomus
-        >>> model1 = pycomus.ComusModel(model_name="OneDimFlowSim")
+        >>> model1 = pycomus.ComusModel(model_name="test")
         >>> controlParams = pycomus.ComusConPars(model=model1, sim_type=1, max_iter=10000)
         """
         self._CheckLib = None
         self._model = model
-        self._SetDlls()
         self.dim_unit: str = dim_unit
         self.time_unit: str = time_unit
         self.sim_mtd: int = sim_mtd
@@ -116,8 +117,9 @@ class ComusConPars:
         self.reg_sta: int = reg_sta
         self.mul_td: int = mul_td
         self.num_td: int = num_td
+        self._SetDlls()
         self._Check()
-        model.CmsPars = self
+        model.package[CON_PKG_NAME] = self
 
     @classmethod
     def load(cls, model, ctrl_params_file: str):
@@ -139,7 +141,7 @@ class ComusConPars:
         Example:
         --------
         >>> import pycomus
-        >>> model1 = pycomus.ComusModel(model_name="OneDimFlowSim(File-Input)")
+        >>> model1 = pycomus.ComusModel(model_name="test")
         >>> controlParams = pycomus.ComusConPars.load(model1,"./InputFiles/CtrlPar.in")
         """
         with open(ctrl_params_file, 'r') as file:
@@ -206,3 +208,33 @@ class ComusConPars:
                                                self.ch_flg, self.wd_flg, self.wet_fct, self.newt_iter,
                                                self.hd_wet, self.reg_sta, self.mul_td, self.num_td):
             sys.exit()
+
+    def write_file(self, folder_path: str):
+        """
+        Typically used as an internal function but can also be called directly, it outputs the `pycomus.ComusConPars`
+        module to the specified path as <CtrlPar.in>.
+
+        :param folder_path: Output folder path.
+        """
+        if BCF_LYR_PKG_NAME not in self._model.package and LPF_LYR_PKG_NAME not in self._model.package:
+            raise ValueError(
+                "Before writing the ComusConPars, `pycomus.ComusDisLpf` or `pycomus.ComusDisBcf` should be set first.")
+        if  BCF_LYR_PKG_NAME in self._model.package:
+            cms_dis = self._model.package[BCF_LYR_PKG_NAME]
+        else:
+            cms_dis = self._model.package[LPF_LYR_PKG_NAME]
+        num_lyr = cms_dis.num_lyr
+        num_row = cms_dis.num_row
+        num_col = cms_dis.num_col
+        x_coord = cms_dis.x_coord
+        y_coord = cms_dis.y_coord
+        header_line = "NUMLYR  NUMROW  NUMCOL  DIMUNIT  TIMEUNIT  XSTCORD  YSTCORD  SIMMTHD  SIMTYPE  LAMBDA  INTBLKM  ISOLVE  MAXIT  DAMP  HCLOSE  " \
+                      "RCLOSE  IRELAX  THETA  GAMMA  AKAPPA  NITER  HNOFLO  ICHFLG  IWDFLG  WETFCT  IWETIT  IHDWET  IREGSTA  IMULTD  NUMTD"
+        conParsData = [num_lyr, num_row, num_col, self.dim_unit, self.time_unit, x_coord, y_coord, self.sim_mtd,
+                       self.sim_type, self.acc_lambda, self.intblkm, self.solve, self.max_iter, self.damp, self.h_close,
+                       self.r_close, self.relax, self.theta, self.gamma, self.akappa, self.n_iter, self.hno_flo,
+                       self.ch_flg, self.wd_flg, self.wet_fct, self.newt_iter, self.hd_wet, self.reg_sta, self.mul_td,
+                       self.num_td]
+        with open(os.path.join(folder_path, CON_FILE_NAME), "w") as file:
+            file.write(header_line + "\n")
+            file.write('    '.join(map(str, conParsData)))

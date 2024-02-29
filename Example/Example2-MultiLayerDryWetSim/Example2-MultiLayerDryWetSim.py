@@ -1,3 +1,5 @@
+import os
+
 import numpy as np
 
 import pycomus
@@ -42,7 +44,6 @@ if __name__ == "__main__":
 
     modelGridPar = pycomus.ComusGridPars(model, top=top, bot=bot, ibound=ibound, kx=4, ky=4, kz=4,
                                          shead=38, sc1=sc1, sc2=sc2)
-
     # Set Period
     period = pycomus.ComusPeriod(model, [(10, 10, 1) for _ in range(3)])
 
@@ -91,18 +92,18 @@ if __name__ == "__main__":
         ehead_period2_data[i, 0, shb_period2_col_idx[idx]] = 22
         idx += 1
     shbPackage = pycomus.ComusGhb(model,
-                                          cond={0: cond_period1_data, 1: cond_period2_data, 2: cond_period3_data},
-                                          shead={0: shead_period1_data, 1: shead_period2_data, 2: shead_period3_data},
-                                          ehead={0: ehead_period1_data, 1: ehead_period2_data, 2: ehead_period3_data})
+                                  cond={0: cond_period1_data, 1: cond_period2_data, 2: cond_period3_data},
+                                  shead={0: shead_period1_data, 1: shead_period2_data, 2: shead_period3_data},
+                                  ehead={0: ehead_period1_data, 1: ehead_period2_data, 2: ehead_period3_data})
 
     # Set HFB
     hfb_data = []
     for i in range(36):
         hfb_data.append((i, 0, 15, 0, 16, 1e-6))
     hfbPackage = pycomus.ComusHfb(model=model, hfb_data=hfb_data)
+    print(hfbPackage)
 
-    # Write Output
-    model.write_files()
-
-    # Run Model
-    model.run()
+    # # Write Output
+    # model.write_files()
+    # # Run Model
+    # model.run()

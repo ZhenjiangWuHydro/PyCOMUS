@@ -11,14 +11,14 @@ if __name__ == "__main__":
     # Control Params
     controlParams = pycomus.ComusConPars(model=model, sim_type=1, intblkm=2, max_iter=100000, damp=0.95, r_close=0.0001)
 
-    outParams = pycomus.ComusOutputPars(model, 2, 2, 2, 2, 2, 2, 2, 2)
+    outParams = pycomus.ComusOutputPars(model)
 
     # Create Grid And Layer
     NumLyr = 10
     NumRow = 1
     NumCol = 100
     modelDis = pycomus.ComusDisLpf(model, NumLyr, NumRow, NumCol, row_space=100, col_space=100,
-                                 lyr_type=[1 for _ in range(NumLyr)])
+                                   lyr_type=[1 for _ in range(NumLyr)])
 
     # Grid Attribute
     top = np.full((NumRow, NumCol), 2000, dtype=float)
@@ -36,7 +36,7 @@ if __name__ == "__main__":
     shead = np.full((NumLyr, NumRow, NumCol), 800, dtype=float)
     shead[9, 0, 99] = 100
     modelGridPar = pycomus.ComusGridPars(model, top=top, bot=bot, ibound=ibound, kx=KxKyKz, ky=KxKyKz, kz=KxKyKz,
-                                       shead=shead)
+                                         shead=shead)
     # Set Period
     period = pycomus.ComusPeriod(model, (1, 1, 1))
 

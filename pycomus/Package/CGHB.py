@@ -4,12 +4,15 @@
 # Author: Zhenjiang Wu
 # Description: Set COMUS Model With GHB Package.
 # --------------------------------------------------------------
+import os
+import sys
 from typing import Union, Dict
 
 import numpy as np
 
 import pycomus
 from pycomus.Utils import BoundaryCheck
+from pycomus.Utils.CONST_VALUE import GHB_PKG_NAME, GHB_FILE_NAME
 
 
 class ComusGhb:
@@ -39,12 +42,15 @@ class ComusGhb:
         --------
         >>> import pycomus
         >>> model1 = pycomus.ComusModel(model_name="test")
-        >>> ghbPackage = pycomus.ComusGhb(model, cond={0: 1}, shead=1, ehead=2)
+        >>> ghbPkg = pycomus.ComusGhb(model1, cond={0: 1}, shead=1, ehead=2)
         """
-        self._num_lyr = model.CmsDis.num_lyr
-        self._num_row = model.CmsDis.num_row
-        self._num_col = model.CmsDis.num_col
-        self._period = model.CmsTime.period
+        BoundaryCheck.check_bnd_queue(model)
+        cms_dis = BoundaryCheck.get_cms_pars(model)
+        cms_period = BoundaryCheck.get_period(model)
+        self._num_lyr = cms_dis.num_lyr
+        self._num_row = cms_dis.num_row
+        self._num_col = cms_dis.num_col
+        self._period = cms_period.period
         self.cond = BoundaryCheck.CheckValueGtZero(cond, "Cond", self._period, self._num_lyr,
                                                    self._num_row, self._num_col)
         self.shead = BoundaryCheck.CheckValueFormat(shead, "Shead", self._period, self._num_lyr,
@@ -53,7 +59,8 @@ class ComusGhb:
                                                     self._num_row, self._num_col)
         if sorted(self.cond.keys()) != sorted(self.shead.keys()) != sorted(self.ehead.keys()):
             raise ValueError("The stress periods for the 'Cond' parameter,'Ehead' and 'Shead' should be the same.")
-        model.package["GHB"] = self
+        self._model = model
+        model.package[GHB_PKG_NAME] = self
 
     @classmethod
     def load(cls, model, ghb_params_file: str):
@@ -75,12 +82,14 @@ class ComusGhb:
         Example:
         --------
         >>> import pycomus
-        >>> model1 = pycomus.ComusModel(model_name="OneDimFlowSim(File-Input)")
-        >>> ghbPackage = pycomus.ComusGhb.load(model, "./InputFiles/DRN.in")
+        >>> model1 = pycomus.ComusModel(model_name="test")
+        >>> ghbPackage = pycomus.ComusGhb.load(model1, "./InputFiles/DRN.in")
         """
-        num_lyr = model.CmsDis.num_lyr
-        num_row = model.CmsDis.num_row
-        num_col = model.CmsDis.num_col
+        BoundaryCheck.check_bnd_queue(model)
+        cms_dis = BoundaryCheck.get_cms_pars(model)
+        num_lyr = cms_dis.num_lyr
+        num_row = cms_dis.num_row
+        num_col = cms_dis.num_col
         with open(ghb_params_file, 'r') as file:
             lines = file.readlines()
         if len(lines[0].strip().split()) != 7:
@@ -100,20 +109,50 @@ class ComusGhb:
             col = int(line[3]) - 1
             if period not in cond:
                 shead[period] = np.zeros((num_lyr, num_row, num_col))
-                shead[period][lyr, row, col] = float(line[4])
                 ehead[period] = np.zeros((num_lyr, num_row, num_col))
-                ehead[period][lyr, row, col] = float(line[5])
                 cond[period] = np.zeros((num_lyr, num_row, num_col))
-                cond[period][lyr, row, col] = float(line[6])
-            else:
-                shead[period][lyr, row, col] = float(line[4])
-                ehead[period][lyr, row, col] = float(line[5])
-                cond[period][lyr, row, col] = float(line[6])
+            shead[period][lyr, row, col] = float(line[4])
+            ehead[period][lyr, row, col] = float(line[5])
+            cond[period][lyr, row, col] = float(line[6])
         instance = cls(model, cond=cond, shead=shead, ehead=ehead)
         return instance
 
     def __str__(self):
-        res = "GHB:\n"
+        res = f"{GHB_PKG_NAME}:\n"
         for period, value in self.cond.items():
             res += f"    Period : {period}\n        Value Shape : {value.shape}\n"
         return res
+
+    def write_file(self, folder_path: str):
+        if not self._write_file_test(folder_path):
+            os.remove(os.path.join(folder_path, GHB_FILE_NAME))
+            sys.exit()
+
+    def _write_file_test(self, folder_path: str) -> bool:
+        period_len = len(self._period)
+        with open(os.path.join(folder_path, GHB_FILE_NAME), "w") as file:
+            file.write("IPER  ILYR  IROW  ICOL  SHEAD  EHEAD  COND\n")
+            periods = sorted(self.cond.keys())
+            for period in periods:
+                if not BoundaryCheck.check_period(period, period_len):
+                    return False
+                cond_value = self.cond[period]
+                shead_value = self.shead[period]
+                ehead_value = self.ehead[period]
+                if not BoundaryCheck.check_dict_zero(cond_value, "Cond", self._num_lyr, self._num_row, self._num_col):
+                    return False
+                for layer in range(self._num_lyr):
+                    lyr_type: int = self._model.layers[layer].lyr_type
+                    for row in range(self._num_row):
+                        for col in range(self._num_col):
+                            if cond_value[layer, row, col] > 0:
+                                if lyr_type in (1, 3):
+                                    bot = self._model.layers[layer].grid_cells[row][col].bot
+                                    if shead_value[layer, row, col] <= bot or ehead_value[layer, row, col] <= bot:
+                                        print(f"The hydraulic head at grid cell ({layer},{row},{col}) cannot be lower "
+                                              f"than or equal to the bottom elevation of the grid cell.")
+                                        return False
+                                file.write(
+                                    f"{period + 1}  {layer + 1}  {row + 1}  {col + 1}  {shead_value[layer, row, col]}  "
+                                    f"{ehead_value[layer, row, col]}  {cond_value[layer, row, col]}\n")
+        return True

@@ -35,6 +35,25 @@ if __name__ == "__main__":
                           125.1961, 124.8039, 124.4118, 124.0196, 123.6275, 123.2353, 122.2549, 120.6863, 119.1176, 117.549,
                           115.9804, 115]
 
-    modelGridPar = pycomus.ComusGridPars(model, top=117, bot=67, ibound=ibound, kx=30)
+    modelGridPar = pycomus.ComusGridPars(model, top=117, bot=67, ibound=ibound, kx=30,sc1=0.2,shead=shead)
 
-    # 
+    # Set Period
+    modelPeriod = pycomus.ComusPeriod.load(model, "./InputFiles/PerAttr.in")
+
+    # Set RCH
+    rchPkg = pycomus.ComusRch.load(model, "./InputFiles/RCH.in")
+
+    # Set EVT
+    evtPkg = pycomus.ComusEvt.load(model, "./InputFiles/EVT.in")
+
+    # Set LAK
+    lakPackage = pycomus.ComusLak.load(model, "./InputFiles/LAKCtrl.in", "./InputFiles/LAKPer.in",
+                                       "./InputFiles/LAKGrd.in")
+
+    # Set STR
+    strPackage = pycomus.ComusStr.load(model, "./InputFiles/STRCtrl.in", "./InputFiles/STRPer.in",
+                                       "./InputFiles/STRGrd.in","./InputFiles/STRWatUse.in","./InputFiles/STRWatDrn.in")
+
+    model.write_files()
+
+    model.run()

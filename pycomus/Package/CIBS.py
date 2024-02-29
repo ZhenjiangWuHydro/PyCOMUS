@@ -4,12 +4,14 @@
 # Author: Zhenjiang Wu
 # Description: Set COMUS Model With IBS Package.
 # --------------------------------------------------------------
+import os
 from typing import Union
 
 import numpy as np
 
 import pycomus
 from pycomus.Utils import BoundaryCheck
+from pycomus.Utils.CONST_VALUE import IBS_PKG_NAME, IBS_FILE_NAME
 
 
 class ComusIbs:
@@ -43,15 +45,17 @@ class ComusIbs:
         >>> model1 = pycomus.ComusModel(model_name="test")
         >>> ibsPackage = pycomus.ComusIbs(model, hc=1, sfe=1, sfv=1, com=1)
         """
-
-        self._num_lyr = model.CmsDis.num_lyr
-        self._num_row = model.CmsDis.num_row
-        self._num_col = model.CmsDis.num_col
-        self.hc = BoundaryCheck.Check3DValueFormat(hc, "HC", self._num_lyr, self._num_row, self._num_col)
-        self.sfe = BoundaryCheck.Check3DValueGtZero(sfe, "SFE", self._num_lyr, self._num_row, self._num_col)
-        self.sfv = BoundaryCheck.Check3DValueGtZero(sfv, "SFV", self._num_lyr, self._num_row, self._num_col)
-        self.com = BoundaryCheck.Check3DValueFormat(com, "COM", self._num_lyr, self._num_row, self._num_col)
-        model.package["IBS"] = self
+        BoundaryCheck.check_bnd_queue(model)
+        cms_dis = BoundaryCheck.get_cms_pars(model)
+        self._num_lyr = cms_dis.num_lyr
+        self._num_row = cms_dis.num_row
+        self._num_col = cms_dis.num_col
+        self._model = model
+        self.hc = BoundaryCheck.check_3d_format(hc, "HC", self._num_lyr, self._num_row, self._num_col)
+        self.sfe = BoundaryCheck.check_3d_zero(sfe, "SFE", self._num_lyr, self._num_row, self._num_col)
+        self.sfv = BoundaryCheck.check_3d_zero(sfv, "SFV", self._num_lyr, self._num_row, self._num_col)
+        self.com = BoundaryCheck.check_3d_format(com, "COM", self._num_lyr, self._num_row, self._num_col)
+        model.package[IBS_PKG_NAME] = self
 
     @classmethod
     def load(cls, model, ibs_file: str):
@@ -76,9 +80,11 @@ class ComusIbs:
         >>> model1 = pycomus.ComusModel(model_name="OneDimFlowSim(File-Input)")
         >>> ibsPackage = pycomus.ComusIbs.load(model, "./InputFiles/IBS.in")
         """
-        num_lyr = model.CmsDis.num_lyr
-        num_row = model.CmsDis.num_row
-        num_col = model.CmsDis.num_col
+        BoundaryCheck.check_bnd_queue(model)
+        cms_dis = BoundaryCheck.get_cms_pars(model)
+        num_lyr = cms_dis.num_lyr
+        num_row = cms_dis.num_row
+        num_col = cms_dis.num_col
         with open(ibs_file, 'r') as file:
             lines = file.readlines()
         if len(lines[0].strip().split()) != 7:
@@ -101,3 +107,22 @@ class ComusIbs:
             com[lyr, row, col] = float(line[6])
         instance = cls(model, hc=hc, sfe=sfe, sfv=sfv, com=com)
         return instance
+
+    def __str__(self):
+        res = f"{IBS_PKG_NAME}:\n"
+        res += f"    HC : {self.hc.shape}\n"
+        res += f"    SFE : {self.sfe.shape}\n"
+        res += f"    SFV : {self.sfv.shape}\n"
+        res += f"    COM : {self.com.shape}\n"
+        return res
+
+    def write_file(self, folder_path: str):
+        with open(os.path.join(folder_path, IBS_FILE_NAME), "w") as file:
+            file.write("ILYR  IROW  ICOL  HC  SFE  SFV  COM\n")
+            for layer in range(self._num_lyr):
+                for row in range(self._num_row):
+                    for col in range(self._num_col):
+                        if self.sfe[layer, row, col] > 0 and self.sfv[layer, row, col] > 0:
+                            file.write(
+                                f"{layer + 1}  {row + 1}  {col + 1}  {self.hc[layer, row, col]}  "
+                                f"{self.sfe[layer, row, col]}  {self.sfv[layer, row, col]}  {self.com[layer, row, col]}\n")

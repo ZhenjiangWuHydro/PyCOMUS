@@ -4,9 +4,12 @@
 # Author: Zhenjiang Wu
 # Description: Set COMUS Model With HFB Package.
 # --------------------------------------------------------------
+import os
 from typing import List, Union, Tuple
 
 import pycomus
+from pycomus.Utils import BoundaryCheck
+from pycomus.Utils.CONST_VALUE import HFB_PKG_NAME, HFB_FILE_NAME
 
 
 class ComusHfb:
@@ -35,14 +38,17 @@ class ComusHfb:
         >>>     data.append((i, 0, 15, 0, 16, 1e-6))
         >>> hfbPackage = pycomus.ComusHfb(model=model, hfb_data=data)
         """
-        self._num_lyr = model.CmsDis.num_lyr
-        self._num_row = model.CmsDis.num_row
-        self._num_col = model.CmsDis.num_col
+        BoundaryCheck.check_bnd_queue(model)
+        cms_dis: Union[pycomus.ComusDisLpf, pycomus.ComusDisBcf] = BoundaryCheck.get_cms_pars(model)
+        self._num_lyr: int = cms_dis.num_lyr
+        self._num_row: int = cms_dis.num_row
+        self._num_col: int = cms_dis.num_col
         self.hfb_data: List[Tuple[int, int, int, int, int, Union[int, float]]] = self.__CheckData(hfb_data)
-        model.package["HFB"] = self
+        self._model: pycomus.ComusModel = model
+        model.package[HFB_PKG_NAME]: pycomus.ComusHfb = self
 
     def __CheckData(self, hfb_data: List[Tuple[int, int, int, int, int, Union[int, float]]]) -> List:
-        valid_hfb_data = []
+        valid_hfb_data: List[Tuple] = []
         for barrier in hfb_data:
 
             lay, row1, col1, row2, col2, hcdw = barrier
@@ -91,11 +97,10 @@ class ComusHfb:
         >>> hfbPackage = pycomus.ComusHfb.load(model, "./InputFiles/HFB.in")
         """
         with open(hfb_params_file, 'r') as file:
-            lines = file.readlines()
+            lines: List[str] = file.readlines()
         if len(lines[0].strip().split()) != 6:
             raise ValueError("The Horizontal-Flow Barrier(HFB) Period Attribute file header should have 6 fields.")
-        data = lines[1].strip().split()
-        if len(data) != 6:
+        if len(lines[1].strip().split()) != 6:
             raise ValueError("The Horizontal-Flow Barrier(HFB) Period Attribute file data line should have 6 values.")
         lines = lines[1:]
         hfb_data = []
@@ -110,3 +115,18 @@ class ComusHfb:
             hfb_data.append((lyr, row1, col1, row2, col2, hcdw))
         instance = cls(model, hfb_data=hfb_data)
         return instance
+
+    def __str__(self):
+        res = f"{HFB_FILE_NAME}:\n"
+        for value in self.hfb_data:
+            res += f"    ILYR:{value[0]}    Grid 1 : ({value[1]}, {value[2]})     Grid 2 : ({value[3]}, {value[4]})" \
+                   f"     HCDW : {value[5]}\n"
+        return res
+
+    def write_file(self, folder_path: str):
+        with open(os.path.join(folder_path, HFB_FILE_NAME), "w") as file:
+            file.write("ILYR  IROW1  ICOL1  IROW2  ICOL2  HCDW\n")
+            for hfb_data in self.hfb_data:
+                file.write(
+                    f"{hfb_data[0] + 1}  {hfb_data[1] + 1}  {hfb_data[2] + 1}  {hfb_data[3] + 1}  {hfb_data[4] + 1}  "
+                    f"{hfb_data[5]}\n")
