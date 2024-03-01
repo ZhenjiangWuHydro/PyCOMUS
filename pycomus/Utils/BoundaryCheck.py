@@ -2,7 +2,7 @@ from typing import Union, Dict, List
 
 import numpy as np
 
-from pycomus.Utils import CONST_VALUE
+from pycomus.Utils import CONSTANTS
 
 
 def CheckValueFormat(Value: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
@@ -99,7 +99,7 @@ def Check3DValueExistGrid(Value: Union[int, float, np.ndarray], ValueName: str, 
 
 
 def check_3d_zero(Value: Union[int, float, np.ndarray], ValueName: str, NumLyr: int, NumRow: int,
-                       NumCol: int) -> np.ndarray:
+                  NumCol: int) -> np.ndarray:
     if isinstance(Value, (int, float)):
         if Value < 0:
             raise ValueError(f"{ValueName} value must be greater than or equal to 0.")
@@ -129,38 +129,38 @@ def check_3d_format(Value: Union[int, float, np.ndarray], ValueName: str, NumLyr
 
 
 def check_bnd_queue(model):
-    if CONST_VALUE.CON_PKG_NAME not in model.package:
+    if CONSTANTS.CON_PKG_NAME not in model.package:
         raise ValueError("Before setting the boundary, `pycomus.ComusConPars` should be set first.")
-    if CONST_VALUE.OUT_PKG_NAME not in model.package:
+    if CONSTANTS.OUT_PKG_NAME not in model.package:
         raise ValueError("Before setting the boundary, `pycomus.ComusOutputPars` should be set first.")
-    if CONST_VALUE.BCF_LYR_PKG_NAME not in model.package and CONST_VALUE.LPF_LYR_PKG_NAME not in model.package:
+    if CONSTANTS.BCF_LYR_PKG_NAME not in model.package and CONSTANTS.LPF_LYR_PKG_NAME not in model.package:
         raise ValueError(
             "Before setting the boundary, `pycomus.ComusDisLpf` or `pycomus.ComusDisBcf` should be set first.")
-    if CONST_VALUE.PERIOD_PKG_NAME not in model.package:
+    if CONSTANTS.PERIOD_PKG_NAME not in model.package:
         raise ValueError("Before setting the boundary, `pycomus.CmsTime` should be set first.")
-    if CONST_VALUE.GRID_PKG_NAME not in model.package:
+    if CONSTANTS.GRID_PKG_NAME not in model.package:
         raise ValueError("Before setting the boundary, `pycomus.ComusGridPars` should be set first.")
 
 
 def get_cms_pars(model):
-    if CONST_VALUE.BCF_LYR_PKG_NAME not in model.package and CONST_VALUE.LPF_LYR_PKG_NAME not in model.package:
+    if CONSTANTS.BCF_LYR_PKG_NAME not in model.package and CONSTANTS.LPF_LYR_PKG_NAME not in model.package:
         raise ValueError("`pycomus.ComusDisLpf` or `pycomus.ComusDisBcf` should be set first.")
-    if CONST_VALUE.BCF_LYR_PKG_NAME in model.package:
-        return model.package[CONST_VALUE.BCF_LYR_PKG_NAME]
+    if CONSTANTS.BCF_LYR_PKG_NAME in model.package:
+        return model.package[CONSTANTS.BCF_LYR_PKG_NAME]
     else:
-        return model.package[CONST_VALUE.LPF_LYR_PKG_NAME]
+        return model.package[CONSTANTS.LPF_LYR_PKG_NAME]
 
 
 def get_con_pars(model):
-    if CONST_VALUE.CON_PKG_NAME not in model.package:
+    if CONSTANTS.CON_PKG_NAME not in model.package:
         raise ValueError("`pycomus.ComusConPars` should be set first.")
-    return model.package[CONST_VALUE.CON_PKG_NAME]
+    return model.package[CONSTANTS.CON_PKG_NAME]
 
 
 def get_period(model):
-    if CONST_VALUE.PERIOD_PKG_NAME not in model.package:
+    if CONSTANTS.PERIOD_PKG_NAME not in model.package:
         raise ValueError("`pycomus.CmsTime` should be set first.")
-    return model.package[CONST_VALUE.PERIOD_PKG_NAME]
+    return model.package[CONSTANTS.PERIOD_PKG_NAME]
 
 
 def check_period(tar_period: int, period: int) -> bool:

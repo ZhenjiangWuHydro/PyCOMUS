@@ -12,7 +12,7 @@ import numpy as np
 
 import pycomus
 from pycomus.Utils import BoundaryCheck
-from pycomus.Utils.CONST_VALUE import WEL_PKG_NAME, WEL_FILE_NAME
+from pycomus.Utils.CONSTANTS import WEL_PKG_NAME, WEL_FILE_NAME
 
 
 class ComusWel:
@@ -39,7 +39,7 @@ class ComusWel:
         --------
         >>> import pycomus
         >>> model1 = pycomus.ComusModel(model_name="test")
-        >>> welPackage = pycomus.ComusWel(model, wellr={0: 1}, satthr=1)
+        >>> welPackage = pycomus.ComusWel(model1, wellr={0: 1}, satthr=1)
         """
         BoundaryCheck.check_bnd_queue(model)
         cms_dis = BoundaryCheck.get_cms_pars(model)
@@ -121,6 +121,12 @@ class ComusWel:
         return res
 
     def write_file(self, folder_path: str):
+        """
+        Typically used as an internal function but can also be called directly, it outputs the `pycomus.ComusWel`
+        module to the specified path as <WEL.in>.
+
+        :param folder_path: Output folder path.
+        """
         if not self._write_file_test(folder_path):
             os.remove(os.path.join(folder_path, WEL_FILE_NAME))
             sys.exit()

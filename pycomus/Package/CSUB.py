@@ -11,7 +11,7 @@ import numpy as np
 
 import pycomus
 from pycomus.Utils import BoundaryCheck
-from pycomus.Utils.CONST_VALUE import SUB_PKG_NAME, SUB_DB_GRID_FILE_NAME, SUB_NDB_GRID_FILE_NAME, SUB_DB_FILE_NAME, \
+from pycomus.Utils.CONSTANTS import SUB_PKG_NAME, SUB_DB_GRID_FILE_NAME, SUB_NDB_GRID_FILE_NAME, SUB_DB_FILE_NAME, \
     SUB_NDB_FILE_NAME, SUB_MZ_FILE_NAME, SUB_CTRL_FILE_NAME
 
 
@@ -381,6 +381,12 @@ class ComusSub:
         return instance
 
     def write_file(self, folder_path: str):
+        """
+        Typically used as an internal function but can also be called directly, it outputs the `pycomus.ComusSub`
+        module to the specified path as <SUBCtrl.in>, <SUBMZ.in>, <SUBNDB.in>, <SUBDB.in>, <SUBGrdNDB.in>, <SUBGrdDB.in>.
+
+        :param folder_path: Output folder path.
+        """
         ctrl_data = self.subValue.ctrl_params
         num_ndb = ctrl_data[0]
         num_db = ctrl_data[1]

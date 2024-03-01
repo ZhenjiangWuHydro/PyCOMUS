@@ -5,8 +5,9 @@
 # Description: Set COMUS Model Output Parameter Attributes.
 # --------------------------------------------------------------
 import os
+from typing import Dict, List
 
-from pycomus.Utils.CONST_VALUE import OUT_PKG_NAME, OUT_FILE_NAME
+from pycomus.Utils.CONSTANTS import OUT_PKG_NAME, OUT_FILE_NAME
 
 
 class ComusOutputPars:
@@ -66,7 +67,7 @@ class ComusOutputPars:
         >>> model1 = pycomus.ComusModel(model_name="OneDimFlowSim")
         >>> outParams = pycomus.ComusOutputPars(model1, 2, 2, 2, 2, 2, 2)
         """
-        self.__params = {
+        self.__params: Dict = {
             'gdw_bd': gdw_bd,
             'lyr_bd': lyr_bd,
             'cell_bd': cell_bd,
@@ -128,13 +129,13 @@ class ComusOutputPars:
         >>> outParams = pycomus.ComusOutputPars.load(model1, "./InputFiles/OutOpt.in")
         """
         with open(output_params_file, 'r') as file:
-            lines = file.readlines()
+            lines: List[str] = file.readlines()
         if len(lines) != 2:
             raise ValueError("The Output Params file should have exactly two lines of data.")
         if len(lines[0].strip().split()) != 14:
             raise ValueError("The Output Params file should have 14 fields.")
 
-        data = lines[1].strip().split()
+        data: List[str] = lines[1].strip().split()
         if len(data) != 14:
             raise ValueError("The Output Params data line should have 14 values.")
 

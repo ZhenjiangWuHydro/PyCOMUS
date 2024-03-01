@@ -3,7 +3,7 @@ import struct
 
 import numpy as np
 
-from pycomus.Utils import CONST_VALUE
+from pycomus.Utils import CONSTANTS
 
 
 class ComusResult:
@@ -21,7 +21,7 @@ class ComusResult:
     def read_cell_head(self, tar_period: int = 0, tar_iter: int = 0, tar_layer: int = 0):
         _period = {}
         for i in range(len(self._periods)):
-            if self._model.model.package[CONST_VALUE.OUT_PKG_NAME].cell_hh == 1:
+            if self._model.model.package[CONSTANTS.OUT_PKG_NAME].cell_hh == 1:
                 _period[i + 1] = self._periods[i][1]
             else:
                 _period[i + 1] = 1
@@ -29,7 +29,7 @@ class ComusResult:
             raise ValueError(f"tar_layer should be greater than or equal to 0, and less than {self._num_lyr}.")
         if tar_period < 0 or tar_period >= len(self._periods):
             raise ValueError(f"tar_period should be greater than or equal to 0, and less than {len(self._periods)}")
-        if self._model.model.package[CONST_VALUE.OUT_PKG_NAME].cell_hh == 1:
+        if self._model.model.package[CONSTANTS.OUT_PKG_NAME].cell_hh == 1:
             iter = _period[tar_period + 1]
             if tar_iter < 0 or tar_iter >= iter:
                 raise ValueError(f"tar_period should be greater than or equal to 0, and less than {iter}")

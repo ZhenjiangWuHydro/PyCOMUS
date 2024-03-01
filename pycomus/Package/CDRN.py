@@ -12,7 +12,7 @@ import numpy as np
 
 import pycomus
 from pycomus.Utils import BoundaryCheck
-from pycomus.Utils.CONST_VALUE import DRN_PKG_NAME, DRN_FILE_NAME
+from pycomus.Utils.CONSTANTS import DRN_PKG_NAME, DRN_FILE_NAME
 
 
 class ComusDrn:
@@ -120,6 +120,12 @@ class ComusDrn:
         return res
 
     def write_file(self, folder_path: str):
+        """
+        Typically used as an internal function but can also be called directly, it outputs the `pycomus.ComusDrn`
+        module to the specified path as <DRN.in>.
+
+        :param folder_path: Output folder path.
+        """
         if not self._write_file_test(folder_path):
             os.remove(os.path.join(folder_path, DRN_FILE_NAME))
             sys.exit()

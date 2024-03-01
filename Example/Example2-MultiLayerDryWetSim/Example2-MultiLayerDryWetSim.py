@@ -101,7 +101,6 @@ if __name__ == "__main__":
     for i in range(36):
         hfb_data.append((i, 0, 15, 0, 16, 1e-6))
     hfbPackage = pycomus.ComusHfb(model=model, hfb_data=hfb_data)
-    print(hfbPackage)
 
     # # Write Output
     # model.write_files()

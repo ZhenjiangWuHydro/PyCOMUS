@@ -12,7 +12,7 @@ import numpy as np
 
 import pycomus
 from pycomus.Utils import BoundaryCheck
-from pycomus.Utils.CONST_VALUE import RCH_PKG_NAME, RCH_FILE_NAME
+from pycomus.Utils.CONSTANTS import RCH_PKG_NAME, RCH_FILE_NAME
 
 
 class ComusRch:
@@ -117,6 +117,12 @@ class ComusRch:
         return res
 
     def write_file(self, folder_path: str):
+        """
+        Typically used as an internal function but can also be called directly, it outputs the `pycomus.ComusRch`
+        module to the specified path as <RCH.in>.
+
+        :param folder_path: Output folder path.
+        """
         if not self._write_file_test(folder_path):
             os.remove(os.path.join(folder_path, RCH_FILE_NAME))
             sys.exit()

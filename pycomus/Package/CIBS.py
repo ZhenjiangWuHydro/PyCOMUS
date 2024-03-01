@@ -11,7 +11,7 @@ import numpy as np
 
 import pycomus
 from pycomus.Utils import BoundaryCheck
-from pycomus.Utils.CONST_VALUE import IBS_PKG_NAME, IBS_FILE_NAME
+from pycomus.Utils.CONSTANTS import IBS_PKG_NAME, IBS_FILE_NAME
 
 
 class ComusIbs:
@@ -43,7 +43,7 @@ class ComusIbs:
         --------
         >>> import pycomus
         >>> model1 = pycomus.ComusModel(model_name="test")
-        >>> ibsPackage = pycomus.ComusIbs(model, hc=1, sfe=1, sfv=1, com=1)
+        >>> ibsPackage = pycomus.ComusIbs(model1, hc=1, sfe=1, sfv=1, com=1)
         """
         BoundaryCheck.check_bnd_queue(model)
         cms_dis = BoundaryCheck.get_cms_pars(model)
@@ -77,8 +77,8 @@ class ComusIbs:
         Example:
         --------
         >>> import pycomus
-        >>> model1 = pycomus.ComusModel(model_name="OneDimFlowSim(File-Input)")
-        >>> ibsPackage = pycomus.ComusIbs.load(model, "./InputFiles/IBS.in")
+        >>> model1 = pycomus.ComusModel(model_name="test")
+        >>> ibsPackage = pycomus.ComusIbs.load(model1, "./InputFiles/IBS.in")
         """
         BoundaryCheck.check_bnd_queue(model)
         cms_dis = BoundaryCheck.get_cms_pars(model)
@@ -117,6 +117,12 @@ class ComusIbs:
         return res
 
     def write_file(self, folder_path: str):
+        """
+        Typically used as an internal function but can also be called directly, it outputs the `pycomus.ComusIbs`
+        module to the specified path as <IBS.in>.
+
+        :param folder_path: Output folder path.
+        """
         with open(os.path.join(folder_path, IBS_FILE_NAME), "w") as file:
             file.write("ILYR  IROW  ICOL  HC  SFE  SFV  COM\n")
             for layer in range(self._num_lyr):

@@ -1,7 +1,5 @@
 # Introduction
 
-The COMUS model is developed by the Institute of Water Resources and Hydropower Research (IWHR) of the China Institute of Water Resources and Hydropower Research (IWHR). This model is applicable to various simulation calculations related to the movement of groundwater, such as assessing groundwater source supply, delineating groundwater source protection areas, studying the impact of mine water inflow, investigating the ecological water balance in arid regions, optimizing regional groundwater exploitation layouts, evaluating Managed Aquifer Recharge (MAR) effectiveness, predicting groundwater over-exploitation and remediation, forecasting seawater intrusion (with the density-dependent module), predicting groundwater pollution (with the solute transport model), and more. It serves as the fundamental support for achieving the "Four Predictions" of groundwater resources management.
-
 PyCOMUS is a Python interface built upon the COMUS model, capable of performing all the functions that the COMUS model offers.
 
 

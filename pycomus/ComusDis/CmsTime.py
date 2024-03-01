@@ -7,7 +7,7 @@
 import os
 from typing import List, Tuple, Union
 
-from pycomus.Utils.CONST_VALUE import PERIOD_FILE_NAME, PERIOD_PKG_NAME
+from pycomus.Utils.CONSTANTS import PERIOD_FILE_NAME, PERIOD_PKG_NAME
 
 
 class ComusPeriod:
@@ -31,10 +31,10 @@ class ComusPeriod:
         Example:
         --------
         >>> import pycomus
-        >>> model1 = pycomus.ComusModel(model_name="OneDimFlowSim")
-        >>> period1 = pycomus.ComusPeriod(model, (1, 1, 1))
+        >>> model1 = pycomus.ComusModel(model_name="test")
+        >>> period1 = pycomus.ComusPeriod(model1, [(1, 1, 1)])
         """
-        self.period = self._validate_period(period)
+        self.period: Union[Tuple, List[Tuple]] = self._validate_period(period)
         self._model = model
         model.package[PERIOD_PKG_NAME] = self
 
@@ -75,14 +75,14 @@ class ComusPeriod:
         Example:
         --------
         >>> import pycomus
-        >>> model1 = pycomus.ComusModel(model_name="OneDimFlowSim(File-Input)")
+        >>> model1 = pycomus.ComusModel(model_name="test")
         >>> modelPeriod = pycomus.ComusPeriod.load(model1,"./InputFiles/PerAttr.in")
         """
         with open(period_file, 'r') as file:
-            lines = file.readlines()[1:]
+            lines: List[str] = file.readlines()[1:]
         if len(lines[0].strip().split()) != 4:
             raise ValueError("The Control Params file header should have 30 fields.")
-        idx_list = [int(line[0]) for line in lines]
+        idx_list: List[int] = [int(line[0]) for line in lines]
         if sorted(idx_list) != [i for i in range(1, len(idx_list) + 1)]:
             raise ValueError(f"Period id should start from 1 and continue consecutively to {len(idx_list) + 1}.")
         period = []

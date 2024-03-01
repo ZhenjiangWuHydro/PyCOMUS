@@ -11,7 +11,7 @@ from typing import Dict, Tuple, Union
 import numpy as np
 
 from pycomus.Utils import BoundaryCheck
-from pycomus.Utils.CONST_VALUE import LAK_PKG_NAME, LAK_CTRL_FILE_NAME, LAK_PERIOD_FILE_NAME, LAK_GRID_FILE_NAME
+from pycomus.Utils.CONSTANTS import LAK_PKG_NAME, LAK_CTRL_FILE_NAME, LAK_PERIOD_FILE_NAME, LAK_GRID_FILE_NAME
 
 
 class ComusLak:
@@ -202,9 +202,8 @@ class ComusLak:
         Example:
         --------
         >>> import pycomus
-        >>> model1 = pycomus.ComusModel(model_name="OneDimFlowSim(File-Input)")
-        >>> lakPackage = pycomus.ComusLak.load(model1, "./InputFiles/LAKCtrl.in", "./InputFiles/LAKPer.in",
-        >>> "./InputFiles/LAKGrd.in")
+        >>> model1 = pycomus.ComusModel(model_name="test")
+        >>> lakPackage = pycomus.ComusLak.load(model1, "LAKCtrl.in", "LAKPer.in", "LAKGrd.in")
         """
         BoundaryCheck.check_bnd_queue(model)
         cms_dis = BoundaryCheck.get_cms_pars(model)
@@ -302,6 +301,12 @@ class ComusLak:
         return res
 
     def write_file(self, folder_path: str):
+        """
+        Typically used as an internal function but can also be called directly, it outputs the `pycomus.ComusLak`
+        module to the specified path as <LAKCtrl.in>, <LAKPer.in> and <LAKGrd.in>.
+
+        :param folder_path: Output folder path.
+        """
         if not self._write_file_test(folder_path):
             lak_file = os.path.join(folder_path, LAK_CTRL_FILE_NAME)
             if os.path.exists(lak_file):

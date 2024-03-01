@@ -9,7 +9,7 @@ from typing import List, Union, Tuple
 
 import pycomus
 from pycomus.Utils import BoundaryCheck
-from pycomus.Utils.CONST_VALUE import HFB_PKG_NAME, HFB_FILE_NAME
+from pycomus.Utils.CONSTANTS import HFB_PKG_NAME, HFB_FILE_NAME
 
 
 class ComusHfb:
@@ -36,7 +36,7 @@ class ComusHfb:
         >>> data = []
         >>> for i in range(36):
         >>>     data.append((i, 0, 15, 0, 16, 1e-6))
-        >>> hfbPackage = pycomus.ComusHfb(model=model, hfb_data=data)
+        >>> hfbPackage = pycomus.ComusHfb(model=model1, hfb_data=data)
         """
         BoundaryCheck.check_bnd_queue(model)
         cms_dis: Union[pycomus.ComusDisLpf, pycomus.ComusDisBcf] = BoundaryCheck.get_cms_pars(model)
@@ -93,8 +93,8 @@ class ComusHfb:
         Example:
         --------
         >>> import pycomus
-        >>> model1 = pycomus.ComusModel(model_name="OneDimFlowSim(File-Input)")
-        >>> hfbPackage = pycomus.ComusHfb.load(model, "./InputFiles/HFB.in")
+        >>> model1 = pycomus.ComusModel(model_name="test")
+        >>> hfbPackage = pycomus.ComusHfb.load(model1, "./InputFiles/HFB.in")
         """
         with open(hfb_params_file, 'r') as file:
             lines: List[str] = file.readlines()
@@ -124,6 +124,12 @@ class ComusHfb:
         return res
 
     def write_file(self, folder_path: str):
+        """
+        Typically used as an internal function but can also be called directly, it outputs the `pycomus.ComusHfb`
+        module to the specified path as <HFB.in>.
+
+        :param folder_path: Output folder path.
+        """
         with open(os.path.join(folder_path, HFB_FILE_NAME), "w") as file:
             file.write("ILYR  IROW1  ICOL1  IROW2  ICOL2  HCDW\n")
             for hfb_data in self.hfb_data:

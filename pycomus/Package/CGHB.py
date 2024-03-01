@@ -12,7 +12,7 @@ import numpy as np
 
 import pycomus
 from pycomus.Utils import BoundaryCheck
-from pycomus.Utils.CONST_VALUE import GHB_PKG_NAME, GHB_FILE_NAME
+from pycomus.Utils.CONSTANTS import GHB_PKG_NAME, GHB_FILE_NAME
 
 
 class ComusGhb:
@@ -124,6 +124,12 @@ class ComusGhb:
         return res
 
     def write_file(self, folder_path: str):
+        """
+        Typically used as an internal function but can also be called directly, it outputs the `pycomus.ComusGhb`
+        module to the specified path as <GHB.in>.
+
+        :param folder_path: Output folder path.
+        """
         if not self._write_file_test(folder_path):
             os.remove(os.path.join(folder_path, GHB_FILE_NAME))
             sys.exit()

@@ -12,7 +12,7 @@ import numpy as np
 
 import pycomus
 from pycomus.Utils import BoundaryCheck
-from pycomus.Utils.CONST_VALUE import SHB_PKG_NAME, SHB_FILE_NAME
+from pycomus.Utils.CONSTANTS import SHB_PKG_NAME, SHB_FILE_NAME
 
 
 class ComusShb:
@@ -118,6 +118,12 @@ class ComusShb:
         return res
 
     def write_file(self, folder_path: str):
+        """
+        Typically used as an internal function but can also be called directly, it outputs the `pycomus.ComusShb`
+        module to the specified path as <SHB.in>.
+
+        :param folder_path: Output folder path.
+        """
         if not self._write_file_test(folder_path):
             os.remove(os.path.join(folder_path, SHB_FILE_NAME))
             sys.exit()

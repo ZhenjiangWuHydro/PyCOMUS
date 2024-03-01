@@ -8,7 +8,7 @@ import ctypes
 import os.path
 import platform
 
-from pycomus.Utils import CONST_VALUE
+from pycomus.Utils import CONSTANTS
 
 
 class ComusModel:
@@ -33,28 +33,28 @@ class ComusModel:
         Compile the input data and save it in the <Data.in> directory located at runtime.
 
         """
-        if CONST_VALUE.CON_PKG_NAME not in self.package:
+        if CONSTANTS.CON_PKG_NAME not in self.package:
             raise ValueError("<pycomus.ComusConPars> needs to be set!")
 
-        if CONST_VALUE.OUT_PKG_NAME not in self.package:
+        if CONSTANTS.OUT_PKG_NAME not in self.package:
             raise ValueError("<pycomus.ComusOutputPars> needs to be set!")
 
-        ctrl_pars = self.package[CONST_VALUE.CON_PKG_NAME]
+        ctrl_pars = self.package[CONSTANTS.CON_PKG_NAME]
         if ctrl_pars.intblkm == 1:
-            if CONST_VALUE.BCF_LYR_PKG_NAME not in self.package:
+            if CONSTANTS.BCF_LYR_PKG_NAME not in self.package:
                 raise ValueError(
                     "In the control parameter settings, the BCF mode has been designated for use, but "
                     "<pycomus.ComusDisBcf> has not been implemented.")
         else:
-            if CONST_VALUE.LPF_LYR_PKG_NAME not in self.package:
+            if CONSTANTS.LPF_LYR_PKG_NAME not in self.package:
                 raise ValueError(
                     "In the control parameter settings, the LPF mode has been designated for use, but "
                     "<pycomus.ComusDisLpf> has not been implemented.")
 
-        if CONST_VALUE.GRID_PKG_NAME not in self.package:
+        if CONSTANTS.GRID_PKG_NAME not in self.package:
             raise ValueError("<pycomus.ComusGridPars> needs to be set!")
 
-        if CONST_VALUE.PERIOD_PKG_NAME not in self.package:
+        if CONSTANTS.PERIOD_PKG_NAME not in self.package:
             raise ValueError("<pycomus.ComusPeriod> needs to be set!")
 
         folder_name = self.model_name

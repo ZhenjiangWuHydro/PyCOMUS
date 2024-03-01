@@ -11,7 +11,7 @@ from typing import Dict, Tuple, Union
 import numpy as np
 
 from pycomus.Utils import BoundaryCheck
-from pycomus.Utils.CONST_VALUE import STR_PKG_NAME, STR_WAT_DRN_FILE_NAME, STR_WAT_USE_FILE_NAME, STR_GRID_FILE_NAME, \
+from pycomus.Utils.CONSTANTS import STR_PKG_NAME, STR_WAT_DRN_FILE_NAME, STR_WAT_USE_FILE_NAME, STR_GRID_FILE_NAME, \
     STR_PERIOD_FILE_NAME, STR_CTRL_FILE_NAME
 
 
@@ -657,6 +657,12 @@ class ComusStr:
         return instance
 
     def write_file(self, folder_path: str):
+        """
+        Typically used as an internal function but can also be called directly, it outputs the `pycomus.ComusStr`
+        module to the specified path as <STRCtrl.in>, <STRPer.in>, <STRGrd.in>, <STRWatUse.in>, <STRWatDrn.in>.
+
+        :param folder_path: Output folder path.
+        """
         control_data = self.streamValue.ControlParams
         period_data = self.streamValue.PeriodData
         grid_data = self.streamValue.GridData

@@ -12,7 +12,7 @@ import numpy as np
 
 import pycomus
 from pycomus.Utils import BoundaryCheck
-from pycomus.Utils.CONST_VALUE import RIV_PKG_NAME, RIV_FILE_NAME
+from pycomus.Utils.CONSTANTS import RIV_PKG_NAME, RIV_FILE_NAME
 
 
 class ComusRiv:
@@ -135,6 +135,12 @@ class ComusRiv:
         return res
 
     def write_file(self, folder_path: str):
+        """
+        Typically used as an internal function but can also be called directly, it outputs the `pycomus.ComusRiv`
+        module to the specified path as <RIV.in>.
+
+        :param folder_path: Output folder path.
+        """
         if not self._write_file_test(folder_path):
             os.remove(os.path.join(folder_path, RIV_FILE_NAME))
             sys.exit()

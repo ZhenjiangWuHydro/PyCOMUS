@@ -7,8 +7,9 @@
 import ctypes
 import os
 import sys
+from typing import List
 
-from pycomus.Utils.CONST_VALUE import CON_PKG_NAME, CON_FILE_NAME, BCF_LYR_PKG_NAME, LPF_LYR_PKG_NAME
+from pycomus.Utils.CONSTANTS import CON_PKG_NAME, CON_FILE_NAME, BCF_LYR_PKG_NAME, LPF_LYR_PKG_NAME
 
 
 class ComusConPars:
@@ -145,7 +146,7 @@ class ComusConPars:
         >>> controlParams = pycomus.ComusConPars.load(model1,"./InputFiles/CtrlPar.in")
         """
         with open(ctrl_params_file, 'r') as file:
-            lines = file.readlines()
+            lines: List[str] = file.readlines()
 
         if len(lines) != 2:
             raise ValueError("The Control Params file should have exactly two lines of data.")
@@ -219,7 +220,7 @@ class ComusConPars:
         if BCF_LYR_PKG_NAME not in self._model.package and LPF_LYR_PKG_NAME not in self._model.package:
             raise ValueError(
                 "Before writing the ComusConPars, `pycomus.ComusDisLpf` or `pycomus.ComusDisBcf` should be set first.")
-        if  BCF_LYR_PKG_NAME in self._model.package:
+        if BCF_LYR_PKG_NAME in self._model.package:
             cms_dis = self._model.package[BCF_LYR_PKG_NAME]
         else:
             cms_dis = self._model.package[LPF_LYR_PKG_NAME]

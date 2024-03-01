@@ -11,7 +11,7 @@ from typing import Dict, Tuple, Union
 import numpy as np
 
 from pycomus.Utils import BoundaryCheck
-from pycomus.Utils.CONST_VALUE import RES_PKG_NAME, RES_CTRL_FILE_NAME, RES_PERIOD_FILE_NAME, RES_GRID_FILE_NAME
+from pycomus.Utils.CONSTANTS import RES_PKG_NAME, RES_CTRL_FILE_NAME, RES_PERIOD_FILE_NAME, RES_GRID_FILE_NAME
 
 
 class ComusRes:
@@ -231,6 +231,12 @@ class ComusRes:
         return instance
 
     def write_file(self, folder_path: str):
+        """
+        Typically used as an internal function but can also be called directly, it outputs the `pycomus.ComusRes`
+        module to the specified path as <RESCtrl.in>, <RESPer.in> and <RESGrd.in>.
+
+        :param folder_path: Output folder path.
+        """
         if not self._write_file_test(folder_path):
             res_file = os.path.join(folder_path, RES_CTRL_FILE_NAME)
             if os.path.exists(res_file):

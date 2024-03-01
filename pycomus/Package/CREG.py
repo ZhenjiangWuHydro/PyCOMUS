@@ -9,7 +9,7 @@ from typing import Dict, List, Tuple
 
 import pycomus
 from pycomus.Utils import BoundaryCheck
-from pycomus.Utils.CONST_VALUE import REG_PKG_NAME
+from pycomus.Utils.CONSTANTS import REG_PKG_NAME, REG_FILE_NAME
 
 
 class ComusReg:
@@ -103,7 +103,13 @@ class ComusReg:
         return res
 
     def write_file(self, folder_path: str):
-        with open(os.path.join(folder_path, "RegSta.in"), "w") as file:
+        """
+        Typically used as an internal function but can also be called directly, it outputs the `pycomus.ComusReg`
+        module to the specified path as <RegSta.in>.
+
+        :param folder_path: Output folder path.
+        """
+        with open(os.path.join(folder_path, REG_FILE_NAME), "w") as file:
             file.write("SCHID  SCHNAM  IREG  REGNAM  ILYR  IROW  ICOL\n")
             scheme_id = 1
             for scheme_name, scheme_data in self.reg_data.items():

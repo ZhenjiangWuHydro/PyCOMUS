@@ -9,7 +9,8 @@ from typing import Union
 
 import numpy as np
 
-from pycomus.Utils.CONST_VALUE import BCF_GRID_FILE_NAME, LPF_GRID_FILE_NAME, GRID_PKG_NAME, BCF_LYR_PKG_NAME, \
+from pycomus.ComusDis.GridCell import GridCell
+from pycomus.Utils.CONSTANTS import BCF_GRID_FILE_NAME, LPF_GRID_FILE_NAME, GRID_PKG_NAME, BCF_LYR_PKG_NAME, \
     LPF_LYR_PKG_NAME, CON_PKG_NAME
 
 
@@ -153,7 +154,7 @@ class ComusGridPars:
 
         # WETDRY Check
         self.wet_dry = np.zeros((self._num_lyr, self._num_row, self._num_col))
-        CmsPars = model.package["CMS_PARS"]
+        CmsPars = model.package[CON_PKG_NAME]
         if CmsPars.sim_type == 2 and CmsPars.wd_flg == 1 and any(x in {1, 3} for x in self._lyr_type):
             if isinstance(wet_dry, np.ndarray):
                 if wet_dry.size == 0:
@@ -494,18 +495,18 @@ class ComusGridPars:
                 for layer in range(self._num_lyr):
                     for row in range(self._num_row):
                         for col in range(self._num_col):
-                            grid_cell = self._model.layers[layer].grid_cells[row][col]
+                            grid_cell: GridCell = self._model.layers[layer].grid_cells[row][col]
                             file.write(
                                 f"{int(layer + 1)}  {int(row + 1)}  {int(col + 1)}  {int(grid_cell.ibound)}  {grid_cell.top}  {grid_cell.bot}  {grid_cell.tran}"
                                 f"  {grid_cell.hk}  {grid_cell.vcont}  {grid_cell.sc1}  {grid_cell.sc2}  {grid_cell.wetdry}  {grid_cell.shead}\n")
         else:
             with open(os.path.join(folder_path, LPF_GRID_FILE_NAME), "w") as file:
-                file.write(
-                    "ILYR  IROW  ICOL  CELLTOP  CELLBOT  IBOUND  HK  HANI  VKA  VKCB  TKCB  SC1  SC2  WETDRY  SHEAD\n")
+                file.write("ILYR  IROW  ICOL  CELLTOP  CELLBOT  IBOUND  HK  HANI  VKA  VKCB  TKCB  SC1  SC2  "
+                           "WETDRY  SHEAD\n")
                 for layer in range(self._num_lyr):
                     for row in range(self._num_row):
                         for col in range(self._num_col):
-                            grid_cell = self._model.layers[layer].grid_cells[row][col]
+                            grid_cell: GridCell = self._model.layers[layer].grid_cells[row][col]
                             file.write(
                                 f"{int(layer + 1)}  {int(row + 1)}  {int(col + 1)}  {grid_cell.top}  {grid_cell.bot}  {int(grid_cell.ibound)}  {grid_cell.hk}"
                                 f"  {grid_cell.hani}  {grid_cell.vka}  {grid_cell.vkcb}  {grid_cell.tkcb}  {grid_cell.sc1}  {grid_cell.sc2}"

@@ -12,7 +12,7 @@ import numpy as np
 
 import pycomus
 from pycomus.Utils import BoundaryCheck
-from pycomus.Utils.CONST_VALUE import EVT_PKG_NAME, EVT_FILE_NAME
+from pycomus.Utils.CONSTANTS import EVT_PKG_NAME, EVT_FILE_NAME
 
 
 class ComusEvt:
@@ -52,7 +52,7 @@ class ComusEvt:
         --------
         >>> import pycomus
         >>> model1 = pycomus.ComusModel(model_name="test")
-        >>> evtPkg = pycomus.ComusEvt(model, et_surf=1, et_rate=1, et_mxd=1, et_exp=1)
+        >>> evtPkg = pycomus.ComusEvt(model1, et_surf=1, et_rate=1, et_mxd=1, et_exp=1)
         """
         BoundaryCheck.check_bnd_queue(model)
         cms_dis = BoundaryCheck.get_cms_pars(model)
@@ -149,6 +149,12 @@ class ComusEvt:
         return res
 
     def write_file(self, folder_path: str):
+        """
+        Typically used as an internal function but can also be called directly, it outputs the `pycomus.ComusEvt`
+        module to the specified path as <EVT.in>.
+
+        :param folder_path: Output folder path.
+        """
         if not self._write_file_test(folder_path):
             os.remove(os.path.join(folder_path, EVT_FILE_NAME))
             sys.exit()
