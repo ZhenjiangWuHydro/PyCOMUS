@@ -82,7 +82,7 @@ class ComusPeriod:
             lines: List[str] = file.readlines()[1:]
         if len(lines[0].strip().split()) != 4:
             raise ValueError("The Control Params file header should have 30 fields.")
-        idx_list: List[int] = [int(line[0]) for line in lines]
+        idx_list: List[int] = [int(line.strip().split()[0]) for line in lines]
         if sorted(idx_list) != [i for i in range(1, len(idx_list) + 1)]:
             raise ValueError(f"Period id should start from 1 and continue consecutively to {len(idx_list) + 1}.")
         period = []

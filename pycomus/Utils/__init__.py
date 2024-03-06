@@ -1,1 +1,2 @@
-from .ReadData import ComusResult
+from .ReadData import ComusData
+from .Map import ComusPlot

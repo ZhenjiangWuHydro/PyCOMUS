@@ -146,10 +146,13 @@ class ComusRiv:
             sys.exit()
 
     def _write_file_test(self, folder_path: str) -> bool:
+        flag = 0
         period_len = len(self._period)
         with open(os.path.join(folder_path, RIV_FILE_NAME), "w") as file:
             file.write("IPER  ILYR  IROW  ICOL  SHEAD  EHEAD  COND  RIVBTM\n")
             periods = sorted(self.cond.keys())
+            if periods[0] != 0:
+                file.write(f"1  1  1  1  1E+100  1E+100  0  1E+100\n")
             for period in periods:
                 if not BoundaryCheck.check_period(period, period_len):
                     return False
@@ -180,4 +183,8 @@ class ComusRiv:
                                 file.write(
                                     f"{period + 1}  {layer + 1}  {row + 1}  {col + 1}  {shead_value[layer, row, col]}  "
                                     f"{ehead_value[layer, row, col]}  {cond_value[layer, row, col]}  {rivBtm_value[layer, row, col]}\n")
+                                if period == 0:
+                                    flag += 1
+                if flag == 0 and period == 0:
+                    file.write("1  1  1  1  0  1E+100  1E+100\n")
         return True

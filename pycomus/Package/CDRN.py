@@ -131,6 +131,7 @@ class ComusDrn:
             sys.exit()
 
     def _write_file_test(self, folder_path: str) -> bool:
+        flag = 0
         period_len = len(self._period)
         with open(os.path.join(folder_path, DRN_FILE_NAME), "w") as file:
             file.write("IPER  ILYR  IROW  ICOL  DELEV  COND\n")
@@ -157,4 +158,8 @@ class ComusDrn:
                                 file.write(
                                     f"{period + 1}  {layer + 1}  {row + 1}  {col + 1}  {delev_value[layer, row, col]}  "
                                     f"{cond_value[layer, row, col]}\n")
+                                if period == 0:
+                                    flag += 1
+                if flag == 0 and period == 0:
+                    file.write("1  1  1  1  1E+100  0\n")
         return True

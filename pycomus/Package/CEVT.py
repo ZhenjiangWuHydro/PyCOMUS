@@ -160,6 +160,7 @@ class ComusEvt:
             sys.exit()
 
     def _write_file_test(self, folder_path: str) -> bool:
+        flag = 0
         period_len = len(self._period)
         if self.evt not in [1, 2]:
             raise ValueError("IEvt should be 1 or 2.")
@@ -188,4 +189,8 @@ class ComusEvt:
                                     f"{period + 1}  {layer + 1}  {row + 1}  {col + 1}  {self.evt}  {ETSurf_value[layer, row, col]}  "
                                     f"{ETRate_value[layer, row, col]}  {ETMxd_value[layer, row, col]}  "
                                     f"{ETExp_value[layer, row, col]}  {self.num_seg}\n")
+                                if period == 0:
+                                    flag += 1
+                if flag == 0 and period == 0:
+                    file.write(f"1  1  1  1  {self.evt}  1E+100  0  1E+100  0  {self.num_seg}\n")
         return True

@@ -32,6 +32,19 @@ if __name__ == "__main__":
     lakPackage = pycomus.ComusLak.load(model, "./InputFiles/LAKCtrl.in", "./InputFiles/LAKPer.in",
                                        "./InputFiles/LAKGrd.in")
 
+    # Write Output
     model.write_files()
 
+    # Run Model
     model.run()
+
+    # Data Extract
+    data = pycomus.ComusData(model)
+    head = data.read_cell_head(tar_period=0, tar_iter=0, tar_layer=0)
+    map = pycomus.ComusPlot(model)
+    map.plot_grid()
+    map.plot_contour(head, contourf_kwargs={'cmap': 'viridis', 'alpha': 0.6},
+                     colorbar_kwargs={'orientation': 'vertical'},
+                     contour_kwargs={'colors': 'black', 'linestyles': 'dashed','levels':10},
+                     clabel_kwargs={'inline': True, 'fontsize': 8})
+    map.show_plot()

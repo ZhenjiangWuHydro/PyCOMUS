@@ -726,7 +726,6 @@ class ComusStr:
 
         with open(os.path.join(folder_path, STR_WAT_USE_FILE_NAME), "w") as file:
             file.write("WUREGID  ILYR  IROW  ICOL  RATIO\n")
-            print(watUse_data.keys())
             wuregId_value = watUse_data["WUREGID"]
             ratio_value = watUse_data["RATIO"]
             for layer in range(self._num_lyr):

@@ -16,16 +16,17 @@ PyCOMUS is a Python interface built upon the COMUS model, capable of performing 
 
 # Installation
 
-PyCOMUS requires **Python** 3.6+ with:
+PyCOMUS requires **Python 3.8+** with:
 
 ```python
-numpy >= 1.12.0
+numpy >=1.15.0,<2.0.0
+matplotlib >=1.4.0
 ```
 
 To install type:
 
 ```bash
-pip install PyCOMUS  # Todo
+pip install PyCOMUS
 ```
 
 
@@ -38,41 +39,79 @@ import numpy as np
 import pycomus
 
 if __name__ == "__main__":
-    # OneDimSteadyFlow：
+    # SubSim：
 
     # Create Model
-    model = pycomus.ComusModel(model_name="OneDimSteadyFlow")
+    model = pycomus.ComusModel(model_name="SubSim")
 
     # Control Params
-    control_pars = pycomus.ComusConPars(model=model, sim_type=1, max_iter=10000)
+    controlParams = pycomus.ComusConPars(model=model, solve=1, max_iter=10000, r_close=0.01)
 
-    # # Output Params
-    out_pars = pycomus.ComusOutputPars(model, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2)
+    # Output Params
+    outParams = pycomus.ComusOutputPars(model)
 
     # Create Grid And Layer
-    num_lyr = 1
-    num_row = 1
-    num_col = 20
-    column_spacing = [493.0318145, 453.5892693, 417.3021278, 383.9179575, 353.2045209, 324.9481593, 298.9523065,
-                      275.036122, 253.0332322, 232.7905737, 214.1673278, 197.0339415, 181.2712262, 166.7695281,
-                      153.4279659, 141.1537286, 129.8614303, 119.4725159, 109.9147146, 101.1215374]
-    model_dis = pycomus.ComusDisBcf(model, num_lyr=num_lyr, num_row=num_row, num_col=num_col, row_space=50,
-                                    col_space=column_spacing, lyr_type=[1], lyr_trpy=[1.0], x_coord=-125)
+    NumLyr = 3
+    NumRow = 10
+    NumCol = 10
+    modelDis = pycomus.ComusDisBcf(model, NumLyr, NumRow, NumCol, row_space=2000, col_space=1000,
+                                   lyr_type=[1, 0, 0], lyr_trpy=[1, 1, 1])
 
     # Grid Attribute
-    ibound = np.full((num_lyr, num_row, num_col), 1, dtype=int)
-    shead = np.full((num_lyr, num_row, num_col), 50, dtype=float)
-    ibound[0, 0, 0] = -1
-    ibound[0, 0, 19] = -1
-    shead[0, 0, 0] = 10
-    grid_pars = pycomus.ComusGridPars(model, top=50, bot=0, ibound=ibound, kx=1, shead=shead)
+    modelGridPar = pycomus.ComusGridPars.load(model, "./InputFiles/BcfGrd.in")
 
     # Set Period
-    period = pycomus.ComusPeriod(model, (1, 1, 1))
+    modelPeriod = pycomus.ComusPeriod(model, [(365.3, 6, 1.3)] * 30)
+
+    # Set WEL
+    evtPkg = pycomus.ComusWel.load(model, "./InputFiles/WEL.in")
+
+    # Set SUB
+    subPkg = pycomus.ComusSub(model, 3, 2, 1, 20, 0, 5, 2)
+    subPkg.set_mz_data({0: (1E-06, 6E-06, 0.0006)})
+    subPkg.set_ndb_lyr([0, 1, 2])
+    subPkg.set_db_lyr([0, 2])
+    sfe = np.zeros((3, NumRow, NumCol))
+    sfe[0, :, :] = 0.00021
+    sfe[1, :, :] = 0.00015
+    sfe[2, :, :] = 0.00042
+    sfv = np.zeros((3, NumRow, NumCol))
+    sfv[0, :, :] = 0.00912
+    sfv[1, :, :] = 0.015
+    sfv[1, 0, :] = 0.00758
+    sfv[1, -1, :] = 0.00758
+    sfv[2, :, :] = 0.01824
+    for i in range(1, 9):
+        sfv[1, i, 0] = 0.00758
+        sfv[1, i, -1] = 0.00758
+    subPkg.set_ndb_grid(hc=-7, sfe=sfe, sfv=sfv, com=0)
+    rnb = np.zeros((2, NumRow, NumCol))
+    rnb[0, :, :] = 7.635
+    rnb[-1, :, :] = 17.718
+    dsh = np.zeros((2, NumRow, NumCol))
+    dsh[0, :, :] = 0
+    dsh[-1, :, :] = -7
+    dz = np.zeros((2, NumRow, NumCol))
+    dz[0, :, :] = 5.894
+    dz[-1, :, :] = 5.08
+    subPkg.set_db_grid(rnb=rnb, dsh=dsh, dhc=-7, dcom=0, dz=dz, imz=1)
 
     # Write Output
     model.write_files()
 
     # Run Model
     model.run()
+
+    # Data Extract
+    data = pycomus.ComusData(model)
+    head = data.read_cell_head(tar_period=0, tar_iter=0, tar_layer=0)
+    map = pycomus.ComusPlot(model)
+    map.plot_grid()
+    map.plot_contour(head, contourf_kwargs={'cmap': 'viridis', 'alpha': 0.6},
+                     colorbar_kwargs={'orientation': 'vertical'},
+                     contour_kwargs={'colors': 'black', 'linestyles': 'dashed','levels':10},
+                     clabel_kwargs={'inline': True, 'fontsize': 8})
+    map.show_plot()
 ```
+
+![](./image/myplot.png)

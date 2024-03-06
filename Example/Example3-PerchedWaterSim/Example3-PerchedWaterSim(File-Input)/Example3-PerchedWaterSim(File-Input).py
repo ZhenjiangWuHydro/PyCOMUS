@@ -26,8 +26,17 @@ if __name__ == "__main__":
     # Set RCH
     rechargePackage = pycomus.ComusRch.load(model, "./InputFiles/RCH.in")
 
+    # Write Output
     model.write_files()
 
+    # Run Model
     model.run()
+
+    # Data Extract
+    data = pycomus.ComusData(model)
+    head = data.read_cell_head(tar_period=0, tar_iter=0, tar_layer=0)
+    map = pycomus.ComusPlot(model)
+    map.plot_grid()
+    map.show_plot()
 
 

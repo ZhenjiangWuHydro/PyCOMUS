@@ -132,6 +132,7 @@ class ComusWel:
             sys.exit()
 
     def _write_file_test(self, folder_path: str) -> bool:
+        flag = 0
         period_len = len(self._period)
         sim_dry_wet: bool = False
         con_pars = BoundaryCheck.get_con_pars(self._model)
@@ -161,4 +162,8 @@ class ComusWel:
                             file.write(
                                 f"{period + 1}  {layer + 1}  {row + 1}  {col + 1}  {wellr_value[layer, row, col]}  "
                                 f"{satthr_value[layer, row, col]}\n")
+                            if period == 0:
+                                flag += 1
+            if flag == 0 and period == 0:
+                file.write(f"1  1  1  1  0  0\n")
         return True

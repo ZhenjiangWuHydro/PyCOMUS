@@ -12,7 +12,7 @@ from pycomus.Utils.CONSTANTS import OUT_PKG_NAME, OUT_FILE_NAME
 
 class ComusOutputPars:
     def __init__(self, model, gdw_bd: int = 1, lyr_bd: int = 1, cell_bd: int = 1, cell_hh: int = 1,
-                 cell_dd: int = 1, cell_flp: int = 1, lak_bd: int = 1, segm_bd: int = 1, rech_bd: int = 1,
+                 cell_dd: int = 1, cell_flo: int = 1, lak_bd: int = 1, segm_bd: int = 1, rech_bd: int = 1,
                  ibs: int = 1, sub: int = 1, ndb: int = 1, db: int = 1, reg_bd: int = 1):
         """
         Set COMUS Model Output Params Attributes.
@@ -37,7 +37,7 @@ class ComusOutputPars:
             Grid cell head output control option.
         cell_dd: int
             Grid cell draw down output control option.
-        cell_flp: int
+        cell_flo: int
             Inter-cell flow output control option.
         lak_bd: int
             Lake balance output control option.
@@ -73,7 +73,7 @@ class ComusOutputPars:
             'cell_bd': cell_bd,
             'cell_hh': cell_hh,
             'cell_dd': cell_dd,
-            'cell_flp': cell_flp,
+            'cell_flo': cell_flo,
             'lak_bd': lak_bd,
             'segm_bd': segm_bd,
             'rech_bd': rech_bd,
@@ -94,7 +94,7 @@ class ComusOutputPars:
         self.cell_bd = cell_bd
         self.cell_hh = cell_hh
         self.cell_dd = cell_dd
-        self.cell_flp = cell_flp
+        self.cell_flo = cell_flo
         self.lak_bd = lak_bd
         self.segm_bd = segm_bd
         self.rech_bd = rech_bd
@@ -145,7 +145,7 @@ class ComusOutputPars:
                        cell_bd=int(data[2]),
                        cell_hh=int(data[3]),
                        cell_dd=int(data[4]),
-                       cell_flp=int(data[5]),
+                       cell_flo=int(data[5]),
                        lak_bd=int(data[6]),
                        segm_bd=int(data[7]),
                        rech_bd=int(data[8]),
@@ -168,6 +168,6 @@ class ComusOutputPars:
                 "GDWBDPRN  LYRBDPRN  CELLBDPRN  CELLHHPRN  CELLDDPRN  CELLFLPRN  LAKBDPRN  SEGMBDPRN  RECHBDPRN  "
                 "IBSPRN  SUBPRN  NDBPRN  DBPRN  REGBDPRN\n")
             file.write(f"{self.gdw_bd}  {self.lyr_bd}  {self.cell_bd}  {self.cell_hh}  "
-                       f"{self.cell_dd}  {self.cell_flp}  {self.lak_bd}  {self.segm_bd}  "
+                       f"{self.cell_dd}  {self.cell_flo}  {self.lak_bd}  {self.segm_bd}  "
                        f"{self.rech_bd}  {self.ibs}  {self.sub}  {self.ndb}  {self.db}  "
                        f"{self.reg_bd}")
