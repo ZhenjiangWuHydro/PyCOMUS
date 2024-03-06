@@ -26,3 +26,5 @@ ComusModel
 CheckParam
 *.docx
 paper
+build
+dist
