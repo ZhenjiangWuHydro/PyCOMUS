@@ -68,7 +68,7 @@ if __name__ == "__main__":
 
     # Data Extract
     data = pycomus.ComusData(model)
-    head = data.read_cell_head(tar_period=0, tar_iter=0, tar_layer=0)
+    head = data.read_cell_head(tar_period=25, tar_iter=0, tar_layer=2)
     map = pycomus.ComusPlot(model)
     map.plot_grid()
     map.plot_contour(head, contourf_kwargs={'cmap': 'viridis', 'alpha': 0.6},

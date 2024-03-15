@@ -68,19 +68,24 @@ class ComusModel:
         Run COMUS Model.
         """
         system = platform.system()
+        current_file_path = os.path.abspath(__file__)
+        current_dir_path = os.path.dirname(current_file_path)
         if system == 'Windows':
-            current_file_path = os.path.abspath(__file__)
-            current_dir_path = os.path.dirname(current_file_path)
-            dll_path = os.path.join(current_dir_path, '.././Utils', 'COMUS.dll')
+            dll_path = os.path.join(current_dir_path, '.././Utils', 'WinComus.dll')
+            comusModel = ctypes.CDLL(dll_path)
+            comusModel.RunModel.argtypes = [ctypes.c_wchar_p]
+            comusModel.RunModel.restype = ctypes.c_int
+            data_path = os.path.join(os.getcwd(), self.model_name)
+            comusModel.RunModel(data_path)
+        elif system == 'Linux':
+            dll_path = os.path.join(current_dir_path, '.././Utils', 'LinuxComus.dll')
             comusModel = ctypes.CDLL(dll_path)
             comusModel.RunModel.argtypes = [ctypes.c_char_p]
             comusModel.RunModel.restype = ctypes.c_int
-            data_path = os.path.join(os.getcwd(), self.model_name).encode('utf-8')
-            comusModel.RunModel(data_path)
-        elif system == 'Linux':
-            print('Linux')
+            data_path = os.path.join(os.getcwd(), self.model_name)
+            comusModel.RunModel(ctypes.c_char_p(data_path.encode('utf-8')))
         else:
-            print('Unknown')
+            raise ValueError("Pycomus only supports Windows and Linux systems.")
 
     def __str__(self):
         return f"ComusModel:\n    COMUS Model Name: {self.model_name}"

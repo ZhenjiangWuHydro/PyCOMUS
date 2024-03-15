@@ -6,6 +6,7 @@
 # --------------------------------------------------------------
 import ctypes
 import os
+import platform
 import sys
 from typing import List
 
@@ -191,7 +192,13 @@ class ComusConPars:
     def _SetDlls(self):
         current_file_path = os.path.abspath(__file__)
         current_dir_path = os.path.dirname(current_file_path)
-        dll_path = os.path.join(current_dir_path, '.././Utils', 'CheckParams.dll')
+        system = platform.system()
+        if system == 'Windows':
+            dll_path = os.path.join(current_dir_path, '.././Utils', 'WinCheckParams.dll')
+        elif system == 'Linux':
+            dll_path = os.path.join(current_dir_path, '.././Utils', 'LinuxCheckParams.so')
+        else:
+            raise ValueError("Pycomus only supports Windows and Linux systems.")
         self._CheckLib = ctypes.CDLL(dll_path)
         self._CheckLib.CheckCtrlParData.argtypes = [ctypes.c_int, ctypes.c_int, ctypes.c_double,
                                                     ctypes.c_int, ctypes.c_int, ctypes.c_int, ctypes.c_double,
