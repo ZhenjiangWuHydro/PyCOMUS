@@ -690,7 +690,6 @@ class ComusStr:
         with open(os.path.join(folder_path, STR_GRID_FILE_NAME), "w") as file:
             file.write("SEGMID  CELLID  ILYR  IROW  ICOL  LEN  BTM  BWDT  SIZH1  SIZH2  BVK  BTK  SLP  NDC\n")
             segIds = sorted(grid_data["CELLID"].keys())
-
             for segId in segIds:
                 # 收集该segId下的所有数据
                 data_to_sort = []

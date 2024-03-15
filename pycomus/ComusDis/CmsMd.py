@@ -78,7 +78,7 @@ class ComusModel:
             data_path = os.path.join(os.getcwd(), self.model_name)
             comusModel.RunModel(data_path)
         elif system == 'Linux':
-            dll_path = os.path.join(current_dir_path, '.././Utils', 'LinuxComus.dll')
+            dll_path = os.path.join(current_dir_path, '.././Utils', 'LinuxComus.so')
             comusModel = ctypes.CDLL(dll_path)
             comusModel.RunModel.argtypes = [ctypes.c_char_p]
             comusModel.RunModel.restype = ctypes.c_int
