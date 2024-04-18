@@ -20,7 +20,7 @@ env/
 tmp/
 temp/
 
-build
+
 PyCOMUS.egg-info
 ComusModel
 CheckParam

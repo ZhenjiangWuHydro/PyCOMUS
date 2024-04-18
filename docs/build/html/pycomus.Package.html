@@ -1,0 +1,1296 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pycomus.Package package &mdash; PyCOMUS 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/documentation_options.js?v=8d563738"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            PyCOMUS
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">pycomus.Package package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-pycomus.Package.CDRN">pycomus.Package.CDRN module</a><ul>
+<li><a class="reference internal" href="#pycomus.Package.CDRN.ComusDrn"><code class="docutils literal notranslate"><span class="pre">ComusDrn</span></code></a><ul>
+<li><a class="reference internal" href="#pycomus.Package.CDRN.ComusDrn.load"><code class="docutils literal notranslate"><span class="pre">ComusDrn.load()</span></code></a></li>
+<li><a class="reference internal" href="#pycomus.Package.CDRN.ComusDrn.write_file"><code class="docutils literal notranslate"><span class="pre">ComusDrn.write_file()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pycomus.Package.CEVT">pycomus.Package.CEVT module</a><ul>
+<li><a class="reference internal" href="#pycomus.Package.CEVT.ComusEvt"><code class="docutils literal notranslate"><span class="pre">ComusEvt</span></code></a><ul>
+<li><a class="reference internal" href="#pycomus.Package.CEVT.ComusEvt.load"><code class="docutils literal notranslate"><span class="pre">ComusEvt.load()</span></code></a></li>
+<li><a class="reference internal" href="#pycomus.Package.CEVT.ComusEvt.write_file"><code class="docutils literal notranslate"><span class="pre">ComusEvt.write_file()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pycomus.Package.CGHB">pycomus.Package.CGHB module</a><ul>
+<li><a class="reference internal" href="#pycomus.Package.CGHB.ComusGhb"><code class="docutils literal notranslate"><span class="pre">ComusGhb</span></code></a><ul>
+<li><a class="reference internal" href="#pycomus.Package.CGHB.ComusGhb.load"><code class="docutils literal notranslate"><span class="pre">ComusGhb.load()</span></code></a></li>
+<li><a class="reference internal" href="#pycomus.Package.CGHB.ComusGhb.write_file"><code class="docutils literal notranslate"><span class="pre">ComusGhb.write_file()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pycomus.Package.CHFB">pycomus.Package.CHFB module</a><ul>
+<li><a class="reference internal" href="#pycomus.Package.CHFB.ComusHfb"><code class="docutils literal notranslate"><span class="pre">ComusHfb</span></code></a><ul>
+<li><a class="reference internal" href="#pycomus.Package.CHFB.ComusHfb.load"><code class="docutils literal notranslate"><span class="pre">ComusHfb.load()</span></code></a></li>
+<li><a class="reference internal" href="#pycomus.Package.CHFB.ComusHfb.write_file"><code class="docutils literal notranslate"><span class="pre">ComusHfb.write_file()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pycomus.Package.CIBS">pycomus.Package.CIBS module</a><ul>
+<li><a class="reference internal" href="#pycomus.Package.CIBS.ComusIbs"><code class="docutils literal notranslate"><span class="pre">ComusIbs</span></code></a><ul>
+<li><a class="reference internal" href="#pycomus.Package.CIBS.ComusIbs.load"><code class="docutils literal notranslate"><span class="pre">ComusIbs.load()</span></code></a></li>
+<li><a class="reference internal" href="#pycomus.Package.CIBS.ComusIbs.write_file"><code class="docutils literal notranslate"><span class="pre">ComusIbs.write_file()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pycomus.Package.CLAK">pycomus.Package.CLAK module</a><ul>
+<li><a class="reference internal" href="#pycomus.Package.CLAK.ComusLak"><code class="docutils literal notranslate"><span class="pre">ComusLak</span></code></a><ul>
+<li><a class="reference internal" href="#pycomus.Package.CLAK.ComusLak.load"><code class="docutils literal notranslate"><span class="pre">ComusLak.load()</span></code></a></li>
+<li><a class="reference internal" href="#pycomus.Package.CLAK.ComusLak.set_control_params"><code class="docutils literal notranslate"><span class="pre">ComusLak.set_control_params()</span></code></a></li>
+<li><a class="reference internal" href="#pycomus.Package.CLAK.ComusLak.set_grid_data"><code class="docutils literal notranslate"><span class="pre">ComusLak.set_grid_data()</span></code></a></li>
+<li><a class="reference internal" href="#pycomus.Package.CLAK.ComusLak.set_period_data"><code class="docutils literal notranslate"><span class="pre">ComusLak.set_period_data()</span></code></a></li>
+<li><a class="reference internal" href="#pycomus.Package.CLAK.ComusLak.write_file"><code class="docutils literal notranslate"><span class="pre">ComusLak.write_file()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pycomus.Package.CLAK.Lak"><code class="docutils literal notranslate"><span class="pre">Lak</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pycomus.Package.CRCH">pycomus.Package.CRCH module</a><ul>
+<li><a class="reference internal" href="#pycomus.Package.CRCH.ComusRch"><code class="docutils literal notranslate"><span class="pre">ComusRch</span></code></a><ul>
+<li><a class="reference internal" href="#pycomus.Package.CRCH.ComusRch.load"><code class="docutils literal notranslate"><span class="pre">ComusRch.load()</span></code></a></li>
+<li><a class="reference internal" href="#pycomus.Package.CRCH.ComusRch.write_file"><code class="docutils literal notranslate"><span class="pre">ComusRch.write_file()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pycomus.Package.CREG">pycomus.Package.CREG module</a><ul>
+<li><a class="reference internal" href="#pycomus.Package.CREG.ComusReg"><code class="docutils literal notranslate"><span class="pre">ComusReg</span></code></a><ul>
+<li><a class="reference internal" href="#pycomus.Package.CREG.ComusReg.load"><code class="docutils literal notranslate"><span class="pre">ComusReg.load()</span></code></a></li>
+<li><a class="reference internal" href="#pycomus.Package.CREG.ComusReg.write_file"><code class="docutils literal notranslate"><span class="pre">ComusReg.write_file()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pycomus.Package.CRES">pycomus.Package.CRES module</a><ul>
+<li><a class="reference internal" href="#pycomus.Package.CRES.ComusRes"><code class="docutils literal notranslate"><span class="pre">ComusRes</span></code></a><ul>
+<li><a class="reference internal" href="#pycomus.Package.CRES.ComusRes.load"><code class="docutils literal notranslate"><span class="pre">ComusRes.load()</span></code></a></li>
+<li><a class="reference internal" href="#pycomus.Package.CRES.ComusRes.set_control_params"><code class="docutils literal notranslate"><span class="pre">ComusRes.set_control_params()</span></code></a></li>
+<li><a class="reference internal" href="#pycomus.Package.CRES.ComusRes.set_grid_data"><code class="docutils literal notranslate"><span class="pre">ComusRes.set_grid_data()</span></code></a></li>
+<li><a class="reference internal" href="#pycomus.Package.CRES.ComusRes.set_period_data"><code class="docutils literal notranslate"><span class="pre">ComusRes.set_period_data()</span></code></a></li>
+<li><a class="reference internal" href="#pycomus.Package.CRES.ComusRes.write_file"><code class="docutils literal notranslate"><span class="pre">ComusRes.write_file()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pycomus.Package.CRES.Res"><code class="docutils literal notranslate"><span class="pre">Res</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pycomus.Package.CRIV">pycomus.Package.CRIV module</a><ul>
+<li><a class="reference internal" href="#pycomus.Package.CRIV.ComusRiv"><code class="docutils literal notranslate"><span class="pre">ComusRiv</span></code></a><ul>
+<li><a class="reference internal" href="#pycomus.Package.CRIV.ComusRiv.load"><code class="docutils literal notranslate"><span class="pre">ComusRiv.load()</span></code></a></li>
+<li><a class="reference internal" href="#pycomus.Package.CRIV.ComusRiv.write_file"><code class="docutils literal notranslate"><span class="pre">ComusRiv.write_file()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pycomus.Package.CSHB">pycomus.Package.CSHB module</a><ul>
+<li><a class="reference internal" href="#pycomus.Package.CSHB.ComusShb"><code class="docutils literal notranslate"><span class="pre">ComusShb</span></code></a><ul>
+<li><a class="reference internal" href="#pycomus.Package.CSHB.ComusShb.load"><code class="docutils literal notranslate"><span class="pre">ComusShb.load()</span></code></a></li>
+<li><a class="reference internal" href="#pycomus.Package.CSHB.ComusShb.write_file"><code class="docutils literal notranslate"><span class="pre">ComusShb.write_file()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pycomus.Package.CSTR">pycomus.Package.CSTR module</a><ul>
+<li><a class="reference internal" href="#pycomus.Package.CSTR.ComusStr"><code class="docutils literal notranslate"><span class="pre">ComusStr</span></code></a><ul>
+<li><a class="reference internal" href="#pycomus.Package.CSTR.ComusStr.load"><code class="docutils literal notranslate"><span class="pre">ComusStr.load()</span></code></a></li>
+<li><a class="reference internal" href="#pycomus.Package.CSTR.ComusStr.load_ctrlPars_file"><code class="docutils literal notranslate"><span class="pre">ComusStr.load_ctrlPars_file()</span></code></a></li>
+<li><a class="reference internal" href="#pycomus.Package.CSTR.ComusStr.load_period_file"><code class="docutils literal notranslate"><span class="pre">ComusStr.load_period_file()</span></code></a></li>
+<li><a class="reference internal" href="#pycomus.Package.CSTR.ComusStr.load_strGrid_file"><code class="docutils literal notranslate"><span class="pre">ComusStr.load_strGrid_file()</span></code></a></li>
+<li><a class="reference internal" href="#pycomus.Package.CSTR.ComusStr.load_watDrn_file"><code class="docutils literal notranslate"><span class="pre">ComusStr.load_watDrn_file()</span></code></a></li>
+<li><a class="reference internal" href="#pycomus.Package.CSTR.ComusStr.load_watUse_file"><code class="docutils literal notranslate"><span class="pre">ComusStr.load_watUse_file()</span></code></a></li>
+<li><a class="reference internal" href="#pycomus.Package.CSTR.ComusStr.set_ControlData"><code class="docutils literal notranslate"><span class="pre">ComusStr.set_ControlData()</span></code></a></li>
+<li><a class="reference internal" href="#pycomus.Package.CSTR.ComusStr.set_GridData"><code class="docutils literal notranslate"><span class="pre">ComusStr.set_GridData()</span></code></a></li>
+<li><a class="reference internal" href="#pycomus.Package.CSTR.ComusStr.set_PeriodData"><code class="docutils literal notranslate"><span class="pre">ComusStr.set_PeriodData()</span></code></a></li>
+<li><a class="reference internal" href="#pycomus.Package.CSTR.ComusStr.set_WatDrnData"><code class="docutils literal notranslate"><span class="pre">ComusStr.set_WatDrnData()</span></code></a></li>
+<li><a class="reference internal" href="#pycomus.Package.CSTR.ComusStr.set_WatUseData"><code class="docutils literal notranslate"><span class="pre">ComusStr.set_WatUseData()</span></code></a></li>
+<li><a class="reference internal" href="#pycomus.Package.CSTR.ComusStr.write_file"><code class="docutils literal notranslate"><span class="pre">ComusStr.write_file()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pycomus.Package.CSTR.Stream"><code class="docutils literal notranslate"><span class="pre">Stream</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pycomus.Package.CSUB">pycomus.Package.CSUB module</a><ul>
+<li><a class="reference internal" href="#pycomus.Package.CSUB.ComusSub"><code class="docutils literal notranslate"><span class="pre">ComusSub</span></code></a><ul>
+<li><a class="reference internal" href="#pycomus.Package.CSUB.ComusSub.load"><code class="docutils literal notranslate"><span class="pre">ComusSub.load()</span></code></a></li>
+<li><a class="reference internal" href="#pycomus.Package.CSUB.ComusSub.set_db_grid"><code class="docutils literal notranslate"><span class="pre">ComusSub.set_db_grid()</span></code></a></li>
+<li><a class="reference internal" href="#pycomus.Package.CSUB.ComusSub.set_db_lyr"><code class="docutils literal notranslate"><span class="pre">ComusSub.set_db_lyr()</span></code></a></li>
+<li><a class="reference internal" href="#pycomus.Package.CSUB.ComusSub.set_mz_data"><code class="docutils literal notranslate"><span class="pre">ComusSub.set_mz_data()</span></code></a></li>
+<li><a class="reference internal" href="#pycomus.Package.CSUB.ComusSub.set_ndb_grid"><code class="docutils literal notranslate"><span class="pre">ComusSub.set_ndb_grid()</span></code></a></li>
+<li><a class="reference internal" href="#pycomus.Package.CSUB.ComusSub.set_ndb_lyr"><code class="docutils literal notranslate"><span class="pre">ComusSub.set_ndb_lyr()</span></code></a></li>
+<li><a class="reference internal" href="#pycomus.Package.CSUB.ComusSub.write_file"><code class="docutils literal notranslate"><span class="pre">ComusSub.write_file()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pycomus.Package.CSUB.LandSub"><code class="docutils literal notranslate"><span class="pre">LandSub</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pycomus.Package.CWEL">pycomus.Package.CWEL module</a><ul>
+<li><a class="reference internal" href="#pycomus.Package.CWEL.ComusWel"><code class="docutils literal notranslate"><span class="pre">ComusWel</span></code></a><ul>
+<li><a class="reference internal" href="#pycomus.Package.CWEL.ComusWel.load"><code class="docutils literal notranslate"><span class="pre">ComusWel.load()</span></code></a></li>
+<li><a class="reference internal" href="#pycomus.Package.CWEL.ComusWel.write_file"><code class="docutils literal notranslate"><span class="pre">ComusWel.write_file()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-pycomus.Package">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PyCOMUS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">pycomus.Package package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/pycomus.Package.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="pycomus-package-package">
+<h1>pycomus.Package package<a class="headerlink" href="#pycomus-package-package" title="Link to this heading">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
+</section>
+<section id="module-pycomus.Package.CDRN">
+<span id="pycomus-package-cdrn-module"></span><h2>pycomus.Package.CDRN module<a class="headerlink" href="#module-pycomus.Package.CDRN" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pycomus.Package.CDRN.ComusDrn">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pycomus.Package.CDRN.</span></span><span class="sig-name descname"><span class="pre">ComusDrn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pycomus.ComusDis.html#pycomus.ComusDis.CmsMd.ComusModel" title="pycomus.ComusDis.CmsMd.ComusModel"><span class="pre">ComusModel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">cond</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delev</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycomus.Package.CDRN.ComusDrn" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pycomus.Package.CDRN.ComusDrn.load">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drn_params_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycomus.Package.CDRN.ComusDrn.load" title="Link to this definition">¶</a></dt>
+<dd><p>Load parameters from a DRN.in file and create a ComusDrn instance.</p>
+<section id="parameters">
+<h3>Parameters:<a class="headerlink" href="#parameters" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>model: pycomus.ComusModel</dt><dd><p>COMUS Model Object.</p>
+</dd>
+<dt>drn_params_file: str</dt><dd><p>Grid DRN Params File Path(DRN.in).</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h3>Returns:<a class="headerlink" href="#returns" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>instance: pycomus.ComusDrn</dt><dd><p>COMUS Drainage(DRN) Params Object.</p>
+</dd>
+</dl>
+</section>
+<section id="example">
+<h3>Example:<a class="headerlink" href="#example" title="Link to this heading">¶</a></h3>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pycomus</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model1</span> <span class="o">=</span> <span class="n">pycomus</span><span class="o">.</span><span class="n">ComusModel</span><span class="p">(</span><span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">drnPkg</span> <span class="o">=</span> <span class="n">pycomus</span><span class="o">.</span><span class="n">ComusDrn</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s2">&quot;./InputFiles/DRN.in&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycomus.Package.CDRN.ComusDrn.write_file">
+<span class="sig-name descname"><span class="pre">write_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycomus.Package.CDRN.ComusDrn.write_file" title="Link to this definition">¶</a></dt>
+<dd><p>Typically used as an internal function but can also be called directly, it outputs the <cite>pycomus.ComusDrn</cite>
+module to the specified path as &lt;DRN.in&gt;.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>folder_path</strong> – Output folder path.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pycomus.Package.CEVT">
+<span id="pycomus-package-cevt-module"></span><h2>pycomus.Package.CEVT module<a class="headerlink" href="#module-pycomus.Package.CEVT" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pycomus.Package.CEVT.ComusEvt">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pycomus.Package.CEVT.</span></span><span class="sig-name descname"><span class="pre">ComusEvt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pycomus.ComusDis.html#pycomus.ComusDis.CmsMd.ComusModel" title="pycomus.ComusDis.CmsMd.ComusModel"><span class="pre">ComusModel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">et_surf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">et_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">et_mxd</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">et_exp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_seg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycomus.Package.CEVT.ComusEvt" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pycomus.Package.CEVT.ComusEvt.load">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pycomus.ComusDis.html#pycomus.ComusDis.CmsMd.ComusModel" title="pycomus.ComusDis.CmsMd.ComusModel"><span class="pre">ComusModel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">evt_params_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycomus.Package.CEVT.ComusEvt.load" title="Link to this definition">¶</a></dt>
+<dd><p>Load parameters from a EVT.in file and create a ComusEvt instance.</p>
+<section id="id1">
+<h3>Parameters:<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>model: pycomus.ComusModel</dt><dd><p>COMUS Model Object.</p>
+</dd>
+<dt>evt_params_file: str</dt><dd><p>Grid EVT Params File Path(EVT.in).</p>
+</dd>
+</dl>
+</section>
+<section id="id2">
+<h3>Returns:<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>instance: pycomus.ComusEvt</dt><dd><p>COMUS Evapotranspiration(EVT) Params Object.</p>
+</dd>
+</dl>
+</section>
+<section id="id3">
+<h3>Example:<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h3>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pycomus</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model1</span> <span class="o">=</span> <span class="n">pycomus</span><span class="o">.</span><span class="n">ComusModel</span><span class="p">(</span><span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">evtPkg</span> <span class="o">=</span> <span class="n">pycomus</span><span class="o">.</span><span class="n">ComusRch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">model1</span><span class="p">,</span> <span class="s2">&quot;./InputFiles/EVT.in&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycomus.Package.CEVT.ComusEvt.write_file">
+<span class="sig-name descname"><span class="pre">write_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycomus.Package.CEVT.ComusEvt.write_file" title="Link to this definition">¶</a></dt>
+<dd><p>Typically used as an internal function but can also be called directly, it outputs the <cite>pycomus.ComusEvt</cite>
+module to the specified path as &lt;EVT.in&gt;.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>folder_path</strong> – Output folder path.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pycomus.Package.CGHB">
+<span id="pycomus-package-cghb-module"></span><h2>pycomus.Package.CGHB module<a class="headerlink" href="#module-pycomus.Package.CGHB" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pycomus.Package.CGHB.ComusGhb">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pycomus.Package.CGHB.</span></span><span class="sig-name descname"><span class="pre">ComusGhb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pycomus.ComusDis.html#pycomus.ComusDis.CmsMd.ComusModel" title="pycomus.ComusDis.CmsMd.ComusModel"><span class="pre">ComusModel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">cond</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shead</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ehead</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycomus.Package.CGHB.ComusGhb" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pycomus.Package.CGHB.ComusGhb.load">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ghb_params_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycomus.Package.CGHB.ComusGhb.load" title="Link to this definition">¶</a></dt>
+<dd><p>Load parameters from a GHB.in file and create a ComusGhb instance.</p>
+<section id="id4">
+<h3>Parameters:<a class="headerlink" href="#id4" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>model: pycomus.ComusModel</dt><dd><p>COMUS Model Object.</p>
+</dd>
+<dt>ghb_params_file: str</dt><dd><p>Grid GHB Params File Path(GHB.in).</p>
+</dd>
+</dl>
+</section>
+<section id="id5">
+<h3>Returns:<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>instance: pycomus.ComusGhb</dt><dd><p>COMUS General-Head Boundary(GHB) Params Object.</p>
+</dd>
+</dl>
+</section>
+<section id="id6">
+<h3>Example:<a class="headerlink" href="#id6" title="Link to this heading">¶</a></h3>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pycomus</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model1</span> <span class="o">=</span> <span class="n">pycomus</span><span class="o">.</span><span class="n">ComusModel</span><span class="p">(</span><span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ghbPackage</span> <span class="o">=</span> <span class="n">pycomus</span><span class="o">.</span><span class="n">ComusGhb</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">model1</span><span class="p">,</span> <span class="s2">&quot;./InputFiles/DRN.in&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycomus.Package.CGHB.ComusGhb.write_file">
+<span class="sig-name descname"><span class="pre">write_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycomus.Package.CGHB.ComusGhb.write_file" title="Link to this definition">¶</a></dt>
+<dd><p>Typically used as an internal function but can also be called directly, it outputs the <cite>pycomus.ComusGhb</cite>
+module to the specified path as &lt;GHB.in&gt;.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>folder_path</strong> – Output folder path.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pycomus.Package.CHFB">
+<span id="pycomus-package-chfb-module"></span><h2>pycomus.Package.CHFB module<a class="headerlink" href="#module-pycomus.Package.CHFB" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pycomus.Package.CHFB.ComusHfb">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pycomus.Package.CHFB.</span></span><span class="sig-name descname"><span class="pre">ComusHfb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pycomus.ComusDis.html#pycomus.ComusDis.CmsMd.ComusModel" title="pycomus.ComusDis.CmsMd.ComusModel"><span class="pre">ComusModel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">hfb_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycomus.Package.CHFB.ComusHfb" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pycomus.Package.CHFB.ComusHfb.load">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hfb_params_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycomus.Package.CHFB.ComusHfb.load" title="Link to this definition">¶</a></dt>
+<dd><p>Load parameters from a HFB.in file and create a ComusHfb instance.</p>
+<section id="id7">
+<h3>Parameters:<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>model: pycomus.ComusModel</dt><dd><p>COMUS Model Object.</p>
+</dd>
+<dt>hfb_params_file: str</dt><dd><p>Grid HFB Params File Path(HFB.in).</p>
+</dd>
+</dl>
+</section>
+<section id="id8">
+<h3>Returns:<a class="headerlink" href="#id8" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>instance: pycomus.ComusHfb</dt><dd><p>COMUS Horizontal-Flow Barrier(HFB) Params Object.</p>
+</dd>
+</dl>
+</section>
+<section id="id9">
+<h3>Example:<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h3>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pycomus</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model1</span> <span class="o">=</span> <span class="n">pycomus</span><span class="o">.</span><span class="n">ComusModel</span><span class="p">(</span><span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hfbPackage</span> <span class="o">=</span> <span class="n">pycomus</span><span class="o">.</span><span class="n">ComusHfb</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">model1</span><span class="p">,</span> <span class="s2">&quot;./InputFiles/HFB.in&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycomus.Package.CHFB.ComusHfb.write_file">
+<span class="sig-name descname"><span class="pre">write_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycomus.Package.CHFB.ComusHfb.write_file" title="Link to this definition">¶</a></dt>
+<dd><p>Typically used as an internal function but can also be called directly, it outputs the <cite>pycomus.ComusHfb</cite>
+module to the specified path as &lt;HFB.in&gt;.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>folder_path</strong> – Output folder path.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pycomus.Package.CIBS">
+<span id="pycomus-package-cibs-module"></span><h2>pycomus.Package.CIBS module<a class="headerlink" href="#module-pycomus.Package.CIBS" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pycomus.Package.CIBS.ComusIbs">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pycomus.Package.CIBS.</span></span><span class="sig-name descname"><span class="pre">ComusIbs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pycomus.ComusDis.html#pycomus.ComusDis.CmsMd.ComusModel" title="pycomus.ComusDis.CmsMd.ComusModel"><span class="pre">ComusModel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">hc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sfe</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sfv</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">com</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycomus.Package.CIBS.ComusIbs" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pycomus.Package.CIBS.ComusIbs.load">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ibs_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycomus.Package.CIBS.ComusIbs.load" title="Link to this definition">¶</a></dt>
+<dd><p>Load parameters from a IBS.in file and create a ComusIbs instance.</p>
+<section id="id10">
+<h3>Parameters:<a class="headerlink" href="#id10" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>model: pycomus.ComusModel</dt><dd><p>COMUS Model Object.</p>
+</dd>
+<dt>ibs_file: str</dt><dd><p>Grid IBS Params File Path(IBS.in).</p>
+</dd>
+</dl>
+</section>
+<section id="id11">
+<h3>Returns:<a class="headerlink" href="#id11" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>instance: pycomus.ComusIbs</dt><dd><p>COMUS Interbed Storage(IBS) Params Object.</p>
+</dd>
+</dl>
+</section>
+<section id="id12">
+<h3>Example:<a class="headerlink" href="#id12" title="Link to this heading">¶</a></h3>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pycomus</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model1</span> <span class="o">=</span> <span class="n">pycomus</span><span class="o">.</span><span class="n">ComusModel</span><span class="p">(</span><span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ibsPackage</span> <span class="o">=</span> <span class="n">pycomus</span><span class="o">.</span><span class="n">ComusIbs</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">model1</span><span class="p">,</span> <span class="s2">&quot;./InputFiles/IBS.in&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycomus.Package.CIBS.ComusIbs.write_file">
+<span class="sig-name descname"><span class="pre">write_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycomus.Package.CIBS.ComusIbs.write_file" title="Link to this definition">¶</a></dt>
+<dd><p>Typically used as an internal function but can also be called directly, it outputs the <cite>pycomus.ComusIbs</cite>
+module to the specified path as &lt;IBS.in&gt;.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>folder_path</strong> – Output folder path.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pycomus.Package.CLAK">
+<span id="pycomus-package-clak-module"></span><h2>pycomus.Package.CLAK module<a class="headerlink" href="#module-pycomus.Package.CLAK" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pycomus.Package.CLAK.ComusLak">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pycomus.Package.CLAK.</span></span><span class="sig-name descname"><span class="pre">ComusLak</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lake_num</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycomus.Package.CLAK.ComusLak" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pycomus.Package.CLAK.ComusLak.load">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctrl_pars_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycomus.Package.CLAK.ComusLak.load" title="Link to this definition">¶</a></dt>
+<dd><p>Load parameters from LAK(LAKCtrl.in, LAKPer.in, LAKGrd.in) file and create a ComusLak instance.</p>
+<section id="id13">
+<h3>Parameters:<a class="headerlink" href="#id13" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>model: pycomus.ComusModel</dt><dd><p>COMUS Model Object.</p>
+</dd>
+<dt>ctrl_pars_file: str</dt><dd><p>LAK Control Params File Path(LAKCtrl.in).</p>
+</dd>
+<dt>period_file: str</dt><dd><p>LAK Period Params File Path(LAKPer.in).</p>
+</dd>
+<dt>grid_file: str</dt><dd><p>LAK Grid Params File Path(LAKGrd.in).</p>
+</dd>
+</dl>
+</section>
+<section id="id14">
+<h3>Returns:<a class="headerlink" href="#id14" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>instance: pycomus.ComusLak</dt><dd><p>COMUS Lake(LAK) Params Object.</p>
+</dd>
+</dl>
+</section>
+<section id="id15">
+<h3>Example:<a class="headerlink" href="#id15" title="Link to this heading">¶</a></h3>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pycomus</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model1</span> <span class="o">=</span> <span class="n">pycomus</span><span class="o">.</span><span class="n">ComusModel</span><span class="p">(</span><span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lakPackage</span> <span class="o">=</span> <span class="n">pycomus</span><span class="o">.</span><span class="n">ComusLak</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">model1</span><span class="p">,</span> <span class="s2">&quot;LAKCtrl.in&quot;</span><span class="p">,</span> <span class="s2">&quot;LAKPer.in&quot;</span><span class="p">,</span> <span class="s2">&quot;LAKGrd.in&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycomus.Package.CLAK.ComusLak.set_control_params">
+<span class="sig-name descname"><span class="pre">set_control_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">control_params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pycomus.Package.CLAK.ComusLak.set_control_params" title="Link to this definition">¶</a></dt>
+<dd><p>Set Lake Control Params.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>control_params</strong> – A Dict type data where the keys represent the lake IDs, and the values are Tuples containing 13
+elements: STRID, DIVSID, DIVSAT, BETA, INIHLEV, DEADHLEV, EVEXP, EVMAXD, NUMSEG, STRBED, STRWDT, STRNDC, STRSLP.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycomus.Package.CLAK.ComusLak.set_grid_data">
+<span class="sig-name descname"><span class="pre">set_grid_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">btm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lnk</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sc1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sc2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pycomus.Package.CLAK.ComusLak.set_grid_data" title="Link to this definition">¶</a></dt>
+<dd><p>Set Reservoir Grid Cell Data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>btm</strong> – Lake bed elevation (L) at the grid cell of the lake.</p></li>
+<li><p><strong>lnk</strong> – Overland flow coefficient (1/T) between the lake bed and the aquifer.</p></li>
+<li><p><strong>sc1</strong> – Storage coefficient (-) when the grid cell of the lake is under pressure condition.</p></li>
+<li><p><strong>sc2</strong> – Supply coefficient (-) when the grid cell of the lake is under non-pressure condition.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycomus.Package.CLAK.ComusLak.set_period_data">
+<span class="sig-name descname"><span class="pre">set_period_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">period_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pycomus.Package.CLAK.ComusLak.set_period_data" title="Link to this definition">¶</a></dt>
+<dd><p>Set Reservoir Period Data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>period_data</strong> – <p>A Dict type data where the keys represent the Period IDs, and the values are Dicts with reservoir IDs as
+keys. Within the inner Dicts, the values are Tuples containing four elements: PCP, RNFCOF, PRHCOF,</p>
+<blockquote>
+<div><p>ET0, EVWBCOF, GEVCOF, WATDIV, WATUSE.</p>
+</div></blockquote>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycomus.Package.CLAK.ComusLak.write_file">
+<span class="sig-name descname"><span class="pre">write_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycomus.Package.CLAK.ComusLak.write_file" title="Link to this definition">¶</a></dt>
+<dd><p>Typically used as an internal function but can also be called directly, it outputs the <cite>pycomus.ComusLak</cite>
+module to the specified path as &lt;LAKCtrl.in&gt;, &lt;LAKPer.in&gt; and &lt;LAKGrd.in&gt;.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>folder_path</strong> – Output folder path.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pycomus.Package.CLAK.Lak">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pycomus.Package.CLAK.</span></span><span class="sig-name descname"><span class="pre">Lak</span></span><a class="headerlink" href="#pycomus.Package.CLAK.Lak" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+</section>
+<section id="module-pycomus.Package.CRCH">
+<span id="pycomus-package-crch-module"></span><h2>pycomus.Package.CRCH module<a class="headerlink" href="#module-pycomus.Package.CRCH" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pycomus.Package.CRCH.ComusRch">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pycomus.Package.CRCH.</span></span><span class="sig-name descname"><span class="pre">ComusRch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pycomus.ComusDis.html#pycomus.ComusDis.CmsMd.ComusModel" title="pycomus.ComusDis.CmsMd.ComusModel"><span class="pre">ComusModel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">rechr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rech</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycomus.Package.CRCH.ComusRch" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pycomus.Package.CRCH.ComusRch.load">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rch_params_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycomus.Package.CRCH.ComusRch.load" title="Link to this definition">¶</a></dt>
+<dd><p>Load parameters from a RCH.in file and create a ComusRch instance.</p>
+<section id="id16">
+<h3>Parameters:<a class="headerlink" href="#id16" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>model: pycomus.ComusModel</dt><dd><p>COMUS Model Object.</p>
+</dd>
+<dt>rch_params_file: str</dt><dd><p>Grid RCH Params File Path(RCH.in).</p>
+</dd>
+</dl>
+</section>
+<section id="id17">
+<h3>Returns:<a class="headerlink" href="#id17" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>instance: pycomus.ComusRch</dt><dd><p>COMUS Recharge(RCH) Params Object.</p>
+</dd>
+</dl>
+</section>
+<section id="id18">
+<h3>Example:<a class="headerlink" href="#id18" title="Link to this heading">¶</a></h3>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pycomus</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model1</span> <span class="o">=</span> <span class="n">pycomus</span><span class="o">.</span><span class="n">ComusModel</span><span class="p">(</span><span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rchPkg</span> <span class="o">=</span> <span class="n">pycomus</span><span class="o">.</span><span class="n">ComusRch</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">model1</span><span class="p">,</span> <span class="s2">&quot;./InputFiles/RCH.in&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycomus.Package.CRCH.ComusRch.write_file">
+<span class="sig-name descname"><span class="pre">write_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycomus.Package.CRCH.ComusRch.write_file" title="Link to this definition">¶</a></dt>
+<dd><p>Typically used as an internal function but can also be called directly, it outputs the <cite>pycomus.ComusRch</cite>
+module to the specified path as &lt;RCH.in&gt;.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>folder_path</strong> – Output folder path.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pycomus.Package.CREG">
+<span id="pycomus-package-creg-module"></span><h2>pycomus.Package.CREG module<a class="headerlink" href="#module-pycomus.Package.CREG" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pycomus.Package.CREG.ComusReg">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pycomus.Package.CREG.</span></span><span class="sig-name descname"><span class="pre">ComusReg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pycomus.ComusDis.html#pycomus.ComusDis.CmsMd.ComusModel" title="pycomus.ComusDis.CmsMd.ComusModel"><span class="pre">ComusModel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">reg_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycomus.Package.CREG.ComusReg" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pycomus.Package.CREG.ComusReg.load">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reg_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycomus.Package.CREG.ComusReg.load" title="Link to this definition">¶</a></dt>
+<dd><p>Load parameters from a RegSta.in file and create a ComusReg instance.</p>
+<section id="id19">
+<h3>Parameters:<a class="headerlink" href="#id19" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>model: pycomus.ComusModel</dt><dd><p>COMUS Model Object.</p>
+</dd>
+<dt>reg_file: str</dt><dd><p>Grid Region Statistics File Path(RegSta.in).</p>
+</dd>
+</dl>
+</section>
+<section id="id20">
+<h3>Returns:<a class="headerlink" href="#id20" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>instance: pycomus.ComusReg</dt><dd><p>COMUS Region Statistics Params Object.</p>
+</dd>
+</dl>
+</section>
+<section id="id21">
+<h3>Example:<a class="headerlink" href="#id21" title="Link to this heading">¶</a></h3>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pycomus</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model1</span> <span class="o">=</span> <span class="n">pycomus</span><span class="o">.</span><span class="n">ComusModel</span><span class="p">(</span><span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;OneDimFlowSim(File-Input)&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">reg_sta</span> <span class="o">=</span> <span class="n">pycomus</span><span class="o">.</span><span class="n">ComusReg</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s2">&quot;./InputFiles/RegSta.in&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycomus.Package.CREG.ComusReg.write_file">
+<span class="sig-name descname"><span class="pre">write_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycomus.Package.CREG.ComusReg.write_file" title="Link to this definition">¶</a></dt>
+<dd><p>Typically used as an internal function but can also be called directly, it outputs the <cite>pycomus.ComusReg</cite>
+module to the specified path as &lt;RegSta.in&gt;.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>folder_path</strong> – Output folder path.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pycomus.Package.CRES">
+<span id="pycomus-package-cres-module"></span><h2>pycomus.Package.CRES module<a class="headerlink" href="#module-pycomus.Package.CRES" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pycomus.Package.CRES.ComusRes">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pycomus.Package.CRES.</span></span><span class="sig-name descname"><span class="pre">ComusRes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">res_num</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycomus.Package.CRES.ComusRes" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pycomus.Package.CRES.ComusRes.load">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctrl_pars_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycomus.Package.CRES.ComusRes.load" title="Link to this definition">¶</a></dt>
+<dd><p>Load parameters from RES(RESCtrl.in, RESPer.in, RESGrd.in) file and create a ComusRes instance.</p>
+<section id="id22">
+<h3>Parameters:<a class="headerlink" href="#id22" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>model: pycomus.ComusModel</dt><dd><p>COMUS Model Object.</p>
+</dd>
+<dt>ctrl_pars_file: str</dt><dd><p>Grid RES Params File Path(RESCtrl.in).</p>
+</dd>
+<dt>period_file: str</dt><dd><p>Grid RES Params File Path(RESPer.in).</p>
+</dd>
+<dt>grid_file: str</dt><dd><p>Grid RES Params File Path(RESGrd.in).</p>
+</dd>
+</dl>
+</section>
+<section id="id23">
+<h3>Returns:<a class="headerlink" href="#id23" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>instance: pycomus.ComusRes</dt><dd><p>COMUS Reservoir(RES) Params Object.</p>
+</dd>
+</dl>
+</section>
+<section id="id24">
+<h3>Example:<a class="headerlink" href="#id24" title="Link to this heading">¶</a></h3>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pycomus</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model1</span> <span class="o">=</span> <span class="n">pycomus</span><span class="o">.</span><span class="n">ComusModel</span><span class="p">(</span><span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;OneDimFlowSim(File-Input)&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">resPackage</span> <span class="o">=</span> <span class="n">pycomus</span><span class="o">.</span><span class="n">ComusRes</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">model1</span><span class="p">,</span> <span class="s2">&quot;./InputFiles/RESCtrl.in&quot;</span><span class="p">,</span> <span class="s2">&quot;./InputFiles/RESPer.in&quot;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s2">&quot;./InputFiles/RESGrd.in&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycomus.Package.CRES.ComusRes.set_control_params">
+<span class="sig-name descname"><span class="pre">set_control_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">control_params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pycomus.Package.CRES.ComusRes.set_control_params" title="Link to this definition">¶</a></dt>
+<dd><p>Set Reservoir Control Params.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>control_params</strong> – A Dict type data where the keys represent the reservoir IDs, and the values are Tuples containing four
+elements: EvExp, EvMaxd, NumSeg, and NumPt.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycomus.Package.CRES.ComusRes.set_grid_data">
+<span class="sig-name descname"><span class="pre">set_grid_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">btm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bvk</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">btk</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pycomus.Package.CRES.ComusRes.set_grid_data" title="Link to this definition">¶</a></dt>
+<dd><p>Set Reservoir Grid Cell Data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>btm</strong> – btm represents the elevation of the reservoir grid cell’s bed (L).</p></li>
+<li><p><strong>bvk</strong> – bvk represents the hydraulic conductivity coefficient of the low-permeability medium at the reservoir grid cell (L/T).</p></li>
+<li><p><strong>btk</strong> – btk represents the thickness of the low-permeability medium at the reservoir grid cell (L).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycomus.Package.CRES.ComusRes.set_period_data">
+<span class="sig-name descname"><span class="pre">set_period_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">period_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pycomus.Package.CRES.ComusRes.set_period_data" title="Link to this definition">¶</a></dt>
+<dd><p>Set Reservoir Period Data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>period_data</strong> – A Dict type data where the keys represent the reservoir IDs, and the values are Dicts with Period IDs as
+keys. Within the inner Dicts, the values are Tuples containing four elements: Shead, Ehead, Rchrg, and Gevt.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycomus.Package.CRES.ComusRes.write_file">
+<span class="sig-name descname"><span class="pre">write_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycomus.Package.CRES.ComusRes.write_file" title="Link to this definition">¶</a></dt>
+<dd><p>Typically used as an internal function but can also be called directly, it outputs the <cite>pycomus.ComusRes</cite>
+module to the specified path as &lt;RESCtrl.in&gt;, &lt;RESPer.in&gt; and &lt;RESGrd.in&gt;.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>folder_path</strong> – Output folder path.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pycomus.Package.CRES.Res">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pycomus.Package.CRES.</span></span><span class="sig-name descname"><span class="pre">Res</span></span><a class="headerlink" href="#pycomus.Package.CRES.Res" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+</section>
+<section id="module-pycomus.Package.CRIV">
+<span id="pycomus-package-criv-module"></span><h2>pycomus.Package.CRIV module<a class="headerlink" href="#module-pycomus.Package.CRIV" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pycomus.Package.CRIV.ComusRiv">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pycomus.Package.CRIV.</span></span><span class="sig-name descname"><span class="pre">ComusRiv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pycomus.ComusDis.html#pycomus.ComusDis.CmsMd.ComusModel" title="pycomus.ComusDis.CmsMd.ComusModel"><span class="pre">ComusModel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">cond</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shead</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ehead</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">riv_btm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycomus.Package.CRIV.ComusRiv" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pycomus.Package.CRIV.ComusRiv.load">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">riv_params_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycomus.Package.CRIV.ComusRiv.load" title="Link to this definition">¶</a></dt>
+<dd><p>Load parameters from a RIV.in file and create a ComusRiv instance.</p>
+<section id="id25">
+<h3>Parameters:<a class="headerlink" href="#id25" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>model: pycomus.ComusModel</dt><dd><p>COMUS Model Object.</p>
+</dd>
+<dt>riv_params_file: str</dt><dd><p>Grid RIV Params File Path(RIV.in).</p>
+</dd>
+</dl>
+</section>
+<section id="id26">
+<h3>Returns:<a class="headerlink" href="#id26" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>instance: pycomus.ComusRiv</dt><dd><p>COMUS River(RIV) Params Object.</p>
+</dd>
+</dl>
+</section>
+<section id="id27">
+<h3>Example:<a class="headerlink" href="#id27" title="Link to this heading">¶</a></h3>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pycomus</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model1</span> <span class="o">=</span> <span class="n">pycomus</span><span class="o">.</span><span class="n">ComusModel</span><span class="p">(</span><span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;OneDimFlowSim(File-Input)&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rivPackage</span> <span class="o">=</span> <span class="n">pycomus</span><span class="o">.</span><span class="n">ComusRiv</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s2">&quot;./InputFiles/RIV.in&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycomus.Package.CRIV.ComusRiv.write_file">
+<span class="sig-name descname"><span class="pre">write_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycomus.Package.CRIV.ComusRiv.write_file" title="Link to this definition">¶</a></dt>
+<dd><p>Typically used as an internal function but can also be called directly, it outputs the <cite>pycomus.ComusRiv</cite>
+module to the specified path as &lt;RIV.in&gt;.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>folder_path</strong> – Output folder path.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pycomus.Package.CSHB">
+<span id="pycomus-package-cshb-module"></span><h2>pycomus.Package.CSHB module<a class="headerlink" href="#module-pycomus.Package.CSHB" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pycomus.Package.CSHB.ComusShb">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pycomus.Package.CSHB.</span></span><span class="sig-name descname"><span class="pre">ComusShb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pycomus.ComusDis.html#pycomus.ComusDis.CmsMd.ComusModel" title="pycomus.ComusDis.CmsMd.ComusModel"><span class="pre">ComusModel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">shead</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ehead</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycomus.Package.CSHB.ComusShb" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pycomus.Package.CSHB.ComusShb.load">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shb_params_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycomus.Package.CSHB.ComusShb.load" title="Link to this definition">¶</a></dt>
+<dd><p>Load parameters from a SHB.in file and create a ComusShb instance.</p>
+<section id="id28">
+<h3>Parameters:<a class="headerlink" href="#id28" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>model: pycomus.ComusModel</dt><dd><p>COMUS Model Object.</p>
+</dd>
+<dt>shb_params_file: str</dt><dd><p>Grid SHB Params File Path(SHB.in).</p>
+</dd>
+</dl>
+</section>
+<section id="id29">
+<h3>Returns:<a class="headerlink" href="#id29" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>instance: pycomus.ComusShb</dt><dd><p>COMUS Transient Specified-Head Boundary(SHB) Params Object.</p>
+</dd>
+</dl>
+</section>
+<section id="id30">
+<h3>Example:<a class="headerlink" href="#id30" title="Link to this heading">¶</a></h3>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pycomus</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model1</span> <span class="o">=</span> <span class="n">pycomus</span><span class="o">.</span><span class="n">ComusModel</span><span class="p">(</span><span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;OneDimFlowSim(File-Input)&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">shbPackage</span> <span class="o">=</span> <span class="n">pycomus</span><span class="o">.</span><span class="n">ComusShb</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="s2">&quot;./InputFiles/SHB.in&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycomus.Package.CSHB.ComusShb.write_file">
+<span class="sig-name descname"><span class="pre">write_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycomus.Package.CSHB.ComusShb.write_file" title="Link to this definition">¶</a></dt>
+<dd><p>Typically used as an internal function but can also be called directly, it outputs the <cite>pycomus.ComusShb</cite>
+module to the specified path as &lt;SHB.in&gt;.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>folder_path</strong> – Output folder path.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pycomus.Package.CSTR">
+<span id="pycomus-package-cstr-module"></span><h2>pycomus.Package.CSTR module<a class="headerlink" href="#module-pycomus.Package.CSTR" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pycomus.Package.CSTR.ComusStr">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pycomus.Package.CSTR.</span></span><span class="sig-name descname"><span class="pre">ComusStr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stream_num</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycomus.Package.CSTR.ComusStr" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pycomus.Package.CSTR.ComusStr.load">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctrl_pars_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">watUse_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">watDrn_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycomus.Package.CSTR.ComusStr.load" title="Link to this definition">¶</a></dt>
+<dd><p>Load parameters from STR(STRCtrl.in, RESPer.in, RESGrd.in) file and create a ComusStr instance.</p>
+<section id="id31">
+<h3>Parameters:<a class="headerlink" href="#id31" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>model: pycomus.ComusModel</dt><dd><p>COMUS Model Object.</p>
+</dd>
+<dt>ctrl_pars_file: str</dt><dd><p>STR Control Params File Path(STRCtrl.in).</p>
+</dd>
+<dt>period_file: str</dt><dd><p>STR Period Params File Path(STRPer.in).</p>
+</dd>
+<dt>grid_file: str</dt><dd><p>STR Grid Params File Path(STRGrd.in).</p>
+</dd>
+<dt>watUse_file: str</dt><dd><p>STR WaterUse Params FilePath(STRWatUse.in).</p>
+</dd>
+<dt>watDrn_file: str</dt><dd><p>STR WaterDrain Params FilePath(STRWatDrn.in).</p>
+</dd>
+</dl>
+</section>
+<section id="id32">
+<h3>Returns:<a class="headerlink" href="#id32" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>instance: pycomus.ComusStr</dt><dd><p>COMUS Stream(STR) Params Object.</p>
+</dd>
+</dl>
+</section>
+<section id="id33">
+<h3>Example:<a class="headerlink" href="#id33" title="Link to this heading">¶</a></h3>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pycomus</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model1</span> <span class="o">=</span> <span class="n">pycomus</span><span class="o">.</span><span class="n">ComusModel</span><span class="p">(</span><span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;OneDimFlowSim(File-Input)&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">strPackage</span> <span class="o">=</span> <span class="n">pycomus</span><span class="o">.</span><span class="n">ComusRes</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">model1</span><span class="p">,</span> <span class="s2">&quot;./InputFiles/STRCtrl.in&quot;</span><span class="p">,</span> <span class="s2">&quot;./InputFiles/STRPer.in&quot;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s2">&quot;./InputFiles/STRGrd.in&quot;</span><span class="p">,</span> <span class="s2">&quot;./InputFiles/STRWatUse.in&quot;</span><span class="p">,</span> <span class="s2">&quot;./InputFiles/STRWatDrn.in&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycomus.Package.CSTR.ComusStr.load_ctrlPars_file">
+<span class="sig-name descname"><span class="pre">load_ctrlPars_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ctrlParFile</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycomus.Package.CSTR.ComusStr.load_ctrlPars_file" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycomus.Package.CSTR.ComusStr.load_period_file">
+<span class="sig-name descname"><span class="pre">load_period_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">period_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycomus.Package.CSTR.ComusStr.load_period_file" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycomus.Package.CSTR.ComusStr.load_strGrid_file">
+<span class="sig-name descname"><span class="pre">load_strGrid_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">strGridFile</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycomus.Package.CSTR.ComusStr.load_strGrid_file" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycomus.Package.CSTR.ComusStr.load_watDrn_file">
+<span class="sig-name descname"><span class="pre">load_watDrn_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">watDrnFile</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycomus.Package.CSTR.ComusStr.load_watDrn_file" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycomus.Package.CSTR.ComusStr.load_watUse_file">
+<span class="sig-name descname"><span class="pre">load_watUse_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">watUseFile</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycomus.Package.CSTR.ComusStr.load_watUse_file" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycomus.Package.CSTR.ComusStr.set_ControlData">
+<span class="sig-name descname"><span class="pre">set_ControlData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">control_params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pycomus.Package.CSTR.ComusStr.set_ControlData" title="Link to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Set Stream Control Params.</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>control_params</strong> – A Dict type data where the keys represent the streams IDs, and the values are Tuples containing nine
+elements: [“NEXTID”, “NEXTAT”, “DIVSID”, “DIVSAT”, “DIVTPOPT”, “WUTPOPT”, “WUREGID”, “WUBKOPT”, “DRNOPT”]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycomus.Package.CSTR.ComusStr.set_GridData">
+<span class="sig-name descname"><span class="pre">set_GridData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cell_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">btm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bwdt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sizh1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sizh2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bvk</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">btk</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ndc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pycomus.Package.CSTR.ComusStr.set_GridData" title="Link to this definition">¶</a></dt>
+<dd><p>Set Stream Grid Cell Data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cell_id</strong> – cell_id is an integer representing the sequential upstream and downstream order of the river segment within
+its parent river unit (1 indicates that the river segment is the first segment of the river unit).</p></li>
+<li><p><strong>length</strong> – length is a double precision floating-point number representing the length of the river segment within the grid cell (L).</p></li>
+<li><p><strong>btm</strong> – btm is a double precision floating-point number representing the average bed elevation of the river segment (L).</p></li>
+<li><p><strong>bwdt</strong> – bwdt is a double precision floating-point number representing the average bed width of the river segment (L).</p></li>
+<li><p><strong>sizh1</strong> – sizh1 is a double precision floating-point number representing the reciprocal of the left bank slope of the river segment (L/L).</p></li>
+<li><p><strong>sizh2</strong> – sizh2 is a double precision floating-point number representing the reciprocal of the right bank slope of the river segment (L/L).</p></li>
+<li><p><strong>bvk</strong> – bvk is a double precision floating-point number representing the permeability coefficient of the low-permeability medium of the river segment (L/T).</p></li>
+<li><p><strong>btk</strong> – btk is a double precision floating-point number representing the thickness of the low-permeability medium of the river segment (L).</p></li>
+<li><p><strong>slp</strong> – slp is a double precision floating-point number representing the average bed slope of the river segment (L/L).</p></li>
+<li><p><strong>ndc</strong> – ndc is a double precision floating-point number representing the Manning’s roughness coefficient (n) of the river segment.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycomus.Package.CSTR.ComusStr.set_PeriodData">
+<span class="sig-name descname"><span class="pre">set_PeriodData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">period_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pycomus.Package.CSTR.ComusStr.set_PeriodData" title="Link to this definition">¶</a></dt>
+<dd><p>Set Stream Period Data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>period_data</strong> – A Dict type data where the keys represent the stream IDs, and the values are Dicts with Period IDs as
+keys. Within the inner Dicts, the values are Tuples containing four elements: (HCALOPT, USLEV, UELEV, DSLEV, DELEV, WATPNT,”
+WATWAY, WATDIV, WATUSE, EVRATE, RCHCOE, WBKCOE)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycomus.Package.CSTR.ComusStr.set_WatDrnData">
+<span class="sig-name descname"><span class="pre">set_WatDrnData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">delev</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cond</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">segm_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pycomus.Package.CSTR.ComusStr.set_WatDrnData" title="Link to this definition">¶</a></dt>
+<dd><p>Set Stream Water Drn Data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>delev</strong> – delev is a double precision floating-point number representing the elevation of the drainage ditch bottom
+at the grid cell (in meters). The drainage ditch only discharges groundwater when the groundwater level
+is higher than this elevation.</p></li>
+<li><p><strong>cond</strong> – <dl class="simple">
+<dt>cond is a double precision floating-point number representing the hydraulic conductivity coefficient between</dt><dd><p>the drainage ditch and the aquifer at the grid cell (in square meters per second).</p>
+</dd>
+</dl>
+</p></li>
+<li><p><strong>segm_id</strong> – segm_id is a double precision floating-point number representing the drainage area number, which is the
+identifier of the river segment of the seasonal river to which the grid cell drainage flows (starting from 1).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycomus.Package.CSTR.ComusStr.set_WatUseData">
+<span class="sig-name descname"><span class="pre">set_WatUseData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wureg_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ratio</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pycomus.Package.CSTR.ComusStr.set_WatUseData" title="Link to this definition">¶</a></dt>
+<dd><p>Set Stream Water Use Data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>wureg_id</strong> – <dl class="simple">
+<dt>wureg_id is an integer representing the water use zone number for the river unit (starting from 1). A portion</dt><dd><p>of the river unit’s water use will be allocated to simulate surface infiltration recharge on grid cells
+within the range of this water use zone.</p>
+</dd>
+</dl>
+</p></li>
+<li><p><strong>ratio</strong> – ratio is a double precision floating-point number representing the weight coefficient of surface infiltration
+recharge for the river unit on the grid cell (-). It must be greater than or equal to 0.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycomus.Package.CSTR.ComusStr.write_file">
+<span class="sig-name descname"><span class="pre">write_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycomus.Package.CSTR.ComusStr.write_file" title="Link to this definition">¶</a></dt>
+<dd><p>Typically used as an internal function but can also be called directly, it outputs the <cite>pycomus.ComusStr</cite>
+module to the specified path as &lt;STRCtrl.in&gt;, &lt;STRPer.in&gt;, &lt;STRGrd.in&gt;, &lt;STRWatUse.in&gt;, &lt;STRWatDrn.in&gt;.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>folder_path</strong> – Output folder path.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pycomus.Package.CSTR.Stream">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pycomus.Package.CSTR.</span></span><span class="sig-name descname"><span class="pre">Stream</span></span><a class="headerlink" href="#pycomus.Package.CSTR.Stream" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+</section>
+<section id="module-pycomus.Package.CSUB">
+<span id="pycomus-package-csub-module"></span><h2>pycomus.Package.CSUB module<a class="headerlink" href="#module-pycomus.Package.CSUB" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pycomus.Package.CSUB.ComusSub">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pycomus.Package.CSUB.</span></span><span class="sig-name descname"><span class="pre">ComusSub</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pycomus.ComusDis.html#pycomus.ComusDis.CmsMd.ComusModel" title="pycomus.ComusDis.CmsMd.ComusModel"><span class="pre">ComusModel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_ndb</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_mz</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">acc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">it_min</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dsh_opt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycomus.Package.CSUB.ComusSub" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pycomus.Package.CSUB.ComusSub.load">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ctrl_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mz_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ndb_lyr_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ndb_grid_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db_lyr_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db_grid_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycomus.Package.CSUB.ComusSub.load" title="Link to this definition">¶</a></dt>
+<dd><p>Load parameters from SUB(SUBCtrl.in, SUBMZ.in, SUBNDB.in, SUBGrdNDB.in, SUBDB.in, SUBGrdDB.in) file and
+create a ComusSub instance.</p>
+<section id="id34">
+<h3>Parameters:<a class="headerlink" href="#id34" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>model: pycomus.ComusModel</dt><dd><p>COMUS Model Object.</p>
+</dd>
+<dt>ctrl_file: str</dt><dd><p>SUB Control Params File Path(SUBCtrl.in).</p>
+</dd>
+<dt>mz_file: str</dt><dd><p>SUB MZ Params File Path(SUBMZ.in).</p>
+</dd>
+<dt>ndb_lyr_file: str</dt><dd><p>SUB NDB Layer Params File Path(SUBNDB.in).</p>
+</dd>
+<dt>ndb_grid_file: str</dt><dd><p>SUB NDB Grid Params FilePath(SUBGrdNDB.in).</p>
+</dd>
+<dt>db_lyr_file: str</dt><dd><p>SUB DB Layer Params FilePath(SUBDB.in).</p>
+</dd>
+<dt>db_grid_file: str</dt><dd><p>SUB DB Grid Params FilePath(SUBGrdDB.in).</p>
+</dd>
+</dl>
+</section>
+<section id="id35">
+<h3>Returns:<a class="headerlink" href="#id35" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>instance: pycomus.ComusSub</dt><dd><p>COMUS Subsidence(SUB) Params Object.</p>
+</dd>
+</dl>
+</section>
+<section id="id36">
+<h3>Example:<a class="headerlink" href="#id36" title="Link to this heading">¶</a></h3>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pycomus</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model1</span> <span class="o">=</span> <span class="n">pycomus</span><span class="o">.</span><span class="n">ComusModel</span><span class="p">(</span><span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;OneDimFlowSim(File-Input)&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">subPackage</span> <span class="o">=</span> <span class="n">pycomus</span><span class="o">.</span><span class="n">ComusSub</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">model1</span><span class="p">,</span> <span class="s2">&quot;./InputFiles/SUBCtrl.in&quot;</span><span class="p">,</span> <span class="s2">&quot;./InputFiles/SUBMZ.in&quot;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s2">&quot;./InputFiles/SUBNDB.in&quot;</span><span class="p">,</span> <span class="s2">&quot;./InputFiles/SUBGrdNDB.in&quot;</span><span class="p">,</span> <span class="s2">&quot;./InputFiles/SUBDB.in&quot;</span><span class="p">,</span> <span class="s2">&quot;./InputFiles/SUBGrdDB.in&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycomus.Package.CSUB.ComusSub.set_db_grid">
+<span class="sig-name descname"><span class="pre">set_db_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rnb</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dsh</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dhc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dcom</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dz</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">imz</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycomus.Package.CSUB.ComusSub.set_db_grid" title="Link to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rnb</strong> – </p></li>
+<li><p><strong>dsh</strong> – </p></li>
+<li><p><strong>dhc</strong> – </p></li>
+<li><p><strong>dcom</strong> – </p></li>
+<li><p><strong>dz</strong> – </p></li>
+<li><p><strong>imz</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycomus.Package.CSUB.ComusSub.set_db_lyr">
+<span class="sig-name descname"><span class="pre">set_db_lyr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db_lyr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycomus.Package.CSUB.ComusSub.set_db_lyr" title="Link to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>db_lyr</strong> – </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycomus.Package.CSUB.ComusSub.set_mz_data">
+<span class="sig-name descname"><span class="pre">set_mz_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mz_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycomus.Package.CSUB.ComusSub.set_mz_data" title="Link to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>mz_data</strong> – </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycomus.Package.CSUB.ComusSub.set_ndb_grid">
+<span class="sig-name descname"><span class="pre">set_ndb_grid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sfe</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sfv</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">com</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycomus.Package.CSUB.ComusSub.set_ndb_grid" title="Link to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hc</strong> – </p></li>
+<li><p><strong>sfe</strong> – </p></li>
+<li><p><strong>sfv</strong> – </p></li>
+<li><p><strong>com</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycomus.Package.CSUB.ComusSub.set_ndb_lyr">
+<span class="sig-name descname"><span class="pre">set_ndb_lyr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ndb_lyr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycomus.Package.CSUB.ComusSub.set_ndb_lyr" title="Link to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ndb_lyr</strong> – </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycomus.Package.CSUB.ComusSub.write_file">
+<span class="sig-name descname"><span class="pre">write_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycomus.Package.CSUB.ComusSub.write_file" title="Link to this definition">¶</a></dt>
+<dd><p>Typically used as an internal function but can also be called directly, it outputs the <cite>pycomus.ComusSub</cite>
+module to the specified path as &lt;SUBCtrl.in&gt;, &lt;SUBMZ.in&gt;, &lt;SUBNDB.in&gt;, &lt;SUBDB.in&gt;, &lt;SUBGrdNDB.in&gt;, &lt;SUBGrdDB.in&gt;.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>folder_path</strong> – Output folder path.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pycomus.Package.CSUB.LandSub">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pycomus.Package.CSUB.</span></span><span class="sig-name descname"><span class="pre">LandSub</span></span><a class="headerlink" href="#pycomus.Package.CSUB.LandSub" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+</section>
+<section id="module-pycomus.Package.CWEL">
+<span id="pycomus-package-cwel-module"></span><h2>pycomus.Package.CWEL module<a class="headerlink" href="#module-pycomus.Package.CWEL" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pycomus.Package.CWEL.ComusWel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pycomus.Package.CWEL.</span></span><span class="sig-name descname"><span class="pre">ComusWel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pycomus.ComusDis.html#pycomus.ComusDis.CmsMd.ComusModel" title="pycomus.ComusDis.CmsMd.ComusModel"><span class="pre">ComusModel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">wellr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">satthr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycomus.Package.CWEL.ComusWel" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pycomus.Package.CWEL.ComusWel.load">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wel_params_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycomus.Package.CWEL.ComusWel.load" title="Link to this definition">¶</a></dt>
+<dd><p>Load parameters from a WEL.in file and create a ComusWel instance.</p>
+<section id="id37">
+<h3>Parameters:<a class="headerlink" href="#id37" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>model: pycomus.ComusModel</dt><dd><p>COMUS Model Object.</p>
+</dd>
+<dt>wel_params_file: str</dt><dd><p>Grid WEL Params File Path(WEL.in).</p>
+</dd>
+</dl>
+</section>
+<section id="id38">
+<h3>Returns:<a class="headerlink" href="#id38" title="Link to this heading">¶</a></h3>
+<dl class="simple">
+<dt>instance: pycomus.ComusWel</dt><dd><p>COMUS Well(WEL) Params Object.</p>
+</dd>
+</dl>
+</section>
+<section id="id39">
+<h3>Example:<a class="headerlink" href="#id39" title="Link to this heading">¶</a></h3>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pycomus</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model1</span> <span class="o">=</span> <span class="n">pycomus</span><span class="o">.</span><span class="n">ComusModel</span><span class="p">(</span><span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">welPackage</span> <span class="o">=</span> <span class="n">pycomus</span><span class="o">.</span><span class="n">ComusWel</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">model1</span><span class="p">,</span> <span class="s2">&quot;./InputFiles/WEL.in&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycomus.Package.CWEL.ComusWel.write_file">
+<span class="sig-name descname"><span class="pre">write_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycomus.Package.CWEL.ComusWel.write_file" title="Link to this definition">¶</a></dt>
+<dd><p>Typically used as an internal function but can also be called directly, it outputs the <cite>pycomus.ComusWel</cite>
+module to the specified path as &lt;WEL.in&gt;.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>folder_path</strong> – Output folder path.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pycomus.Package">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pycomus.Package" title="Link to this heading">¶</a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Zhenjiang Wu.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
