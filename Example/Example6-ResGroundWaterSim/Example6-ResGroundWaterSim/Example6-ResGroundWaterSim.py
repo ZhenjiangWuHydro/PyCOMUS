@@ -6,9 +6,9 @@ import pycomus
 
 
 def getResValue(filePath: str) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
-    btm = np.zeros((NumLyr, NumRow, NumCol), dtype=float)
-    bvk = np.zeros((NumLyr, NumRow, NumCol), dtype=float)
-    btk = np.zeros((NumLyr, NumRow, NumCol), dtype=float)
+    btm = np.zeros((num_lyr, num_row, num_col), dtype=float)
+    bvk = np.zeros((num_lyr, num_row, num_col), dtype=float)
+    btk = np.zeros((num_lyr, num_row, num_col), dtype=float)
     with open(filePath, 'r') as file:
         for line_num, line in enumerate(file, start=1):
             if line_num == 1:
@@ -36,10 +36,10 @@ if __name__ == "__main__":
     outParams = pycomus.ComusOutputPars(model)
 
     # Create Grid And Layer
-    NumLyr = 1
-    NumRow = 12
-    NumCol = 12
-    modelDis = pycomus.ComusDisBcf(model, NumLyr, NumRow, NumCol, row_space=100, col_space=100, lyr_type=[0],
+    num_lyr = 1
+    num_row = 12
+    num_col = 12
+    modelDis = pycomus.ComusDisBcf(model, num_lyr, num_row, num_col, row_space=100, col_space=100, lyr_type=[0],
                                    lyr_trpy=[1], y_coord=1200)
 
     # Grid Attribute
@@ -49,11 +49,11 @@ if __name__ == "__main__":
     period = pycomus.ComusPeriod(model, [(2, 2, 1) for _ in range(2)] + [(5, 5, 1)])
 
     # Set GHB
-    cond_data = np.zeros((NumLyr, NumRow, NumCol))
+    cond_data = np.zeros((num_lyr, num_row, num_col))
     for i in range(12):
         cond_data[0, i, 0] = 1000
         cond_data[0, i, 11] = 1000
-    shead_ehead_data = np.zeros((NumLyr, NumRow, NumCol))
+    shead_ehead_data = np.zeros((num_lyr, num_row, num_col))
     shbPackage = pycomus.Package.ComusGhb(model, cond={0: cond_data}, shead={0: shead_ehead_data},
                                           ehead={0: shead_ehead_data})
 

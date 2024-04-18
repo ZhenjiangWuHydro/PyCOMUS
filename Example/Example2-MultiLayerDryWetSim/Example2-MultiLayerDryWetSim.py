@@ -17,20 +17,20 @@ if __name__ == "__main__":
     outParams = pycomus.ComusOutputPars(model, 2, 2, 2, 2, 2, 2)
 
     # Create Grid And Layer
-    NumLyr = 40
-    NumRow = 1
-    NumCol = 100
-    modelDis = pycomus.ComusDisLpf(model, NumLyr, NumRow, NumCol, row_space=1, col_space=1,
-                                   lyr_type=[1 for _ in range(NumLyr)], y_coord=1)
+    num_lyr = 40
+    num_row = 1
+    num_col = 100
+    modelDis = pycomus.ComusDisLpf(model, num_lyr, num_row, num_col, row_space=1, col_space=1,
+                                   lyr_type=[1 for _ in range(num_lyr)], y_coord=1)
 
     # Grid Attribute
-    top = np.full((NumRow, NumCol), 40, dtype=float)
-    bot = np.zeros((NumLyr, NumRow, NumCol))
-    for lyr in range(NumLyr):
+    top = np.full((num_row, num_col), 40, dtype=float)
+    bot = np.zeros((num_lyr, num_row, num_col))
+    for lyr in range(num_lyr):
         bot[lyr, :, :] = 39 - 1 * lyr
-    ibound = np.full((NumLyr, NumRow, NumCol), 0, dtype=int)
-    sc1 = np.full((NumLyr, NumRow, NumCol), 0, dtype=float)
-    sc2 = np.full((NumLyr, NumRow, NumCol), 0, dtype=float)
+    ibound = np.full((num_lyr, num_row, num_col), 0, dtype=int)
+    sc1 = np.full((num_lyr, num_row, num_col), 0, dtype=float)
+    sc2 = np.full((num_lyr, num_row, num_col), 0, dtype=float)
     active_cell = [(13, 22), (12, 24), (12, 26), (12, 28), (11, 30), (11, 32), (11, 34), (10, 36), (10, 38), (10, 40),
                    (9, 42), (9, 44), (9, 46), (8, 48), (8, 50), (8, 52), (7, 54), (7, 56), (7, 58), (6, 60), (6, 62),
                    (6, 64), (5, 66), (5, 68), (5, 70), (4, 72), (4, 74), (4, 76), (3, 78), (3, 80), (3, 82), (2, 84),
@@ -48,8 +48,8 @@ if __name__ == "__main__":
     period = pycomus.ComusPeriod(model, [(10, 10, 1) for _ in range(3)])
 
     # Set DRN
-    cond = np.zeros((NumLyr, NumRow, NumCol))
-    delev = np.full((NumLyr, NumRow, NumCol), 0, dtype=float)
+    cond = np.zeros((num_lyr, num_row, num_col))
+    delev = np.full((num_lyr, num_row, num_col), 0, dtype=float)
     idx = 24
     left_value = 38
     right_value = 37
@@ -67,15 +67,15 @@ if __name__ == "__main__":
                              3, 2, 2, 2, 1, 1, 1, 0, 0, 0]
     shb_period2_col_idx = [7, 6, 6, 6, 5, 5, 5, 4, 4, 4, 3, 3, 3, 2, 2, 2, 1, 1, 1, 0, 0, 0]
 
-    cond_period1_data = np.zeros((NumLyr, NumRow, NumCol))
-    shead_period1_data = np.zeros((NumLyr, NumRow, NumCol))
-    ehead_period1_data = np.zeros((NumLyr, NumRow, NumCol))
-    cond_period2_data = np.zeros((NumLyr, NumRow, NumCol))
-    shead_period2_data = np.zeros((NumLyr, NumRow, NumCol))
-    ehead_period2_data = np.zeros((NumLyr, NumRow, NumCol))
-    cond_period3_data = np.zeros((NumLyr, NumRow, NumCol))
-    shead_period3_data = np.zeros((NumLyr, NumRow, NumCol))
-    ehead_period3_data = np.zeros((NumLyr, NumRow, NumCol))
+    cond_period1_data = np.zeros((num_lyr, num_row, num_col))
+    shead_period1_data = np.zeros((num_lyr, num_row, num_col))
+    ehead_period1_data = np.zeros((num_lyr, num_row, num_col))
+    cond_period2_data = np.zeros((num_lyr, num_row, num_col))
+    shead_period2_data = np.zeros((num_lyr, num_row, num_col))
+    ehead_period2_data = np.zeros((num_lyr, num_row, num_col))
+    cond_period3_data = np.zeros((num_lyr, num_row, num_col))
+    shead_period3_data = np.zeros((num_lyr, num_row, num_col))
+    ehead_period3_data = np.zeros((num_lyr, num_row, num_col))
     idx = 0
     for i in range(2, 40):
         cond_period1_data[i, 0, shb_period1_3_col_idx[idx]] = 1000

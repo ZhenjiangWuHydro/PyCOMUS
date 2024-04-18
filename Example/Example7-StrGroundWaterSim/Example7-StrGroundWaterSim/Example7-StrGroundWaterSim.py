@@ -4,7 +4,7 @@ import pycomus
 
 
 def getValue(filePath: str) -> np.ndarray:
-    res = np.zeros((NumRow, NumCol), dtype=float)
+    res = np.zeros((num_row, num_col), dtype=float)
     with open(filePath, 'r') as file:
         for line_num, line in enumerate(file, start=1):
             if line_num == 1:
@@ -30,16 +30,16 @@ if __name__ == "__main__":
     outParams = pycomus.ComusOutputPars(model, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2)
 
     # Create Grid And Layer
-    NumLyr = 1
-    NumRow = 20
-    NumCol = 20
-    modelDis = pycomus.ComusDisBcf(model, NumLyr, NumRow, NumCol, row_space=500, col_space=500,
+    num_lyr = 1
+    num_row = 20
+    num_col = 20
+    modelDis = pycomus.ComusDisBcf(model, num_lyr, num_row, num_col, row_space=500, col_space=500,
                                    lyr_type=[1], lyr_trpy=[1], y_coord=10000)
 
     # Grid Attribute
     top = getValue("TOP.txt")
-    ibound = np.full((NumLyr, NumRow, NumCol), 1, dtype=int)
-    shead = np.full((NumLyr, NumRow, NumCol), 5, dtype=float)
+    ibound = np.full((num_lyr, num_row, num_col), 1, dtype=int)
+    shead = np.full((num_lyr, num_row, num_col), 5, dtype=float)
     for i in range(20):
         ibound[0, i, 0] = -1
         ibound[0, i, 19] = -1
@@ -52,7 +52,7 @@ if __name__ == "__main__":
     period = pycomus.ComusPeriod(model, (1, 1, 1))
 
     # Set EVT
-    etSurf = getValue("EVT.txt").reshape((NumLyr, NumRow, NumCol))
+    etSurf = getValue("EVT.txt").reshape((num_lyr, num_row, num_col))
     evtPackage = pycomus.ComusEvt(model, et_surf={0: etSurf}, et_rate=0.003, et_mxd=3.5, et_exp=2.5, evt=1, num_seg=10)
 
     # Set Stream

@@ -4,7 +4,7 @@ import pycomus
 
 
 def getValue(filePath: str) -> np.ndarray:
-    res = np.zeros((NumRow, NumCol), dtype=float)
+    res = np.zeros((num_row, num_col), dtype=float)
     with open(filePath, 'r') as file:
         for line_num, line in enumerate(file, start=1):
             if line_num == 1:
@@ -30,16 +30,16 @@ if __name__ == "__main__":
     outParams = pycomus.ComusOutputPars(model, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2)
 
     # Create Grid And Layer
-    NumLyr = 1
-    NumRow = 22
-    NumCol = 22
+    num_lyr = 1
+    num_row = 22
+    num_col = 22
     row_col_space = [250] + [1000] * 5 + [250] * 10 + [1000] * 5 + [250]
-    modelDis = pycomus.ComusDisBcf(model, NumLyr, NumRow, NumCol, row_space=row_col_space, col_space=row_col_space,
+    modelDis = pycomus.ComusDisBcf(model, num_lyr, num_row, num_col, row_space=row_col_space, col_space=row_col_space,
                                    lyr_type=[1], lyr_trpy=[1], y_coord=13000)
 
     # Grid Attribute
-    ibound = np.full((NumLyr, NumRow, NumCol), 1, dtype=int)
-    shead = np.full((NumLyr, NumRow, NumCol), 115, dtype=float)
+    ibound = np.full((num_lyr, num_row, num_col), 1, dtype=int)
+    shead = np.full((num_lyr, num_row, num_col), 115, dtype=float)
     ibound[0, 0, :] = -1
     ibound[0, -1, :] = ibound[0, 0, :]
     shead[0, 0, :] = [160, 159.0196075, 157.4509735, 155.8823547, 154.3137207, 152.7451019, 151.7647095, 151.3725433,
@@ -58,8 +58,8 @@ if __name__ == "__main__":
     period = pycomus.ComusPeriod(model, (1, 1, 1))
 
     # Set EVT
-    etSurf = getValue("EVT.txt").reshape((NumLyr, NumRow, NumCol))
-    etExp = np.zeros((NumLyr, NumRow, NumCol))
+    etSurf = getValue("EVT.txt").reshape((num_lyr, num_row, num_col))
+    etExp = np.zeros((num_lyr, num_row, num_col))
     etExp[0, :6, :] = 1
     etExp[0, 16:, :] = 1
     etExp[0, 6:17, :6] = 1
@@ -67,7 +67,7 @@ if __name__ == "__main__":
     evtPackage = pycomus.ComusEvt(model, et_surf={0: etSurf}, et_rate=0.0141, et_mxd=15, et_exp={0: etExp})
 
     # Set RCH
-    recharge = np.zeros((NumLyr, NumRow, NumCol))
+    recharge = np.zeros((num_lyr, num_row, num_col))
     recharge[0, :6, :] = 0.0116
     recharge[0, 16:, :] = 0.0116
     recharge[0, 6:17, :6] = 0.0116
@@ -79,8 +79,8 @@ if __name__ == "__main__":
     lakPackage.set_control_params({0: (0, 0, 0, 0, 110, 97, 1, 15, 10, 0, 0, 0, 0)})
     lakPackage.set_period_data(
         {0: {0: (0.0116, 0, 1, 0.0103, 1, 1.368932039, 0, 0)}})
-    btm = getValue("LAKGrd.txt").reshape((NumLyr, NumRow, NumCol))
-    lnk = np.zeros((NumLyr, NumRow, NumCol))
+    btm = getValue("LAKGrd.txt").reshape((num_lyr, num_row, num_col))
+    lnk = np.zeros((num_lyr, num_row, num_col))
     lnk[0, 6:16, 6:16] = 0.1
     lakPackage.set_grid_data({0: btm}, {0: lnk}, 0, 0)
 

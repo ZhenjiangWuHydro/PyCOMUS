@@ -6,11 +6,11 @@ from pycomus.Utils import CONSTANTS
 
 
 def CheckValueFormat(Value: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
-                     ValueName: str, period: List, NumLyr: int, NumRow: int, NumCol: int) -> Dict:
+                     ValueName: str, period: List, num_lyr: int, num_row: int, num_col: int) -> Dict:
     res = {}
     if isinstance(Value, (float, int)):
         for i in range(len(period)):
-            res[i] = np.full((NumLyr, NumRow, NumCol), Value, dtype=float)
+            res[i] = np.full((num_lyr, num_row, num_col), Value, dtype=float)
         return res
     elif isinstance(Value, Dict):
         # Check for duplicate keys
@@ -27,9 +27,9 @@ def CheckValueFormat(Value: Union[int, float, Dict[int, Union[int, float, np.nda
                 raise ValueError(
                     f"Invalid key {key} in {ValueName} dictionary. Keys should be in the range 0 to {len(period) - 1}.")
             if isinstance(value, (int, float)):
-                res[key] = np.full((NumLyr, NumRow, NumCol), value, dtype=float)
+                res[key] = np.full((num_lyr, num_row, num_col), value, dtype=float)
             elif isinstance(value, np.ndarray):
-                if value.shape == (NumLyr, NumRow, NumCol):
+                if value.shape == (num_lyr, num_row, num_col):
                     res[key] = value
                 else:
                     raise ValueError(f"Invalid shape or values in the {ValueName} numpy array.")
@@ -42,13 +42,13 @@ def CheckValueFormat(Value: Union[int, float, Dict[int, Union[int, float, np.nda
 
 
 def CheckValueGtZero(Value: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
-                     ValueName: str, period: List, NumLyr: int, NumRow: int, NumCol: int) -> Dict:
+                     ValueName: str, period: List, num_lyr: int, num_row: int, num_col: int) -> Dict:
     res = {}
     if isinstance(Value, (float, int)):
         if Value < 0:
             raise ValueError(f"{ValueName} value must be greater than or equal to 0.")
         for i in range(len(period)):
-            res[i] = np.full((NumLyr, NumRow, NumCol), Value, dtype=float)
+            res[i] = np.full((num_lyr, num_row, num_col), Value, dtype=float)
         return res
     elif isinstance(Value, Dict):
         if len(Value) != len(set(Value.keys())):
@@ -64,9 +64,9 @@ def CheckValueGtZero(Value: Union[int, float, Dict[int, Union[int, float, np.nda
             if isinstance(value, (int, float)):
                 if value < 0:
                     raise ValueError(f"{ValueName} value must be greater than or equal to 0.")
-                res[key] = np.full((NumLyr, NumRow, NumCol), value, dtype=float)
+                res[key] = np.full((num_lyr, num_row, num_col), value, dtype=float)
             elif isinstance(value, np.ndarray):
-                if value.shape == (NumLyr, NumRow, NumCol):
+                if value.shape == (num_lyr, num_row, num_col):
                     if (value < 0).all():
                         raise ValueError(f"{ValueName} value must be greater than or equal to 0.")
                     res[key] = value
@@ -80,14 +80,14 @@ def CheckValueGtZero(Value: Union[int, float, Dict[int, Union[int, float, np.nda
         raise ValueError(f"Invalid value type for '{ValueName}'. It should be int, float, or a dictionary.")
 
 
-def Check3DValueExistGrid(Value: Union[int, float, np.ndarray], ValueName: str, NumLyr: int, NumRow: int,
-                          NumCol: int, OriginValueList: List) -> np.ndarray:
+def Check3DValueExistGrid(Value: Union[int, float, np.ndarray], ValueName: str, num_lyr: int, num_row: int,
+                          num_col: int, OriginValueList: List) -> np.ndarray:
     if isinstance(Value, (int, float)):
         if Value not in OriginValueList:
             raise ValueError(f"{ValueName} : should exist in {OriginValueList}.")
-        return np.full((NumLyr, NumRow, NumCol), Value, dtype=float)
+        return np.full((num_lyr, num_row, num_col), Value, dtype=float)
     elif isinstance(Value, np.ndarray):
-        if Value.shape == (NumLyr, NumRow, NumCol):
+        if Value.shape == (num_lyr, num_row, num_col):
             if np.all(np.isin(Value, OriginValueList)):
                 return Value
             else:
@@ -98,14 +98,14 @@ def Check3DValueExistGrid(Value: Union[int, float, np.ndarray], ValueName: str, 
         raise ValueError(f"Invalid value type for '{ValueName}'. It should be int, float, or a np.ndarray.")
 
 
-def check_3d_zero(Value: Union[int, float, np.ndarray], ValueName: str, NumLyr: int, NumRow: int,
-                  NumCol: int) -> np.ndarray:
+def check_3d_zero(Value: Union[int, float, np.ndarray], ValueName: str, num_lyr: int, num_row: int,
+                  num_col: int) -> np.ndarray:
     if isinstance(Value, (int, float)):
         if Value < 0:
             raise ValueError(f"{ValueName} value must be greater than or equal to 0.")
-        return np.full((NumLyr, NumRow, NumCol), Value, dtype=float)
+        return np.full((num_lyr, num_row, num_col), Value, dtype=float)
     elif isinstance(Value, np.ndarray):
-        if Value.shape == (NumLyr, NumRow, NumCol):
+        if Value.shape == (num_lyr, num_row, num_col):
             if (Value < 0).all():
                 raise ValueError(f"{ValueName} value must be greater than or equal to 0.")
             return Value
@@ -115,12 +115,12 @@ def check_3d_zero(Value: Union[int, float, np.ndarray], ValueName: str, NumLyr: 
         raise ValueError(f"Invalid value type for '{ValueName}'. It should be int, float, or a np.ndarray.")
 
 
-def check_3d_format(Value: Union[int, float, np.ndarray], ValueName: str, NumLyr: int, NumRow: int,
-                    NumCol: int) -> np.ndarray:
+def check_3d_format(Value: Union[int, float, np.ndarray], ValueName: str, num_lyr: int, num_row: int,
+                    num_col: int) -> np.ndarray:
     if isinstance(Value, (int, float)):
-        return np.full((NumLyr, NumRow, NumCol), Value, dtype=float)
+        return np.full((num_lyr, num_row, num_col), Value, dtype=float)
     elif isinstance(Value, np.ndarray):
-        if Value.shape == (NumLyr, NumRow, NumCol):
+        if Value.shape == (num_lyr, num_row, num_col):
             return Value
         else:
             raise ValueError(f"{ValueName} : Invalid shape or values in the {ValueName} numpy array.")
@@ -191,13 +191,13 @@ def check_col(tar_col: int, col: int) -> bool:
     return True
 
 
-def check_dict_zero(Value: np.ndarray, ValueName: str, NumLyr: int, NumRow: int,
-                    NumCol: int):
-    if Value.shape == (NumLyr, NumRow, NumCol):
+def check_dict_zero(Value: np.ndarray, ValueName: str, num_lyr: int, num_row: int,
+                    num_col: int):
+    if Value.shape == (num_lyr, num_row, num_col):
         if (Value < 0).all():
             print(f"{ValueName} value must be greater than or equal to 0.")
             return False
     else:
-        print(f"{ValueName} : Invalid shape in the {ValueName} numpy array(need {NumLyr},{NumRow},{NumCol}).")
+        print(f"{ValueName} : Invalid shape in the {ValueName} numpy array(need {num_lyr},{num_row},{num_col}).")
         return False
     return True
