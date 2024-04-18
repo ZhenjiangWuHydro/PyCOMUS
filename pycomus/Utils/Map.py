@@ -1,5 +1,7 @@
 import re
 
+import matplotlib
+matplotlib.use('Qt5Agg')  # 尝试使用 Qt5Agg 后端，也可以尝试其他可用的后端
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.collections import LineCollection

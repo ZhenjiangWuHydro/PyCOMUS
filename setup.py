@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="PyCOMUS",
-    version="1.0.2",
+    version="1.0.3",
     author="Zhenjiang Wu",
     author_email="zhenjiangwu613@gmail.com",
     description="A Python library for invoking the COMUS model for groundwater numerical simulation.",
@@ -14,7 +14,7 @@ setuptools.setup(
     url="https://github.com/ZhenjiangWuHydro/PyCOMUS",
     packages=setuptools.find_packages(exclude=['Example*', 'tests*', 'docs*', 'build*', 'dist*', '.idea*', '.gitignore', 'README.md','ComusModel','paper','CheckParam']),
     package_data={
-        'pycomus.Utils': ['*.dll'],
+        'pycomus.Utils': ['*.dll','*.so'],
     },
     classifiers=[
         "Programming Language :: Python :: 3",

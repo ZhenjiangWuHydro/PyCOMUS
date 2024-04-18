@@ -11,16 +11,19 @@ from pycomus.Utils.CONSTANTS import PERIOD_FILE_NAME, PERIOD_PKG_NAME
 
 
 class ComusPeriod:
+    """
+    Comus Period Class. Contain PERLEN, NSTEP and MULTR.
+    """
     def __init__(self, model, period: Union[Tuple, List[Tuple]]):
         """
         Set COMUS Model Period Attributes.
 
         Parameters:
         ----------------------------
-        model:
+        model -pycomus.ComusModel
             COMUS Model Object.
-        period:
-            It can be a Tuple or a List[Tuple], and each Tuple should contain three elements, which are PERLEN, NSTEP,
+        period -Union[Tuple, List[Tuple]]
+            It can be a Tuple or a List[Tuple], and each Tuple should contain three elements, which are PERLEN, NSTEP
              and MULTR, and each element should be greater than 0.
 
         Returns:
