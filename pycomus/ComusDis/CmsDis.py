@@ -15,36 +15,67 @@ from pycomus.Utils.CONSTANTS import LPF_LYR_FILE_NAME, BCF_LYR_FILE_NAME, LPF_LY
 
 
 class ComusDis:
+    """
+    Base Class
+    """
+
     def __init__(self, model, num_lyr: int = 1, num_row: int = 1, num_col: int = 1,
-                 x_coord: float = 0, y_coord: float = 0, row_space: Union[float, int, List[float]] = 1,
+                 x_coord: Union[float, int] = 0, y_coord: Union[float, int] = 0,
+                 row_space: Union[float, int, List[float]] = 1,
                  col_space: Union[float, int, List[float]] = 1):
-        if num_row < 1:
-            raise ValueError("num_row should be greater than 0!")
-        if num_col < 1:
-            raise ValueError("num_col should be greater than 0!")
-        if num_lyr < 1:
-            raise ValueError("num_lyr should be greater than 0!")
-        self.num_lyr: int = num_lyr
-        self.num_row: int = num_row
-        self.num_col: int = num_col
-        self.x_coord: float = x_coord
-        self.y_coord: float = y_coord
+
+        # Check layer,row,col
+        if isinstance(num_lyr, int):
+            self.num_lyr: int = num_lyr
+            if num_lyr < 1:
+                raise ValueError("num_lyr should be greater than 0!")
+        else:
+            raise ValueError("num_lyr should be int")
+
+        if isinstance(num_row, int):
+            self.num_row: int = num_row
+            if num_row < 1:
+                raise ValueError("num_row should be greater than 0!")
+        else:
+            raise ValueError("num_row should be int")
+
+        if isinstance(num_col, int):
+            self.num_col: int = num_col
+            if num_col < 1:
+                raise ValueError("num_col should be greater than 0!")
+        else:
+            raise ValueError("num_col should be int")
+
+        # Check x_coord and y_coord
+        if isinstance(x_coord, (float, int)):
+            self.x_coord: Union[float, int] = x_coord
+        else:
+            raise ValueError("x_coord should be an integer or a float.")
+
+        if isinstance(y_coord, (float, int)):
+            self.y_coord: Union[float, int] = y_coord
+        else:
+            raise ValueError("y_coord should be an integer or a float.")
+
+        # Check row_space and col_space
         if isinstance(row_space, (float, int)):
             self.row_space: List[Union[int, float]] = [row_space] * num_row
         elif isinstance(row_space, list) and num_row != len(row_space):
             raise ValueError("row_space grid spacing length should be the same as num_row!")
         else:
             self.row_space: List[Union[int, float]] = row_space
+        if not all(x > 0 for x in self.row_space):
+            raise ValueError("row_space should be greater than 0")
+
         if isinstance(col_space, (float, int)):
             self.col_space: List[Union[int, float]] = [col_space] * num_col
         elif isinstance(col_space, list) and num_col != len(col_space):
             raise ValueError("col_space grid spacing length should be the same as num_col!")
         else:
             self.col_space: List[Union[int, float]] = col_space
-        if not all(x > 0 for x in self.row_space):
-            raise ValueError("row_space should be greater than 0")
         if not all(x > 0 for x in self.col_space):
             raise ValueError("col_space should be greater than 0")
+
         self._model = model
 
     @classmethod
@@ -91,11 +122,6 @@ class ComusDis:
                 row_space.append(float(data[2]))
         return row_space, col_space
 
-    def __str__(self):
-        return f"Mesh Grid And Layer:\n    Number of layers : {self.num_lyr}\n    Number of rows : {self.num_row}\n    Number of cols : {self.num_col}  \n" \
-               f"    RowSpace : {self.row_space}  \n    ColSpace : {self.col_space}  \n    XCoord : {self.x_coord}\n    " \
-               f"YCoord : {self.y_coord}"
-
     def write_file(self, folder_path):
         with open(os.path.join(folder_path, GRID_SPACE_FILE_NAME), "w") as file:
             file.write("ATTI  NUMID  DELT\n")
@@ -107,6 +133,11 @@ class ComusDis:
             for colSpace in self.col_space:
                 file.write(f"R  {index}  {colSpace}\n")
                 index += 1
+
+    def __str__(self):
+        return f"Grid And Layer:\n    Number of layers : {self.num_lyr}\n    Number of rows : {self.num_row}\n    Number of cols : {self.num_col}  \n" \
+               f"    RowSpace : {self.row_space}  \n    ColSpace : {self.col_space}  \n    XCoord : {self.x_coord}\n    " \
+               f"YCoord : {self.y_coord}"
 
 
 class ComusDisLpf(ComusDis):

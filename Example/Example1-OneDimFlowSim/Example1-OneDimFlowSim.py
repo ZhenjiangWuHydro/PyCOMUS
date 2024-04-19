@@ -22,7 +22,7 @@ if __name__ == "__main__":
                       275.036122, 253.0332322, 232.7905737, 214.1673278, 197.0339415, 181.2712262, 166.7695281,
                       153.4279659, 141.1537286, 129.8614303, 119.4725159, 109.9147146, 101.1215374]
     model_dis = pycomus.ComusDisBcf(model, num_lyr=num_lyr, num_row=num_row, num_col=num_col, row_space=50,
-                                    col_space=column_spacing, lyr_type=[1], lyr_trpy=[1.0], x_coord=-125)
+                                    col_space=250, lyr_type=[1], lyr_trpy=[1.0], x_coord=-125)
 
     # Grid Attribute
     ibound = np.full((num_lyr, num_row, num_col), 1, dtype=int)

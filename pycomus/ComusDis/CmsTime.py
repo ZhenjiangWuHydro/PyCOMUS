@@ -20,9 +20,9 @@ class ComusPeriod:
 
         Parameters:
         ----------------------------
-        model -pycomus.ComusModel
+        model: pycomus.ComusModel
             COMUS Model Object.
-        period -Union[Tuple, List[Tuple]]
+        period: Union[Tuple, List[Tuple]]
             It can be a Tuple or a List[Tuple], and each Tuple should contain three elements, which are PERLEN, NSTEP
              and MULTR, and each element should be greater than 0.
 

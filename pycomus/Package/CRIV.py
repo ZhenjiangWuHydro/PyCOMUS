@@ -19,7 +19,7 @@ class ComusRiv:
     def __init__(self, model: pycomus.ComusModel, cond: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
                  shead: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
                  ehead: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
-                 riv_btm: Union[int, float, Dict[int, Union[int, float, np.ndarray]]], ):
+                 riv_btm: Union[int, float, Dict[int, Union[int, float, np.ndarray]]]):
         """
         Initialize the COMUS Model with the River(RIV) package.
 

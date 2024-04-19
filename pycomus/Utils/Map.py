@@ -1,7 +1,9 @@
 import re
+from typing import Union
 
 import matplotlib
-matplotlib.use('Qt5Agg')  # 尝试使用 Qt5Agg 后端，也可以尝试其他可用的后端
+
+matplotlib.use('Qt5Agg')
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.collections import LineCollection
@@ -37,7 +39,17 @@ class ComusPlot:
         hex_color_pattern = r'^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$'
         return bool(re.match(hex_color_pattern, color_string))
 
-    def plot_grid(self, color: str = "#ffffff", edge_color: str = "#000000", line_width: int = 1):
+    def plot_grid(self, color: str = "#ffffff", edge_color: str = "#000000", line_width: Union[int, float] = 1):
+        """
+        Plot Grid To Map.
+
+        :param color: str
+            Hex Color
+        :param edge_color: str
+            Hex Color
+        :param line_width: int/float
+            Grid Line With
+        """
         if not self._is_hex_color(color):
             raise ValueError("Invalid color format for color")
         if not self._is_hex_color(edge_color):
@@ -60,6 +72,14 @@ class ComusPlot:
         return collection
 
     def plot_contour(self, value: np.ndarray, **kwargs):
+        """
+        Plot Contour Plot.
+
+        :param value: np.ndarray
+            2D Array
+        :param kwargs: contourf_kwargs/colorbar_kwargs/contour_kwargs/clabel_kwargs
+
+        """
         x, y = self.calculate_grid_centers()
         mask = np.zeros_like(value, dtype=bool)
         mask[abs((value - self._cms_par.hno_flo) / self._cms_par.hno_flo) <= 0.00001] = True
@@ -73,7 +93,7 @@ class ComusPlot:
 
         # Contour fill plot
         contourf_plot = plt.contourf(x, y, masked_groundwater_level, **contourf_kwargs)
-        colorbar = plt.colorbar(contourf_plot, **colorbar_kwargs)
+        plt.colorbar(contourf_plot, **colorbar_kwargs)
         plt.xlabel('X')
         plt.ylabel('Y')
         self._set_axes_limits(self._ax)

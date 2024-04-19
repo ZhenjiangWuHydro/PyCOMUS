@@ -17,8 +17,8 @@ from pycomus.Utils.CONSTANTS import DRN_PKG_NAME, DRN_FILE_NAME
 
 class ComusDrn:
     def __init__(self, model: pycomus.ComusModel,
-                 cond: Union[int, float, Dict[int, Union[int, float, np.ndarray]]] = None,
-                 delev: Union[int, float, Dict[int, Union[int, float, np.ndarray]]] = None):
+                 cond: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
+                 delev: Union[int, float, Dict[int, Union[int, float, np.ndarray]]]):
         """
         Initialize the COMUS Model with the Drainage(DRN) package.
 
@@ -54,9 +54,14 @@ class ComusDrn:
         if cond:
             self.cond = BoundaryCheck.CheckValueGtZero(cond, "Cond", self._period, self._num_lyr,
                                                        self._num_row, self._num_col)
+        else:
+            raise ValueError("Cond parameter not set!")
         if delev:
             self.delev = BoundaryCheck.CheckValueFormat(delev, "Delev", self._period, self._num_lyr,
                                                         self._num_row, self._num_col)
+        else:
+            raise ValueError("Delev parameter not set!")
+
         if cond and delev:
             if sorted(self.cond.keys()) != sorted(self.delev.keys()):
                 raise ValueError("The periods for the 'Cond' parameter and 'Delev' should be the same.")

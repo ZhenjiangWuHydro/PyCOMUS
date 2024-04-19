@@ -77,7 +77,6 @@ class ComusGridPars:
         self._intblkm = cms_pars.intblkm
         self._sim_type = cms_pars.sim_type
         self._lyr_type = [model.layers[i].lyr_type for i in range(self._num_lyr)]
-        model.package[GRID_PKG_NAME] = self
 
         # top Check
         if isinstance(top, np.ndarray):
@@ -302,6 +301,7 @@ class ComusGridPars:
                 else:
                     self.__ShowErrorMsg("sc2")
             self.__SetLpfPars()
+        model.package[GRID_PKG_NAME] = self
 
     @classmethod
     def load(cls, model, grid_params_file: str):
