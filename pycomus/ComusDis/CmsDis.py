@@ -141,49 +141,65 @@ class ComusDis:
 
 
 class ComusDisLpf(ComusDis):
+    """
+    COMUS Layer Property Flow Package Class(LPF).
+
+    Attributes:
+    -----------
+    model : pycomus.ComusModel
+        COMUS Model Object
+    num_lyr : int
+        Number of layers
+    num_row : int
+        Number of rows
+    num_col : int
+        Number of columns
+    row_space : Union[float, int, List[float]]
+        A float, int, or List representing row spacing
+    col_space : Union[float, int, List[float]]
+        A float, int, or List representing column spacing
+    x_coord : float
+        Top left corner X coordinate
+    y_coord : float
+        Top left corner Y coordinate
+    lyr_type : List[int]
+        The data in lyr_type should be in [0: Confined, 1: Convertible]
+    lyr_cbd : List[int]
+        The data in lyr_cbd should be in [0: Quasi Three Dimensions-Disable, 1: Quasi Three Dimensions-Enable]
+    lyr_ibs : List[int]
+        The data in lyr_ibs should be in [0: IBS-Disable, 1: IBS-Enable]
+
+    Methods:
+    --------
+    __init__(self, model, num_lyr: int = 1, num_row: int = 1, num_col: int = 1,
+                 row_space: Union[float, int, List[float]] = 1, col_space: Union[float, int, List[float]] = 1,
+                 x_coord: float = 0, y_coord: float = 0, lyr_type: List[int] = None, lyr_cbd: List[int] = None,
+                 lyr_ibs: List[int] = None)
+        Instantiate an instance of ComusDisLpf.
+
+    load(cls, model, ctrl_params_file: str, grd_space_file: str, lpf_lyr_file: str)
+         Load parameters from a LpfLyr.in file and create a ComusDisLpf instance.
+
+    write_file(self, folder_path: str)
+        Typically used as an internal function but can also be called directly, it outputs the `pycomus.ComusDisLpf`
+        module to the specified path as <LpfLyr.in>.
+
+    Returns:
+    --------
+    instance: pycomus.ComusDisLpf
+        COMUS LPF Layer Params Object.
+
+    Example:
+    --------
+    >>> import pycomus
+    >>> model1 = pycomus.ComusModel(model_name="test")
+    >>> modelDis = pycomus.ComusDisLpf(model1, 1, 20, 20, row_space=1, col_space=1, lyr_type=[1 for _ in range(1)], y_coord=1)
+    """
+
     def __init__(self, model, num_lyr: int = 1, num_row: int = 1, num_col: int = 1,
                  row_space: Union[float, int, List[float]] = 1, col_space: Union[float, int, List[float]] = 1,
                  x_coord: float = 0, y_coord: float = 0, lyr_type: List[int] = None, lyr_cbd: List[int] = None,
                  lyr_ibs: List[int] = None):
-        """
-        COMUS Layer Property Flow Package Class(LPF).
-
-        Parameters:
-        ----------------------------
-        model: pycomus.ComusModel
-            COMUS Model Object
-        num_lyr: int
-            Number of layers
-        num_row: int
-            Number of rows
-        num_col: int
-            Number of columns
-        row_space: Union[float, int, List[float]]
-            A float, int, or List representing row spacing
-        col_space: Union[float, int, List[float]]
-            A float, int, or List representing column spacing
-        x_coord: float
-            Top left corner X coordinate
-        y_coord: float
-            Top left corner Y coordinate
-        lyr_type: List[int]
-            The data in lyr_type should be in [0: Confined, 1: Convertible]
-        lyr_cbd: List[int]
-            The data in lyr_cbd should be in [0: Quasi Three Dimensions-Disable, 1: Quasi Three Dimensions-Enable]
-        lyr_ibs: List[int]
-            The data in lyr_ibs should be in [0: IBS-Disable, 1: IBS-Enable]
-
-        Returns:
-        --------
-        instance: pycomus.ComusDisLpf
-            COMUS LPF Layer Params Object.
-
-        Example:
-        --------
-        >>> import pycomus
-        >>> model1 = pycomus.ComusModel(model_name="test")
-        >>> modelDis = pycomus.ComusDisLpf(model1, 1, 20, 20, row_space=1, col_space=1, lyr_type=[1 for _ in range(1)], y_coord=1)
-        """
         super().__init__(model, num_lyr, num_row, num_col, x_coord, y_coord, row_space, col_space)
         cms_pars: pycomus.ComusConPars = model.package[CON_PKG_NAME]
         if cms_pars.intblkm == 1:
@@ -294,50 +310,67 @@ class ComusDisLpf(ComusDis):
 
 
 class ComusDisBcf(ComusDis):
+    """
+    COMUS Grid And Layer Property Flow Package Class(BCF).
+
+    Attributes:
+    ----------------------------
+    model: pycomus.ComusModel
+        COMUS model object
+    num_lyr: int
+        Number of layers
+    num_row: int
+        Number of rows
+    num_col: int
+        Number of cols
+    row_space: Union[float, int, List[float]]
+        A float or List data that represents row spacing
+    col_space: Union[float, int, List[float]]
+        A float or List data that represents col spacing
+    x_coord: float, optional
+        Top left corner X coordinate, by default 0
+    y_coord: float, optional
+        Top left corner Y coordinate, by default 0
+    lyr_type: List[int]
+        The data in lyr_type should be in [0:Confined,1:Unconfined,2:Limited Convertible,3:Full Convertible]
+    lyr_trpy: List[float], optional
+        ky/kx, by default None
+    lyr_ibs: List[int], optional
+        The data in lyr_ibs should be in [0:IBS-Disable,1:IBS-Enable]!, by default None
+
+    Methods:
+    --------
+    __init__(self, model, num_lyr: int = 1, num_row: int = 1, num_col: int = 1,
+                 row_space: Union[float, int, List[float]] = 1,
+                 col_space: Union[float, int, List[float]] = 1,
+                 x_coord: float = 0, y_coord: float = 0,
+                 lyr_type: List[int] = None, lyr_trpy: List[float] = None, lyr_ibs: List[int] = None)
+        Instantiate an instance of ComusDisBcf.
+
+    load(cls, model, ctrl_params_file: str, grd_space_file: str, bcf_lyr_file: str)
+         Load parameters from a LpfLyr.in file and create a ComusDisLpf instance.
+
+    write_file(self, folder_path: str)
+        Typically used as an internal function but can also be called directly, it outputs the `pycomus.ComusDisBcf`
+        module to the specified path as <BcfLyr.in>.
+
+    Returns:
+    --------
+    instance: pycomus.ComusDisBcf
+        COMUS BCF Layer Params Object.
+
+    Example:
+    --------
+    >>> import pycomus
+    >>> model1 = pycomus.ComusModel(model_name="test")
+    >>> modelDis = pycomus.ComusDisBcf(model1, 1, 20, 20, row_space=1, col_space=1, lyr_type=[1 for _ in range(1)], y_coord=1)
+    """
+
     def __init__(self, model, num_lyr: int = 1, num_row: int = 1, num_col: int = 1,
                  row_space: Union[float, int, List[float]] = 1,
                  col_space: Union[float, int, List[float]] = 1,
                  x_coord: float = 0, y_coord: float = 0,
                  lyr_type: List[int] = None, lyr_trpy: List[float] = None, lyr_ibs: List[int] = None) -> None:
-        """
-        COMUS Grid And Layer Property Flow Package Class(BCF).
-
-        Parameters:
-        ----------------------------
-        model: pycomus.ComusModel
-            COMUS model object
-        num_lyr: int
-            Number of layers
-        num_row: int
-            Number of rows
-        num_col: int
-            Number of cols
-        row_space: Union[float, int, List[float]]
-            A float or List data that represents row spacing
-        col_space: Union[float, int, List[float]]
-            A float or List data that represents col spacing
-        x_coord: float, optional
-            Top left corner X coordinate, by default 0
-        y_coord: float, optional
-            Top left corner Y coordinate, by default 0
-        lyr_type: List[int]
-            The data in lyr_type should be in [0:Confined,1:Unconfined,2:Limited Convertible,3:Full Convertible]
-        lyr_trpy: List[float], optional
-            ky/kx, by default None
-        lyr_ibs: List[int], optional
-            The data in lyr_ibs should be in [0:IBS-Disable,1:IBS-Enable]!, by default None
-
-        Returns:
-        --------
-        instance: pycomus.ComusDisBcf
-            COMUS BCF Layer Params Object.
-
-        Example:
-        --------
-        >>> import pycomus
-        >>> model1 = pycomus.ComusModel(model_name="test")
-        >>> modelDis = pycomus.ComusDisBcf(model1, 1, 20, 20, row_space=1, col_space=1, lyr_type=[1 for _ in range(1)], y_coord=1)
-        """
         super().__init__(model, num_lyr, num_row, num_col, x_coord, y_coord, row_space, col_space)
         cms_pars = model.package[CON_PKG_NAME]
         if cms_pars.intblkm == 2:
@@ -373,7 +406,7 @@ class ComusDisBcf(ComusDis):
     @classmethod
     def load(cls, model, ctrl_params_file: str, grd_space_file: str, bcf_lyr_file: str):
         """
-        Load parameters from a LpfLyr.in file and create a ComusDisLpf instance.
+        Load parameters from a BcfLyr.in file and create a ComusDisBcf instance.
 
         Parameters:
         ----------------------------

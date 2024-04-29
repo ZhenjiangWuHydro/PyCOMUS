@@ -13,31 +13,44 @@ from pycomus.Utils.CONSTANTS import HFB_PKG_NAME, HFB_FILE_NAME
 
 
 class ComusHfb:
-    def __init__(self, model: pycomus.ComusModel, hfb_data: List[Tuple[int, int, int, int, int, Union[int, float]]]):
-        """
+    """
+    Initialize the COMUS Model with the Horizontal-Flow Barrier(HFB) package.
+
+    Attributes:
+    ----------------------------
+    model:
+        The COMUS model to which the HFB package will be applied.
+    hfb_data:
+        List[Tuple] type data, in which the Tuple should contain six parameters: ILYR, IROW1, ICOL1, IROW2, ICOL2, HCDW.
+
+    Methods:
+    --------
+    __init__(self, model: pycomus.ComusModel, hfb_data: List[Tuple[int, int, int, int, int, Union[int, float]]])
         Initialize the COMUS Model with the Horizontal-Flow Barrier(HFB) package.
 
-        Parameters:
-        ----------------------------
-        model:
-            The COMUS model to which the HFB package will be applied.
-        hfb_data:
-            List[Tuple] type data, in which the Tuple should contain six parameters: ILYR, IROW1, ICOL1, IROW2, ICOL2, HCDW.
+    load(cls, model, hfb_params_file: str)
+         Load parameters from a HFB.in file and create a ComusHfb instance.
 
-        Returns:
-        --------
-        instance: pycomus.ComusHfb
-           COMUS Horizontal-Flow Barrier(HFB) Params Object.
+    write_file(self, folder_path: str)
+        Typically used as an internal function but can also be called directly, it outputs the `pycomus.ComusHfb`
+        module to the specified path as <HFB.in>.
 
-        Example:
-        --------
-        >>> import pycomus
-        >>> model1 = pycomus.ComusModel(model_name="test")
-        >>> data = []
-        >>> for i in range(36):
-        >>>     data.append((i, 0, 15, 0, 16, 1e-6))
-        >>> hfbPackage = pycomus.ComusHfb(model=model1, hfb_data=data)
-        """
+    Returns:
+    --------
+    instance: pycomus.ComusHfb
+       COMUS Horizontal-Flow Barrier(HFB) Params Object.
+
+    Example:
+    --------
+    >>> import pycomus
+    >>> model1 = pycomus.ComusModel(model_name="test")
+    >>> data = []
+    >>> for i in range(36):
+    >>>     data.append((i, 0, 15, 0, 16, 1e-6))
+    >>> hfbPackage = pycomus.ComusHfb(model=model1, hfb_data=data)
+    """
+
+    def __init__(self, model: pycomus.ComusModel, hfb_data: List[Tuple[int, int, int, int, int, Union[int, float]]]):
         BoundaryCheck.check_bnd_queue(model)
         cms_dis: Union[pycomus.ComusDisLpf, pycomus.ComusDisBcf] = BoundaryCheck.get_cms_pars(model)
         self._num_lyr: int = cms_dis.num_lyr

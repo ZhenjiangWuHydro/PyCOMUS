@@ -8,6 +8,7 @@ pycomus.Utils.BoundaryCheck module
 ----------------------------------
 
 .. automodule:: pycomus.Utils.BoundaryCheck
+   :noindex:
    :members:
    :undoc-members:
    :show-inheritance:
@@ -16,6 +17,7 @@ pycomus.Utils.CONSTANTS module
 ------------------------------
 
 .. automodule:: pycomus.Utils.CONSTANTS
+   :noindex:
    :members:
    :undoc-members:
    :show-inheritance:
@@ -40,6 +42,7 @@ Module contents
 ---------------
 
 .. automodule:: pycomus.Utils
+   :noindex:
    :members:
    :undoc-members:
    :show-inheritance:

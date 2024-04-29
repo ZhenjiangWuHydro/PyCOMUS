@@ -15,28 +15,52 @@ from pycomus.Utils.CONSTANTS import RES_PKG_NAME, RES_CTRL_FILE_NAME, RES_PERIOD
 
 
 class ComusRes:
-    def __init__(self, model, res_num: int):
-        """
+    """
+    Initialize the COMUS Model with the Reservoir(RES) package.
+
+    Attributes:
+    ----------------------------
+    model:
+        COMUS Model Object.
+    res_num:
+        Number of reservoirs.
+
+    Methods:
+    --------
+    __init__(self, model, res_num: int)
         Initialize the COMUS Model with the Reservoir(RES) package.
 
-        Parameters:
-        ----------------------------
-        model:
-            COMUS Model Object.
-        res_num:
-            Number of reservoirs.
+    set_control_params(self, control_params: Dict[int, Tuple[float, float, int, int]])
+        Set Reservoir Control Params.
 
-        Returns:
-        --------
-        instance: pycomus.ComusRes
-           COMUS Reservoir(RES) Params Object.
+    set_period_data(self, period_data: Dict[int, Dict[int, Tuple[float, float, float, float]]])
+        Set Reservoir Period Data.
 
-        Example:
-        --------
-        >>> import pycomus
-        >>> model1 = pycomus.ComusModel(model_name="test")
-        >>> resPackage = pycomus.ComusRes(model1, res_num=1)
-        """
+    set_grid_data(self, btm: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
+                      bvk: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
+                      btk: Union[int, float, Dict[int, Union[int, float, np.ndarray]]])
+        Set Reservoir Grid Cell Data.
+
+    load(cls, model, ctrl_pars_file: str, period_file: str, grid_file: str)
+         Load parameters from RES(RESCtrl.in, RESPer.in, RESGrd.in) file and create a ComusRes instance.
+
+    write_file(self, folder_path: str)
+        Typically used as an internal function but can also be called directly, it outputs the `pycomus.ComusRes`
+        module to the specified path as <RESCtrl.in>, <RESPer.in> and <RESGrd.in>.
+
+    Returns:
+    --------
+    instance: pycomus.ComusRes
+       COMUS Reservoir(RES) Params Object.
+
+    Example:
+    --------
+    >>> import pycomus
+    >>> model1 = pycomus.ComusModel(model_name="test")
+    >>> resPackage = pycomus.ComusRes(model1, res_num=1)
+    """
+
+    def __init__(self, model, res_num: int):
         if res_num < 1:
             raise ValueError("The number of reservoirs should be greater than or equal to 1.")
         self._res_num = res_num

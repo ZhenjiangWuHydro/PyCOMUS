@@ -15,6 +15,71 @@ from pycomus.Utils.CONSTANTS import BCF_GRID_FILE_NAME, LPF_GRID_FILE_NAME, GRID
 
 
 class ComusGridPars:
+    """
+    Set COMUS Model GridCell Parameter Attributes.
+
+    Attributes:
+    ----------------------------
+    model:
+        COMUS Model Object.
+    top:
+        A value of 0 indicates an inactive cell; 1 indicates a variable head cell; -1 indicates a constant head cell.
+    bot:
+        Represents the elevation of the bottom boundary of the grid cell (in length units).
+    ibound:
+        Represents the elevation of the top boundary of the grid cell (in length units).
+    shead:
+        The initial head value for the grid cell (L).
+    kx:
+        Permeability coefficient kx in the X-direction.
+    transm:
+        This represents the transmissivity of the grid cell in the row direction.
+    vcont:
+        The vertical hydraulic conductivity of the grid cell (1/T), also known as the leakage coefficient.
+    sc1:
+        Grid cell type 1 storage coefficient (-).
+    sc2:
+        Grid cell type 2 storage coefficient (-).
+    wet_dry:
+        The absolute value is the threshold by which the head in the adjacent cell must exceed the bottom elevation of the current cell to trigger wetting.
+    ky:
+        Permeability coefficient ky in the Y-direction.
+    kz:
+        Permeability coefficient kz in the Z-direction.
+    vkcb:
+        It represents the vertical hydraulic conductivity of the low-permeability medium at the bottom of the grid cell (L/T).
+    tkcb:
+        It denotes the thickness of the low-permeability medium at the bottom of the grid cell (L).
+
+    Methods:
+    --------
+    __init__(self, model, top: Union[float, int, np.ndarray] = None, bot: Union[float, int, np.ndarray] = None,
+        ibound: Union[int, np.ndarray] = None, shead: Union[float, int, np.ndarray] = None,
+        kx: Union[float, int, np.ndarray] = None, transm: Union[float, int, np.ndarray] = None,
+        vcont: Union[float, int, np.ndarray] = None, sc1: Union[float, int, np.ndarray] = None,
+        sc2: Union[float, int, np.ndarray] = None, wet_dry: Union[float, int, np.ndarray] = None,
+        ky: Union[float, int, np.ndarray] = None, kz: Union[float, int, np.ndarray] = None,
+        vkcb: Union[float, int, np.ndarray] = None, tkcb: Union[float, int, np.ndarray] = None)
+        Set COMUS Model GridCell Parameter Attributes.
+
+    load(cls, model, grid_params_file: str)
+         Load parameters from a BcfGrd.in or LpfGrd.in file and create a ComusGridPars instance.
+
+    write_file(self, folder_path: str)
+        Typically used as an internal function but can also be called directly, it outputs the `pycomus.ComusGridPars`
+        module to the specified path as <BcfGrd.in> or <LpfGrd.in>.
+
+    Returns:
+    --------
+    controlParams: pycomus.ComusGridPars
+        COMUS Grid Attribute Params Object.
+
+    Example:
+    --------
+    >>> import pycomus
+    >>> model1 = pycomus.ComusModel(model_name="OneDimFlowSim")
+    >>> modelGridPar = pycomus.ComusGridPars(model1, top=50, bot=0, ibound=1, kx=1, shead=20)
+    """
     def __init__(self, model, top: Union[float, int, np.ndarray] = None, bot: Union[float, int, np.ndarray] = None,
                  ibound: Union[int, np.ndarray] = None, shead: Union[float, int, np.ndarray] = None,
                  kx: Union[float, int, np.ndarray] = None, transm: Union[float, int, np.ndarray] = None,
@@ -22,53 +87,6 @@ class ComusGridPars:
                  sc2: Union[float, int, np.ndarray] = None, wet_dry: Union[float, int, np.ndarray] = None,
                  ky: Union[float, int, np.ndarray] = None, kz: Union[float, int, np.ndarray] = None,
                  vkcb: Union[float, int, np.ndarray] = None, tkcb: Union[float, int, np.ndarray] = None):
-        """
-        Set COMUS Model GridCell Parameter Attributes.
-
-        Parameters:
-        ----------------------------
-        model:
-            COMUS Model Object.
-        top:
-            A value of 0 indicates an inactive cell; 1 indicates a variable head cell; -1 indicates a constant head cell.
-        bot:
-            Represents the elevation of the bottom boundary of the grid cell (in length units).
-        ibound:
-            Represents the elevation of the top boundary of the grid cell (in length units).
-        shead:
-            The initial head value for the grid cell (L).
-        kx:
-            Permeability coefficient kx in the X-direction.
-        transm:
-            This represents the transmissivity of the grid cell in the row direction.
-        vcont:
-            The vertical hydraulic conductivity of the grid cell (1/T), also known as the leakage coefficient.
-        sc1:
-            Grid cell type 1 storage coefficient (-).
-        sc2:
-            Grid cell type 2 storage coefficient (-).
-        wet_dry:
-            The absolute value is the threshold by which the head in the adjacent cell must exceed the bottom elevation of the current cell to trigger wetting.
-        ky:
-            Permeability coefficient ky in the Y-direction.
-        kz:
-            Permeability coefficient kz in the Z-direction.
-        vkcb:
-            It represents the vertical hydraulic conductivity of the low-permeability medium at the bottom of the grid cell (L/T).
-        tkcb:
-            It denotes the thickness of the low-permeability medium at the bottom of the grid cell (L).
-
-        Returns:
-        --------
-        controlParams: pycomus.ComusGridPars
-            COMUS Grid Attribute Params Object.
-
-        Example:
-        --------
-        >>> import pycomus
-        >>> model1 = pycomus.ComusModel(model_name="OneDimFlowSim")
-        >>> modelGridPar = pycomus.ComusGridPars(model1, top=50, bot=0, ibound=1, kx=1, shead=20)
-        """
         cms_pars, cms_dis = self.__Check(model)
         self._model = model
         self._num_lyr = cms_dis.num_lyr

@@ -16,33 +16,48 @@ from pycomus.Utils.CONSTANTS import DRN_PKG_NAME, DRN_FILE_NAME
 
 
 class ComusDrn:
+    """
+    Initialize the COMUS Model with the Drainage(DRN) package.
+
+    Attributes:
+    ----------------------------
+    model: pycomus.ComusModel
+        The COMUS model to which the DRN package will be applied.
+    cond: Union[int, float, Dict[int, Union[int, float, np.ndarray]]]
+        The hydraulic conductivity coefficient between the drainage ditch and the aquifer at the grid cell (L²/T).
+    delev: Union[int, float, Dict[int, Union[int, float, np.ndarray]]]
+        The elevation of the bottom of the drainage ditch at the grid cell (L).
+
+    Methods:
+    --------
+    __init__(self, model: pycomus.ComusModel,
+                 cond: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
+                 delev: Union[int, float, Dict[int, Union[int, float, np.ndarray]]])
+        Initialize the COMUS Model with the Drainage(DRN) package.
+
+    load(cls, model, drn_params_file: str)
+         Load parameters from a DRN.in file and create a ComusDrn instance.
+
+    write_file(self, folder_path: str)
+        Typically used as an internal function but can also be called directly, it outputs the `pycomus.ComusDrn`
+        module to the specified path as <DRN.in>.
+
+    Returns:
+    --------
+    instance: pycomus.ComusDrn
+       COMUS Drainage(DRN) Params Object.
+
+    Example:
+    --------
+    >>> import pycomus
+    >>> model1 = pycomus.ComusModel(model_name="test")
+    >>> drnPkg = pycomus.Package.ComusDrn(model1, Cond={0: 1}, Delev={0: 20})
+
+    """
+
     def __init__(self, model: pycomus.ComusModel,
                  cond: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
                  delev: Union[int, float, Dict[int, Union[int, float, np.ndarray]]]):
-        """
-        Initialize the COMUS Model with the Drainage(DRN) package.
-
-        Parameters:
-        ----------------------------
-        model: pycomus.ComusModel
-            The COMUS model to which the DRN package will be applied.
-        cond: Union[int, float, Dict[int, Union[int, float, np.ndarray]]]
-            The hydraulic conductivity coefficient between the drainage ditch and the aquifer at the grid cell (L²/T).
-        delev: Union[int, float, Dict[int, Union[int, float, np.ndarray]]]
-            The elevation of the bottom of the drainage ditch at the grid cell (L).
-
-        Returns:
-        --------
-        instance: pycomus.ComusDrn
-           COMUS Drainage(DRN) Params Object.
-
-        Example:
-        --------
-        >>> import pycomus
-        >>> model1 = pycomus.ComusModel(model_name="test")
-        >>> drnPkg = pycomus.Package.ComusDrn(model, Cond={0: 1}, Delev={0: 20})
-
-        """
         BoundaryCheck.check_bnd_queue(model)
         cms_dis = BoundaryCheck.get_cms_pars(model)
         cms_period = BoundaryCheck.get_period(model)

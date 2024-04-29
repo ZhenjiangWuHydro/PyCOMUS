@@ -16,31 +16,46 @@ from pycomus.Utils.CONSTANTS import WEL_PKG_NAME, WEL_FILE_NAME
 
 
 class ComusWel:
-    def __init__(self, model: pycomus.ComusModel, wellr: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
-                 satthr: Union[int, float, Dict[int, Union[int, float, np.ndarray]]]):
-        """
+    """
+    Initialize the COMUS Model with the Well(WEL) package.
+
+    Attributes:
+    ----------------------------
+    model:
+        The COMUS model to which the WEL package will be applied.
+    wellr:
+        The well flow rate (L³/T) for a grid cell.
+    satthr:
+        It is the saturation thickness threshold (L) for the grid cell.
+
+    Methods:
+    --------
+    __init__(self, model: pycomus.ComusModel, wellr: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
+                 satthr: Union[int, float, Dict[int, Union[int, float, np.ndarray]]])
         Initialize the COMUS Model with the Well(WEL) package.
 
-        Parameters:
-        ----------------------------
-        model:
-            The COMUS model to which the WEL package will be applied.
-        wellr:
-            The well flow rate (L³/T) for a grid cell.
-        satthr:
-            It is the saturation thickness threshold (L) for the grid cell.
+    load(cls, model, wel_params_file: str)
+         Load parameters from a WEL.in file and create a ComusWel instance.
 
-        Returns:
-        --------
-        instance: pycomus.ComusWel
-           COMUS Well(WEL) Params Object.
+    write_file(self, folder_path: str)
+        Typically used as an internal function but can also be called directly, it outputs the `pycomus.ComusWel`
+        module to the specified path as <WEL.in>.
 
-        Example:
-        --------
-        >>> import pycomus
-        >>> model1 = pycomus.ComusModel(model_name="test")
-        >>> welPackage = pycomus.ComusWel(model1, wellr={0: 1}, satthr=1)
-        """
+
+    Returns:
+    --------
+    instance: pycomus.ComusWel
+       COMUS Well(WEL) Params Object.
+
+    Example:
+    --------
+    >>> import pycomus
+    >>> model1 = pycomus.ComusModel(model_name="test")
+    >>> welPackage = pycomus.ComusWel(model1, wellr={0: 1}, satthr=1)
+    """
+
+    def __init__(self, model: pycomus.ComusModel, wellr: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
+                 satthr: Union[int, float, Dict[int, Union[int, float, np.ndarray]]]):
         BoundaryCheck.check_bnd_queue(model)
         cms_dis = BoundaryCheck.get_cms_pars(model)
         cms_period = BoundaryCheck.get_period(model)

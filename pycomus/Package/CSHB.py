@@ -16,31 +16,45 @@ from pycomus.Utils.CONSTANTS import SHB_PKG_NAME, SHB_FILE_NAME
 
 
 class ComusShb:
-    def __init__(self, model: pycomus.ComusModel, shead: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
-                 ehead: Union[int, float, Dict[int, Union[int, float, np.ndarray]]]):
-        """
+    """
+    Initialize the COMUS Model with the Transient Specified-Head Boundary(SHB) package.
+
+    Parameters:
+    ----------------------------
+    model:
+        The COMUS model to which the SHB package will be applied.
+    shead:
+        The hydraulic head value of the grid cell at the beginning of the stress period (L).
+    ehead:
+        The hydraulic head value of the grid cell at the end of the stress period (L).
+
+    Methods:
+    --------
+    __init__(self, model: pycomus.ComusModel, shead: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
+                 ehead: Union[int, float, Dict[int, Union[int, float, np.ndarray]]])
         Initialize the COMUS Model with the Transient Specified-Head Boundary(SHB) package.
 
-        Parameters:
-        ----------------------------
-        model:
-            The COMUS model to which the SHB package will be applied.
-        shead:
-            The hydraulic head value of the grid cell at the beginning of the stress period (L).
-        ehead:
-            The hydraulic head value of the grid cell at the end of the stress period (L).
+    load(cls, model, shb_params_file: str)
+          Load parameters from a SHB.in file and create a ComusShb instance.
 
-        Returns:
-        --------
-        instance: pycomus.ComusShb
-           COMUS Transient Specified-Head Boundary(SHB) Params Object.
+    write_file(self, folder_path: str)
+        Typically used as an internal function but can also be called directly, it outputs the `pycomus.ComusShb`
+        module to the specified path as <SHB.in>.
 
-        Example:
-        --------
-        >>> import pycomus
-        >>> model1 = pycomus.ComusModel(model_name="test")
-        >>> shbPackage = pycomus.ComusShb(model1, shead=1, ehead=2)
-        """
+    Returns:
+    --------
+    instance: pycomus.ComusShb
+       COMUS Transient Specified-Head Boundary(SHB) Params Object.
+
+    Example:
+    --------
+    >>> import pycomus
+    >>> model1 = pycomus.ComusModel(model_name="test")
+    >>> shbPackage = pycomus.ComusShb(model1, shead=1, ehead=2)
+    """
+
+    def __init__(self, model: pycomus.ComusModel, shead: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
+                 ehead: Union[int, float, Dict[int, Union[int, float, np.ndarray]]]):
         BoundaryCheck.check_bnd_queue(model)
         cms_dis = BoundaryCheck.get_cms_pars(model)
         cms_period = BoundaryCheck.get_period(model)

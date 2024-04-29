@@ -16,41 +16,75 @@ from pycomus.Utils.CONSTANTS import SUB_PKG_NAME, SUB_DB_GRID_FILE_NAME, SUB_NDB
 
 
 class ComusSub:
-    def __init__(self, model: pycomus.ComusModel, num_ndb: int, num_db: int, num_mz: int, nn: int = 20,
+    """
+    Initialize the COMUS Model with the Subsidence(SUB) package.
+
+    Attributes:
+    ----------------------------
+    model:
+        The COMUS model to which the SUB package will be applied.
+    num_ndb:
+        Number of delayed interbedded body groups without delay.
+    num_db:
+        Number of delayed interbedded bodies.
+    num_mz:
+        Only valid when num_ndb > 0, indicating the number of media zones.
+    nn:
+        Number of discrete points on the half thickness of equivalent interbedded bodies.
+    acc:
+        Representing the simulation acceleration parameter of delayed interbedded bodies.
+    it_min:
+        The effective value should be greater than or equal to 2, typically set to 5.
+    dsh_opt:
+        Representing the option for determining the initial head values of delayed interbedded bodies.
+
+    Methods:
+    --------
+    __init__(self, model: pycomus.ComusModel, num_ndb: int, num_db: int, num_mz: int, nn: int = 20,
                  acc: float = 0.5, it_min: int = 5, dsh_opt: int = 2):
-        """
         Initialize the COMUS Model with the Subsidence(SUB) package.
 
-        Parameters:
-        ----------------------------
-        model:
-            The COMUS model to which the SUB package will be applied.
-        num_ndb:
-            Number of delayed interbedded body groups without delay.
-        num_db:
-            Number of delayed interbedded bodies.
-        num_mz:
-            Only valid when num_ndb > 0, indicating the number of media zones.
-        nn:
-            Number of discrete points on the half thickness of equivalent interbedded bodies.
-        acc:
-            Representing the simulation acceleration parameter of delayed interbedded bodies.
-        it_min:
-            The effective value should be greater than or equal to 2, typically set to 5.
-        dsh_opt:
-            Representing the option for determining the initial head values of delayed interbedded bodies.
+    set_mz_data(self, mz_data: Union[Dict[int, Tuple[float, float, float]], List[Tuple[float, float, float]]])
+        Set MZ Data.
 
-        Returns:
-        --------
-        instance: pycomus.ComusSub
-           COMUS Subsidence(SUB) Params Object.
+    set_ndb_lyr(self, ndb_lyr: Union[Dict[int, int], List[int]])
+        Set No Delay Interbeds Layer Property.
 
-        Example:
-        --------
-        >>> import pycomus
-        >>> model1 = pycomus.ComusModel(model_name="test")
-        >>> subPackage = pycomus.ComusSub(model, 2, 2, 10)
-        """
+    set_ndb_grid(self, hc: Union[int, float, np.ndarray], sfe: Union[int, float, np.ndarray],
+                     sfv: Union[int, float, np.ndarray], com: Union[int, float, np.ndarray])
+        Set No Delay Interbeds Grid Cell Property.
+
+    set_db_lyr(self, db_lyr: Union[Dict[int, int], List[int]])
+        Set Delay Interbeds Layer Property.
+
+    set_db_grid(self, rnb: Union[int, float, np.ndarray], dsh: Union[int, float, np.ndarray],
+                    dhc: Union[int, float, np.ndarray], dcom: Union[int, float, np.ndarray],
+                    dz: Union[int, float, np.ndarray], imz: Union[int, float, np.ndarray])
+        Set Delay Interbeds Grid Cell Property.
+
+    load(cls, model, ctrl_file: str, mz_file: str, ndb_lyr_file: str, ndb_grid_file: str, db_lyr_file: str,
+             db_grid_file: str)
+        Load parameters from SUB(SUBCtrl.in, SUBMZ.in, SUBNDB.in, SUBGrdNDB.in, SUBDB.in, SUBGrdDB.in) file and
+        create a ComusSub instance.
+
+    write_file(self, folder_path: str)
+        Typically used as an internal function but can also be called directly, it outputs the `pycomus.ComusSub`
+        module to the specified path as <SUBCtrl.in>, <SUBMZ.in>, <SUBNDB.in>, <SUBDB.in>, <SUBGrdNDB.in>, <SUBGrdDB.in>.
+
+    Returns:
+    --------
+    instance: pycomus.ComusSub
+       COMUS Subsidence(SUB) Params Object.
+
+    Example:
+    --------
+    >>> import pycomus
+    >>> model1 = pycomus.ComusModel(model_name="test")
+    >>> subPackage = pycomus.ComusSub(model1, 2, 2, 10)
+    """
+
+    def __init__(self, model: pycomus.ComusModel, num_ndb: int, num_db: int, num_mz: int, nn: int = 20,
+                 acc: float = 0.5, it_min: int = 5, dsh_opt: int = 2):
 
         BoundaryCheck.check_bnd_queue(model)
         cms_dis = BoundaryCheck.get_cms_pars(model)
@@ -87,9 +121,9 @@ class ComusSub:
 
     def set_mz_data(self, mz_data: Union[Dict[int, Tuple[float, float, float]], List[Tuple[float, float, float]]]):
         """
+        Set MZ Data.
 
-        :param mz_data:
-        :return:
+        :param mz_data: Union[Dict[int, Tuple[float, float, float]], List[Tuple[float, float, float]]]
         """
         mz_data_len = len(mz_data)
         mz_dict_data: Dict = {}
@@ -115,9 +149,9 @@ class ComusSub:
 
     def set_ndb_lyr(self, ndb_lyr: Union[Dict[int, int], List[int]]):
         """
+        Set No Delay Interbeds Layer Property.
 
-        :param ndb_lyr:
-        :return:
+        :param ndb_lyr: Union[Dict[int, int], List[int]]
         """
         ndb_lyr_len: int = len(ndb_lyr)
         ndb_lyr_dict: Dict = {}
@@ -141,12 +175,12 @@ class ComusSub:
     def set_ndb_grid(self, hc: Union[int, float, np.ndarray], sfe: Union[int, float, np.ndarray],
                      sfv: Union[int, float, np.ndarray], com: Union[int, float, np.ndarray]):
         """
+        Set No Delay Interbeds Grid Cell Property.
 
-        :param hc:
-        :param sfe:
-        :param sfv:
-        :param com:
-        :return:
+        :param hc: Union[int, float, np.ndarray]
+        :param sfe: Union[int, float, np.ndarray]
+        :param sfv: Union[int, float, np.ndarray]
+        :param com: Union[int, float, np.ndarray]
         """
         if isinstance(hc, (int, float)):
             hc = np.full((self._num_ndb, self._num_row, self._num_col), hc, dtype=float)
@@ -164,9 +198,9 @@ class ComusSub:
 
     def set_db_lyr(self, db_lyr: Union[Dict[int, int], List[int]]):
         """
+        Set Delay Interbeds Layer Property.
 
-        :param db_lyr:
-        :return:
+        :param db_lyr: Union[Dict[int, int], List[int]]
         """
         db_lyr_len: int = len(db_lyr)
         db_lyr_dict: Dict = {}
@@ -191,14 +225,14 @@ class ComusSub:
                     dhc: Union[int, float, np.ndarray], dcom: Union[int, float, np.ndarray],
                     dz: Union[int, float, np.ndarray], imz: Union[int, float, np.ndarray]):
         """
+        Set Delay Interbeds Grid Cell Property.
 
-        :param rnb:
-        :param dsh:
-        :param dhc:
-        :param dcom:
-        :param dz:
-        :param imz:
-        :return:
+        :param rnb: Union[int, float, np.ndarray]
+        :param dsh: Union[int, float, np.ndarray]
+        :param dhc: Union[int, float, np.ndarray]
+        :param dcom: Union[int, float, np.ndarray]
+        :param dz: Union[int, float, np.ndarray]
+        :param imz: Union[int, float, np.ndarray]
         """
         if isinstance(rnb, (int, float)):
             rnb = np.full((self._num_db, self._num_row, self._num_col), rnb, dtype=float)

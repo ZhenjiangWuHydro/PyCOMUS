@@ -16,34 +16,49 @@ from pycomus.Utils.CONSTANTS import GHB_PKG_NAME, GHB_FILE_NAME
 
 
 class ComusGhb:
+    """
+    Initialize the COMUS Model with the General-Head Boundary(GHB) package.
+
+    Attributes:
+    ----------------------------
+    model:
+        The COMUS model to which the GHB package will be applied.
+    Cond:
+        The hydraulic conductivity coefficient between the general head and the aquifer (L²/T).
+    Shead:
+        The general head value at the beginning of the stress period (L).
+    Ehead:
+        The general head value at the end of the stress period (L).
+
+    Methods:
+    --------
+    __init__(self, model: pycomus.ComusModel, cond: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
+                 shead: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
+                 ehead: Union[int, float, Dict[int, Union[int, float, np.ndarray]]])
+        Initialize the COMUS Model with the General-Head Boundary(GHB) package.
+
+    load(cls, model, ghb_params_file: str)
+          Load parameters from a GHB.in file and create a ComusGhb instance.
+
+    write_file(self, folder_path: str)
+        Typically used as an internal function but can also be called directly, it outputs the `pycomus.ComusGhb`
+        module to the specified path as <GHB.in>.
+
+    Returns:
+    --------
+    instance: pycomus.ComusGhb
+       COMUS General-Head Boundary(GHB) Params Object.
+
+    Example:
+    --------
+    >>> import pycomus
+    >>> model1 = pycomus.ComusModel(model_name="test")
+    >>> ghbPkg = pycomus.ComusGhb(model1, cond={0: 1}, shead=1, ehead=2)
+    """
+
     def __init__(self, model: pycomus.ComusModel, cond: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
                  shead: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
                  ehead: Union[int, float, Dict[int, Union[int, float, np.ndarray]]]):
-        """
-        Initialize the COMUS Model with the General-Head Boundary(GHB) package.
-
-        Parameters:
-        ----------------------------
-        model:
-            The COMUS model to which the GHB package will be applied.
-        Cond:
-            The hydraulic conductivity coefficient between the general head and the aquifer (L²/T).
-        Shead:
-            The general head value at the beginning of the stress period (L).
-        Ehead:
-            The general head value at the end of the stress period (L).
-
-        Returns:
-        --------
-        instance: pycomus.ComusGhb
-           COMUS General-Head Boundary(GHB) Params Object.
-
-        Example:
-        --------
-        >>> import pycomus
-        >>> model1 = pycomus.ComusModel(model_name="test")
-        >>> ghbPkg = pycomus.ComusGhb(model1, cond={0: 1}, shead=1, ehead=2)
-        """
         BoundaryCheck.check_bnd_queue(model)
         cms_dis = BoundaryCheck.get_cms_pars(model)
         cms_period = BoundaryCheck.get_period(model)

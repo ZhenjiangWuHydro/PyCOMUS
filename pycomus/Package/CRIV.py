@@ -16,37 +16,53 @@ from pycomus.Utils.CONSTANTS import RIV_PKG_NAME, RIV_FILE_NAME
 
 
 class ComusRiv:
+    """
+    Initialize the COMUS Model with the River(RIV) package.
+
+    Attributes:
+    ----------------------------
+    model:
+        The COMUS model to which the RIV package will be applied.
+    cond:
+        The hydraulic conductivity coefficient between the river and the aquifer on the grid cell (L²/T)
+    shead:
+        The river stage at the beginning of the stress period (L)
+    ehead:
+        The river stage at the end of the stress period (L)
+    riv_btm:
+        The elevation of the bottom of the low permeability medium in the riverbed on the grid cell (L).
+
+    Methods:
+    --------
+    __init__(self, model: pycomus.ComusModel, cond: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
+                 shead: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
+                 ehead: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
+                 riv_btm: Union[int, float, Dict[int, Union[int, float, np.ndarray]]])
+        Initialize the COMUS Model with the River(RIV) package.
+
+    load(cls, model, riv_params_file: str)
+          Load parameters from a RIV.in file and create a ComusRiv instance.
+
+    write_file(self, folder_path: str)
+        Typically used as an internal function but can also be called directly, it outputs the `pycomus.ComusRiv`
+        module to the specified path as <RIV.in>.
+
+    Returns:
+    --------
+    instance: pycomus.ComusRiv
+       COMUS River(RIV) Params Object.
+
+    Example:
+    --------
+    >>> import pycomus
+    >>> model1 = pycomus.ComusModel(model_name="test")
+    >>> rivPackage = pycomus.ComusRiv(model1, cond=1, shead=1, ehead=2, riv_btm=10)
+    """
+
     def __init__(self, model: pycomus.ComusModel, cond: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
                  shead: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
                  ehead: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
                  riv_btm: Union[int, float, Dict[int, Union[int, float, np.ndarray]]]):
-        """
-        Initialize the COMUS Model with the River(RIV) package.
-
-        Parameters:
-        ----------------------------
-        model:
-            The COMUS model to which the RIV package will be applied.
-        cond:
-            The hydraulic conductivity coefficient between the river and the aquifer on the grid cell (L²/T)
-        shead:
-            The river stage at the beginning of the stress period (L)
-        ehead:
-            The river stage at the end of the stress period (L)
-        riv_btm:
-            The elevation of the bottom of the low permeability medium in the riverbed on the grid cell (L).
-
-        Returns:
-        --------
-        instance: pycomus.ComusRiv
-           COMUS River(RIV) Params Object.
-
-        Example:
-        --------
-        >>> import pycomus
-        >>> model1 = pycomus.ComusModel(model_name="test")
-        >>> rivPackage = pycomus.ComusRiv(model1, cond=1, shead=1, ehead=2, riv_btm=10)
-        """
         BoundaryCheck.check_bnd_queue(model)
         cms_dis = BoundaryCheck.get_cms_pars(model)
         cms_period = BoundaryCheck.get_period(model)

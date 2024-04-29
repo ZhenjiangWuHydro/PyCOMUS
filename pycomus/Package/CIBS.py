@@ -15,36 +15,51 @@ from pycomus.Utils.CONSTANTS import IBS_PKG_NAME, IBS_FILE_NAME
 
 
 class ComusIbs:
+    """
+    Initialize the COMUS Model with the Interbed Storage(IBS) package.
+
+    Attributes:
+    ----------------------------
+    model:
+        The COMUS model to which the IBS package will be applied.
+    hc:
+        Preconsolidation head (L) of interbedded bodies within the grid cell.
+    sfe:
+        Elastic storage coefficient (-) of interbedded bodies within the grid cell.
+    sfv:
+        Inelastic (plastic) storage coefficient (-) of interbedded bodies within the grid cell.
+    com:
+        Historical compression amount (L) of interbedded bodies within the grid cell.
+
+    Methods:
+    --------
+    __init__(self, model: pycomus.ComusModel, hc: Union[int, float, np.ndarray],
+                 sfe: Union[int, float, np.ndarray], sfv: Union[int, float, np.ndarray],
+                 com: Union[int, float, np.ndarray])
+        Initialize the COMUS Model with the Interbed Storage(IBS) package.
+
+    load(cls, model, ibs_file: str)
+         Load parameters from a IBS.in file and create a ComusIbs instance.
+
+    write_file(self, folder_path: str)
+        Typically used as an internal function but can also be called directly, it outputs the `pycomus.ComusIbs`
+        module to the specified path as <IBS.in>.
+
+    Returns:
+    --------
+    instance: pycomus.ComusIbs
+       COMUS Interbed Storage(IBS) Params Object.
+
+    Example:
+    --------
+    >>> import pycomus
+    >>> model1 = pycomus.ComusModel(model_name="test")
+    >>> ibsPackage = pycomus.ComusIbs(model1, hc=1, sfe=1, sfv=1, com=1)
+    """
+
     def __init__(self, model: pycomus.ComusModel, hc: Union[int, float, np.ndarray],
                  sfe: Union[int, float, np.ndarray], sfv: Union[int, float, np.ndarray],
                  com: Union[int, float, np.ndarray]):
-        """
-        Initialize the COMUS Model with the Interbed Storage(IBS) package.
-
-        Parameters:
-        ----------------------------
-        model:
-            The COMUS model to which the IBS package will be applied.
-        hc:
-            Preconsolidation head (L) of interbedded bodies within the grid cell.
-        sfe:
-            Elastic storage coefficient (-) of interbedded bodies within the grid cell.
-        sfv:
-            Inelastic (plastic) storage coefficient (-) of interbedded bodies within the grid cell.
-        com:
-            Historical compression amount (L) of interbedded bodies within the grid cell.
-
-        Returns:
-        --------
-        instance: pycomus.ComusIbs
-           COMUS Interbed Storage(IBS) Params Object.
-
-        Example:
-        --------
-        >>> import pycomus
-        >>> model1 = pycomus.ComusModel(model_name="test")
-        >>> ibsPackage = pycomus.ComusIbs(model1, hc=1, sfe=1, sfv=1, com=1)
-        """
         BoundaryCheck.check_bnd_queue(model)
         cms_dis = BoundaryCheck.get_cms_pars(model)
         self._num_lyr = cms_dis.num_lyr

@@ -13,31 +13,44 @@ from pycomus.Utils.CONSTANTS import REG_PKG_NAME, REG_FILE_NAME
 
 
 class ComusReg:
-    def __init__(self, model: pycomus.ComusModel, reg_data: Dict[str, Dict[str, List[Tuple[int, int, int]]]]):
-        """
+    """
+    Initialize the COMUS Model with the Region Statistics tool.
+
+    Attributes:
+    ----------------------------
+    model: pycomus.ComusModel
+        The COMUS model to which the IBS package will be applied.
+    reg_data: Dict[str, Dict[str, List[Tuple[int, int, int]]]]
+        The `reg_data` is a nested dictionary. The keys of the outer dictionary are the names of the statistical
+        schemes, and the values are dictionaries. The keys of the inner dictionary are the names of the statistical
+        partitions, and the values are a list of tuples, where each tuple represents the layer number, row number
+        , and column number.
+
+    Methods:
+    --------
+    __init__(self, model: pycomus.ComusModel, reg_data: Dict[str, Dict[str, List[Tuple[int, int, int]]]])
         Initialize the COMUS Model with the Region Statistics tool.
 
-        Parameters:
-        ----------------------------
-        model: pycomus.ComusModel
-            The COMUS model to which the IBS package will be applied.
-        reg_data: Dict[str, Dict[str, List[Tuple[int, int, int]]]]
-            The `reg_data` is a nested dictionary. The keys of the outer dictionary are the names of the statistical
-            schemes, and the values are dictionaries. The keys of the inner dictionary are the names of the statistical
-            partitions, and the values are a list of tuples, where each tuple represents the layer number, row number
-            , and column number.
+    load(cls, model, reg_file: str)
+        Load parameters from a RegSta.in file and create a ComusReg instance.
 
-        Returns:
-        --------
-        instance: pycomus.ComusReg
-           COMUS Region Statistics Params Object.
+    write_file(self, folder_path: str)
+        Typically used as an internal function but can also be called directly, it outputs the `pycomus.ComusReg`
+        module to the specified path as <RegSta.in>.
 
-        Example:
-        --------
-        >>> import pycomus
-        >>> model1 = pycomus.ComusModel(model_name="test")
-        >>> reg_sta = pycomus.ComusReg(model,{"scheme1": {"par1": [(0,0,0), (0,0,1), (1,1,1)]}})
-        """
+    Returns:
+    --------
+    instance: pycomus.ComusReg
+       COMUS Region Statistics Params Object.
+
+    Example:
+    --------
+    >>> import pycomus
+    >>> model1 = pycomus.ComusModel(model_name="test")
+    >>> reg_sta = pycomus.ComusReg(model1,{"scheme1": {"par1": [(0,0,0), (0,0,1), (1,1,1)]}})
+    """
+
+    def __init__(self, model: pycomus.ComusModel, reg_data: Dict[str, Dict[str, List[Tuple[int, int, int]]]]):
 
         BoundaryCheck.check_bnd_queue(model)
         cms_dis = BoundaryCheck.get_cms_pars(model)

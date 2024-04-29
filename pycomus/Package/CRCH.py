@@ -16,33 +16,47 @@ from pycomus.Utils.CONSTANTS import RCH_PKG_NAME, RCH_FILE_NAME
 
 
 class ComusRch:
-    def __init__(self, model: pycomus.ComusModel, rechr: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
-                 rech: int):
-        """
+    """
+    Set COMUS Model With Recharge(RCH) Package.
+
+    Attributes:
+    ----------------------------
+    model:
+        COMUS Model Object.
+    rechr:
+        The rate of areal recharge to the grid cell (L/T). This value must be greater than or equal to 0.
+    rech:
+        The computation option for areal recharge. The value 1 indicates that areal recharge is calculated for specified layer grid cells; 2 indicates that areal recharge is calculated for the highest active grid cells in the model.
+
+    Methods:
+    --------
+    __init__(self, model: pycomus.ComusModel, rechr: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
+                 rech: int)
         Set COMUS Model With Recharge(RCH) Package.
 
-        Parameters:
-        ----------------------------
-        model:
-            COMUS Model Object.
-        rechr:
-            The rate of areal recharge to the grid cell (L/T). This value must be greater than or equal to 0.
-        rech:
-            The computation option for areal recharge. The value 1 indicates that areal recharge is calculated for specified layer grid cells; 2 indicates that areal recharge is calculated for the highest active grid cells in the model.
+    load(cls, model, rch_params_file: str)
+         Load parameters from a RCH.in file and create a ComusRch instance.
 
-        Returns:
-        --------
-        instance: pycomus.ComusRch
-           COMUS Recharge(RCH) Params Object.
+    write_file(self, folder_path: str)
+        Typically used as an internal function but can also be called directly, it outputs the `pycomus.ComusRch`
+        module to the specified path as <RCH.in>.
 
-        Example:
-        --------
-        >>> import pycomus
-        >>> model1 = pycomus.ComusModel(model_name="test")
-        >>> recharge = np.zeros((40, 1, 100))
-        >>> recharge[0, 0, 49:52] = 0.0015
-        >>> rchPkg = pycomus.ComusRch(model1, rechr={0: recharge}, rech=1)
-        """
+    Returns:
+    --------
+    instance: pycomus.ComusRch
+       COMUS Recharge(RCH) Params Object.
+
+    Example:
+    --------
+    >>> import pycomus
+    >>> model1 = pycomus.ComusModel(model_name="test")
+    >>> recharge = np.zeros((40, 1, 100))
+    >>> recharge[0, 0, 49:52] = 0.0015
+    >>> rchPkg = pycomus.ComusRch(model1, rechr={0: recharge}, rech=1)
+    """
+
+    def __init__(self, model: pycomus.ComusModel, rechr: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
+                 rech: int):
         BoundaryCheck.check_bnd_queue(model)
         cms_dis = BoundaryCheck.get_cms_pars(model)
         cms_period = BoundaryCheck.get_period(model)

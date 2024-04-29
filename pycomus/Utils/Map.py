@@ -12,6 +12,44 @@ from pycomus.Utils import BoundaryCheck
 
 
 class ComusPlot:
+    """
+    Plot COMUS Model Output Data.
+
+    Attributes:
+    ----------------------------
+    model: pycomus.ComusModel
+        COMUS Model Object
+    tar_layer: int
+        Target Layer Index.
+    plt: matplotlib.pyplot
+
+    Methods:
+    --------
+    __init__(self, model, tar_layer: int = 0)
+        Plot COMUS Model Output Data.
+
+    plot_grid(self, color: str = "#ffffff", edge_color: str = "#000000", line_width: Union[int, float] = 1) -> LineCollection
+        Plot Grid To Map.
+
+    plot_contour(self, value: np.ndarray, **kwargs)
+        Plot Contour Plot.
+
+    show_plot(self)
+        Show Plot.
+
+    Returns:
+    --------
+    instance: pycomus.ComusPlot
+        COMUS Plot Object.
+
+    Example:
+    --------
+    >>> import pycomus
+    >>> model1 = pycomus.ComusModel(model_name="OneDimFlowSim")
+    >>> data = pycomus.ComusData(model1)
+    >>> head = data.read_cell_head(tar_period=25, tar_iter=0, tar_layer=2)
+    """
+
     def __init__(self, model, tar_layer: int = 0):
         self._cms_dis = BoundaryCheck.get_cms_pars(model)
         self._cms_par = BoundaryCheck.get_con_pars(model)
@@ -39,7 +77,7 @@ class ComusPlot:
         hex_color_pattern = r'^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$'
         return bool(re.match(hex_color_pattern, color_string))
 
-    def plot_grid(self, color: str = "#ffffff", edge_color: str = "#000000", line_width: Union[int, float] = 1):
+    def plot_grid(self, color: str = "#ffffff", edge_color: str = "#000000", line_width: Union[int, float] = 1) -> LineCollection:
         """
         Plot Grid To Map.
 
@@ -49,6 +87,7 @@ class ComusPlot:
             Hex Color
         :param line_width: int/float
             Grid Line With
+        :return: LineCollection
         """
         if not self._is_hex_color(color):
             raise ValueError("Invalid color format for color")

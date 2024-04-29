@@ -15,28 +15,55 @@ from pycomus.Utils.CONSTANTS import LAK_PKG_NAME, LAK_CTRL_FILE_NAME, LAK_PERIOD
 
 
 class ComusLak:
-    def __init__(self, model, lake_num: int):
-        """
+    """
+    Initialize the COMUS Model with the Lake(LAK) package.
+
+    Attributes:
+    ----------------------------
+    model:
+        COMUS Model Object.
+    lake_num:
+        Number of lakes.
+
+    Methods:
+    --------
+    __init__(self, model, lake_num: int)
         Initialize the COMUS Model with the Lake(LAK) package.
 
-        Parameters:
-        ----------------------------
-        model:
-            COMUS Model Object.
-        lake_num:
-            Number of lakes.
+    set_control_params(self, control_params: Dict[
+        int, Tuple[int, int, int, float, float, float, float, float, int, float, float, float, float]])
+        Set Lake Control Params.
 
-        Returns:
-        --------
-        instance: pycomus.ComusLak
-           COMUS Lake(LAK) Params Object.
+    set_period_data(self, period_data: Dict[
+        int, Dict[int, Tuple[float, float, float, float, float, float, float, float]]])
+        Set Lake Period Data.
 
-        Example:
-        --------
-        >>> import pycomus
-        >>> model1 = pycomus.ComusModel(model_name="test")
-        >>> lakPackage = pycomus.ComusLak(model1, lake_num=1)
-        """
+    set_grid_data(self, btm: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
+                      lnk: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
+                      sc1: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
+                      sc2: Union[int, float, Dict[int, Union[int, float, np.ndarray]]])
+        Set Lake Grid Cell Data.
+
+    load(cls, model, ctrl_pars_file: str, period_file: str, grid_file: str)
+         Load parameters from LAK(LAKCtrl.in, LAKPer.in, LAKGrd.in) file and create a ComusLak instance.
+
+    write_file(self, folder_path: str)
+        Typically used as an internal function but can also be called directly, it outputs the `pycomus.ComusLak`
+        module to the specified path as <LAKCtrl.in>, <LAKPer.in> and <LAKGrd.in>.
+
+    Returns:
+    --------
+    instance: pycomus.ComusLak
+       COMUS Lake(LAK) Params Object.
+
+    Example:
+    --------
+    >>> import pycomus
+    >>> model1 = pycomus.ComusModel(model_name="test")
+    >>> lakPackage = pycomus.ComusLak(model1, lake_num=1)
+    """
+
+    def __init__(self, model, lake_num: int):
         if lake_num < 1:
             raise ValueError("The number of lakes should be greater than or equal to 1.")
         BoundaryCheck.check_bnd_queue(model)
@@ -52,7 +79,7 @@ class ComusLak:
         model.package[LAK_PKG_NAME] = self
 
     def set_control_params(self, control_params: Dict[
-            int, Tuple[int, int, int, float, float, float, float, float, int, float, float, float, float]]) -> None:
+        int, Tuple[int, int, int, float, float, float, float, float, int, float, float, float, float]]) -> None:
         """
         Set Lake Control Params.
 
@@ -106,12 +133,12 @@ class ComusLak:
         self.lakeValue.ControlParams = control_params
 
     def set_period_data(self, period_data: Dict[
-            int, Dict[int, Tuple[float, float, float, float, float, float, float, float]]]) -> None:
+        int, Dict[int, Tuple[float, float, float, float, float, float, float, float]]]) -> None:
         """
-        Set Reservoir Period Data.
+        Set Lake Period Data.
 
         :param period_data:
-            A Dict type data where the keys represent the Period IDs, and the values are Dicts with reservoir IDs as
+            A Dict type data where the keys represent the Period IDs, and the values are Dicts with lake IDs as
             keys. Within the inner Dicts, the values are Tuples containing four elements: PCP, RNFCOF, PRHCOF,
              ET0, EVWBCOF, GEVCOF, WATDIV, WATUSE.
         """
@@ -158,7 +185,7 @@ class ComusLak:
                       sc1: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
                       sc2: Union[int, float, Dict[int, Union[int, float, np.ndarray]]]) -> None:
         """
-        Set Reservoir Grid Cell Data.
+        Set Lake Grid Cell Data.
 
         :param btm:
             Lake bed elevation (L) at the grid cell of the lake.

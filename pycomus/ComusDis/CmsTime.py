@@ -12,31 +12,41 @@ from pycomus.Utils.CONSTANTS import PERIOD_FILE_NAME, PERIOD_PKG_NAME
 
 class ComusPeriod:
     """
-    Comus Period Class. Contain PERLEN, NSTEP and MULTR.
-    """
-    def __init__(self, model, period: Union[Tuple, List[Tuple]]):
-        """
+    Set COMUS Model Period Attributes.
+
+    Attributes:
+    ----------------------------
+    model: pycomus.ComusModel
+        COMUS Model Object.
+    period: Union[Tuple, List[Tuple]]
+        It can be a Tuple or a List[Tuple], and each Tuple should contain three elements, which are PERLEN, NSTEP
+         and MULTR, and each element should be greater than 0.
+
+    Methods:
+    --------
+    __init__(self, model, period: Union[Tuple, List[Tuple]])
         Set COMUS Model Period Attributes.
 
-        Parameters:
-        ----------------------------
-        model: pycomus.ComusModel
-            COMUS Model Object.
-        period: Union[Tuple, List[Tuple]]
-            It can be a Tuple or a List[Tuple], and each Tuple should contain three elements, which are PERLEN, NSTEP
-             and MULTR, and each element should be greater than 0.
+    load(cls, model, period_file: str)
+        Load parameters from a PerAttr.in file and create a ComusPeriod instance.
 
-        Returns:
-        --------
-        controlParams: pycomus.ComusPeriod
-            COMUS Period Attributes Object.
+    write_file(self, folder_path: str)
+        Typically used as an internal function but can also be called directly, it outputs the `pycomus.ComusPeriod`
+        module to the specified path as <PerAttr.in>.
 
-        Example:
-        --------
-        >>> import pycomus
-        >>> model1 = pycomus.ComusModel(model_name="test")
-        >>> period1 = pycomus.ComusPeriod(model1, [(1, 1, 1)])
-        """
+    Returns:
+    --------
+    controlParams: pycomus.ComusPeriod
+        COMUS Period Attributes Object.
+
+    Example:
+    --------
+    >>> import pycomus
+    >>> model1 = pycomus.ComusModel(model_name="test")
+    >>> period1 = pycomus.ComusPeriod(model1, [(1, 1, 1)])
+    """
+
+    def __init__(self, model, period: Union[Tuple, List[Tuple]]):
         self.period: Union[Tuple, List[Tuple]] = self._validate_period(period)
         self._model = model
         model.package[PERIOD_PKG_NAME] = self

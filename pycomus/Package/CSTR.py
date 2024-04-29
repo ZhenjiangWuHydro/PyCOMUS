@@ -16,17 +16,82 @@ from pycomus.Utils.CONSTANTS import STR_PKG_NAME, STR_WAT_DRN_FILE_NAME, STR_WAT
 
 
 class ComusStr:
-    def __init__(self, model, stream_num: int):
-        """
+    """
+    Initialize the COMUS Model with the Stream(STR) package.
+
+    Attributes:
+    ----------------------------
+    model:
+       COMUS Model Object.
+    stream_num:
+       Number of streams.
+
+    Methods:
+    --------
+    __init__(self, model, stream_num: int)
         Initialize the COMUS Model with the Stream(STR) package.
 
-        Parameters:
-        ----------------------------
-        model:
-           COMUS Model Object.
-        stream_num:
-           Number of streams.
-        """
+    set_ControlData(self, control_params: Dict[int, Tuple[int, int, int, int, int, int, int, int, int]])
+        Set Stream Control Params.
+
+    set_PeriodData(self, period_data: Dict[int, Dict[
+        int, Tuple[int, float, float, float, float, float, float, float, float, float, float, float]]])
+        Set Stream Period Data.
+
+    set_GridData(self, cell_id: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
+                     length: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
+                     btm: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
+                     bwdt: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
+                     sizh1: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
+                     sizh2: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
+                     bvk: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
+                     btk: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
+                     slp: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
+                     ndc: Union[int, float, Dict[int, Union[int, float, np.ndarray]]])
+        Set Stream Grid Cell Data.
+
+    set_WatUseData(self, wureg_id: Union[int, np.ndarray], ratio: Union[int, float, np.ndarray])
+        Set Stream Water Use Data.
+
+    set_WatDrnData(self, delev: Union[int, np.ndarray], cond: Union[int, float, np.ndarray],
+                       segm_id: Union[int, float, np.ndarray])
+        Set Stream Water Drn Data.
+
+    load_ctrlPars_file(self, ctrlParFile)
+        Load data from <STRCtrl.in>.
+
+    load_period_file(self, period_file: str)
+        Load data from <STRPer.in>.
+
+    load_strGrid_file(self, strGridFile: str)
+        Load data from <STRGrd.in>.
+
+    load_watUse_file(self, watUseFile: str)
+        Load data from <STRWatUse.in>.
+
+    load_watDrn_file(self, watDrnFile: str)
+        Load data from <STRWatDrn.in>.
+
+    load(cls, model, ctrl_pars_file: str, period_file: str, grid_file: str, watUse_file: str, watDrn_file: str):
+        Load parameters from STR(STRCtrl.in, RESPer.in, RESGrd.in, STRWatUse.in, STRWatDrn.in) file and create a ComusStr instance.
+
+    write_file(self, folder_path: str)
+        Typically used as an internal function but can also be called directly, it outputs the `pycomus.ComusStr`
+        module to the specified path as <STRCtrl.in>, <STRPer.in>, <STRGrd.in>, <STRWatUse.in>, <STRWatDrn.in>.
+
+    Returns:
+    --------
+    instance: pycomus.ComusStr
+       COMUS Stream(STR) Params Object.
+
+    Example:
+    --------
+    >>> import pycomus
+    >>> model1 = pycomus.ComusModel(model_name="test")
+    >>> strPackage = pycomus.ComusStr(model1, stream_num=1)
+    """
+
+    def __init__(self, model, stream_num: int):
         if stream_num < 1:
             raise ValueError("The number of streams should be greater than or equal to 1.")
         self._stream_num = stream_num
@@ -229,7 +294,7 @@ class ComusStr:
                      bvk: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
                      btk: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
                      slp: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
-                     ndc: Union[int, float, Dict[int, Union[int, float, np.ndarray]]], ) -> None:
+                     ndc: Union[int, float, Dict[int, Union[int, float, np.ndarray]]]) -> None:
         """
         Set Stream Grid Cell Data.
 
@@ -320,6 +385,11 @@ class ComusStr:
         self.streamValue.WatDrnData = {"DELEV": delev, "COND": cond, "SEGMID": segm_id}
 
     def load_ctrlPars_file(self, ctrlParFile):
+        """
+        Load data from <STRCtrl.in>.
+
+        :param ctrlParFile: Stream Control Parameters File.
+        """
         with open(ctrlParFile, 'r') as file:
             lines = file.readlines()
         if len(lines[0].strip().split()) != 10:
@@ -340,6 +410,11 @@ class ComusStr:
         self.streamValue.ControlParams = ctrl_pars_data
 
     def load_period_file(self, period_file: str):
+        """
+        Load data from <STRPer.in>.
+
+        :param period_file: Stream Period Parameters File.
+        """
         with open(period_file, 'r') as file:
             lines = file.readlines()
         if len(lines[0].strip().split()) != 14:
@@ -362,6 +437,11 @@ class ComusStr:
         self.streamValue.PeriodData = period_data
 
     def load_strGrid_file(self, strGridFile: str):
+        """
+        Load data from <STRGrd.in>.
+
+        :param strGridFile: Stream Grid Cell Parameters File.
+        """
         with open(strGridFile, 'r') as file:
             CELLID = {}
             LEN = {}
@@ -428,6 +508,11 @@ class ComusStr:
                                          "SIZH2": SIZH2, "BVK": BVK, "BTK": BTK, "SLP": SLP, "NDC": NDC}
 
     def load_watUse_file(self, watUseFile: str):
+        """
+        Load data from <STRWatUse.in>.
+
+        :param watUseFile: Stream Water Use Parameters File.
+        """
         with open(watUseFile, 'r') as file:
             WUREGID = np.zeros((self._num_lyr, self._num_row, self._num_col))
             RATIO = np.zeros((self._num_lyr, self._num_row, self._num_col))
@@ -446,6 +531,11 @@ class ComusStr:
             self.streamValue.WatUseData = {"WUREGID": WUREGID, "RATIO": RATIO}
 
     def load_watDrn_file(self, watDrnFile: str):
+        """
+        Load data from <STRWatDrn.in>.
+
+        :param watDrnFile: Stream Water Drn Parameters File.
+        """
         with open(watDrnFile, 'r') as file:
             DELEV = np.zeros((self._num_lyr, self._num_row, self._num_col))
             COND = np.zeros((self._num_lyr, self._num_row, self._num_col))
@@ -475,7 +565,7 @@ class ComusStr:
     @classmethod
     def load(cls, model, ctrl_pars_file: str, period_file: str, grid_file: str, watUse_file: str, watDrn_file: str):
         """
-        Load parameters from STR(STRCtrl.in, RESPer.in, RESGrd.in) file and create a ComusStr instance.
+        Load parameters from STR(STRCtrl.in, RESPer.in, RESGrd.in, STRWatUse.in, STRWatDrn.in) file and create a ComusStr instance.
 
         Parameters:
         --------

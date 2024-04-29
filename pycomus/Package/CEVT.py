@@ -16,44 +16,60 @@ from pycomus.Utils.CONSTANTS import EVT_PKG_NAME, EVT_FILE_NAME
 
 
 class ComusEvt:
+    """
+    Initialize the COMUS Model with the Evapotranspiration(EVT) package.
+
+    Attributes:
+    ----------------------------
+    model: pycomus.ComusModel
+        The COMUS model to which the EVT package will be applied.
+    et_surf: Union[int, float, Dict[int, Union[int, float, np.ndarray]]]
+        The elevation of the subsurface evaporation interface at the grid cell (L).
+    et_rate: Union[int, float, Dict[int, Union[int, float, np.ndarray]]]
+        The potential (maximum) subsurface evaporation intensity at the grid cell (L/T).
+    et_mxd: Union[int, float, Dict[int, Union[int, float, np.ndarray]]]
+        The limit depth for subsurface evaporation at the grid cell (L).
+    et_exp: Union[int, float, Dict[int, Union[int, float, np.ndarray]]]
+        The subsurface evaporation exponent at the grid cell.
+    evt: int
+        Subsurface evaporation calculation option. 1: Calculate subsurface evaporation for specified layer grid cells;
+        2: Calculate subsurface evaporation for the highest layer effective
+    num_seg: int
+        The number of segments in the curve representing the change of subsurface evaporation with depth at the grid cell,
+        with a minimum of 2 segments and a maximum of 20 segments.
+
+    Methods:
+    --------
+    __init__(self, model: pycomus.ComusModel, et_surf: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
+                 et_rate: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
+                 et_mxd: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
+                 et_exp: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
+                 evt: int = 1, num_seg: int = 10)
+        Initialize the COMUS Model with the Evapotranspiration(EVT) package.
+
+    load(cls, model: pycomus.ComusModel, evt_params_file: str)
+         Load parameters from a EVT.in file and create a ComusEvt instance.
+
+    write_file(self, folder_path: str)
+        Typically used as an internal function but can also be called directly, it outputs the `pycomus.ComusEvt`
+        module to the specified path as <EVT.in>.
+
+    Returns:
+    --------
+    instance: pycomus.ComusEvt
+       COMUS Evapotranspiration(EVT) Params Object.
+
+    Example:
+    --------
+    >>> import pycomus
+    >>> model1 = pycomus.ComusModel(model_name="test")
+    >>> evtPkg = pycomus.ComusEvt(model1, et_surf=1, et_rate=1, et_mxd=1, et_exp=1)
+    """
     def __init__(self, model: pycomus.ComusModel, et_surf: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
                  et_rate: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
                  et_mxd: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
                  et_exp: Union[int, float, Dict[int, Union[int, float, np.ndarray]]],
                  evt: int = 1, num_seg: int = 10):
-        """
-        Initialize the COMUS Model with the Evapotranspiration(EVT) package.
-
-        Parameters:
-        ----------------------------
-        model: pycomus.ComusModel
-            The COMUS model to which the EVT package will be applied.
-        et_surf: Union[int, float, Dict[int, Union[int, float, np.ndarray]]]
-            The elevation of the subsurface evaporation interface at the grid cell (L).
-        et_rate: Union[int, float, Dict[int, Union[int, float, np.ndarray]]]
-            The potential (maximum) subsurface evaporation intensity at the grid cell (L/T).
-        et_mxd: Union[int, float, Dict[int, Union[int, float, np.ndarray]]]
-            The limit depth for subsurface evaporation at the grid cell (L).
-        et_exp: Union[int, float, Dict[int, Union[int, float, np.ndarray]]]
-            The subsurface evaporation exponent at the grid cell.
-        evt: int
-            Subsurface evaporation calculation option. 1: Calculate subsurface evaporation for specified layer grid cells;
-            2: Calculate subsurface evaporation for the highest layer effective
-        num_seg: int
-            The number of segments in the curve representing the change of subsurface evaporation with depth at the grid cell,
-            with a minimum of 2 segments and a maximum of 20 segments.
-
-        Returns:
-        --------
-        instance: pycomus.ComusEvt
-           COMUS Evapotranspiration(EVT) Params Object.
-
-        Example:
-        --------
-        >>> import pycomus
-        >>> model1 = pycomus.ComusModel(model_name="test")
-        >>> evtPkg = pycomus.ComusEvt(model1, et_surf=1, et_rate=1, et_mxd=1, et_exp=1)
-        """
         BoundaryCheck.check_bnd_queue(model)
         cms_dis = BoundaryCheck.get_cms_pars(model)
         cms_period = BoundaryCheck.get_period(model)
