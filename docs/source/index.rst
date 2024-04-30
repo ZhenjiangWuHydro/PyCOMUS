@@ -11,10 +11,6 @@ Welcome to PyCOMUS's documentation!
    :caption: Contents:
 
 
-   modules
-
-
-
 Indices and tables
 ==================
 
