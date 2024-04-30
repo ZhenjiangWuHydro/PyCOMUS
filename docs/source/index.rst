@@ -1,5 +1,5 @@
 .. PyCOMUS documentation master file, created by
-   sphinx-quickstart on Thu Apr 18 08:34:46 2024.
+   sphinx-quickstart on Tue Apr 30 10:02:16 2024.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 

@@ -6,16 +6,22 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
+import os
+import sys
+sys.path.insert(0, os.path.abspath('../../pycomus'))
+
 project = 'PyCOMUS'
 copyright = '2024, Zhenjiang Wu'
 author = 'Zhenjiang Wu'
-release = '1.0.0'
+release = '1.1'
+
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
-        'sphinx.ext.autodoc'
+    'sphinx.ext.autodoc',
+    'sphinx.ext.viewcode',
 ]
 
 import sphinx_rtd_theme

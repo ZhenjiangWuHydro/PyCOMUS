@@ -343,8 +343,7 @@ class ComusDisBcf(ComusDis):
     __init__(self, model, num_lyr: int = 1, num_row: int = 1, num_col: int = 1,
                  row_space: Union[float, int, List[float]] = 1,
                  col_space: Union[float, int, List[float]] = 1,
-                 x_coord: float = 0, y_coord: float = 0,
-                 lyr_type: List[int] = None, lyr_trpy: List[float] = None, lyr_ibs: List[int] = None)
+                 x_coord: float = 0, y_coord: float = 0, lyr_type: List[int] = None, lyr_trpy: List[float] = None, lyr_ibs: List[int] = None)
         Instantiate an instance of ComusDisBcf.
 
     load(cls, model, ctrl_params_file: str, grd_space_file: str, bcf_lyr_file: str)

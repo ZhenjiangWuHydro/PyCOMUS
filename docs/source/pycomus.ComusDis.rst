@@ -4,6 +4,14 @@ pycomus.ComusDis package
 Submodules
 ----------
 
+pycomus.ComusDis.CONSTANTS module
+---------------------------------
+
+.. automodule:: pycomus.ComusDis.CONSTANTS
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 pycomus.ComusDis.CmsDis module
 ------------------------------
 

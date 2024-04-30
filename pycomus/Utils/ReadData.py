@@ -270,16 +270,12 @@ class ComusData:
         return res
 
     def _get_bd_size(self) -> int:
-        bd_size: int = 0
-        if self._cms_par.sim_type == 2:
-            bd_size += 1
-        bd_size += 1
-        layers = self._model.layers
-        for layer in layers:
-            grid_cells = layer.grid_cells
+        bd_size = 0
+        bd_size += 1 if self._cms_par.sim_type == 2 else 0
+        for layer in self._model.layers:
             for row in range(self._num_row):
                 for col in range(self._num_col):
-                    grid_cell = grid_cells[row][col]
+                    grid_cell = layer.grid_cells[row][col]
                     if grid_cell.ibound == -1:
                         bd_size += 1
                         break
